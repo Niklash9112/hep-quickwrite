@@ -5,6 +5,7 @@ import { CheckCircle, Lock, Sun, Moon, Copy, Loader2, Download, FileText, Chevro
 import { UserButton, useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import jsPDF from 'jspdf';
+import Image from 'next/image';
 import { getTemplatesForMode, getTemplatesByCategory, type Template } from '@/lib/templates';
 import { saveReport } from '@/lib/clientHistory';
 
@@ -158,6 +159,7 @@ export default function Home() {
       year: 'numeric'
     });
 
+    // Logo im PDF (Base64 - muss noch konvertiert werden, für jetzt nur Platzhalter)
     doc.setFontSize(10);
     doc.setTextColor(100, 100, 100);
     doc.text('HEP-QuickWrite', margin, 15);
@@ -217,9 +219,21 @@ export default function Home() {
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between gap-2">
-            <h1 className={`text-2xl sm:text-3xl font-bold ${
-              theme === 'light' ? 'text-indigo-600' : 'text-indigo-400'
-            }`}>HEP-QuickWrite</h1>
+            {/* Logo */}
+            <div className="flex items-center gap-3 cursor-pointer" onClick={() => router.push('/')}>
+              <Image 
+                src="/logo.jpg" 
+                alt="HEP-QuickWrite Logo" 
+                width={50} 
+                height={50}
+                className="rounded-lg"
+                priority
+              />
+              <h1 className={`hidden sm:block text-2xl font-bold ${
+                theme === 'light' ? 'text-indigo-600' : 'text-indigo-400'
+              }`}>HEP-QuickWrite</h1>
+            </div>
+            
             <div className="flex items-center gap-2 sm:gap-4 flex-wrap justify-end">
               {user && (
                 <span className={`hidden sm:block text-sm ${
@@ -628,9 +642,16 @@ export default function Home() {
             theme === 'light' ? 'bg-white' : 'bg-gray-800'
           }`}>
             <div className="text-center">
-              <Lock className={`w-16 h-16 mx-auto mb-4 ${
-                theme === 'light' ? 'text-indigo-600' : 'text-indigo-400'
-              }`} />
+              {/* Logo im Paywall */}
+              <div className="mb-4 flex justify-center">
+                <Image 
+                  src="/logo.jpg" 
+                  alt="HEP-QuickWrite Logo" 
+                  width={80} 
+                  height={80}
+                  className="rounded-lg"
+                />
+              </div>
               
               <h2 className={`text-2xl font-bold mb-2 ${
                 theme === 'light' ? 'text-gray-900' : 'text-gray-100'
@@ -740,11 +761,22 @@ export default function Home() {
         theme === 'light' ? 'border-gray-200' : 'border-gray-700'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className={`text-center text-sm ${
-            theme === 'light' ? 'text-gray-500' : 'text-gray-400'
-          }`}>
-            © 2026 HEP-QuickWrite. Alle Rechte vorbehalten.
-          </p>
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div className="flex items-center gap-3">
+              <Image 
+                src="/logo.jpg" 
+                alt="HEP-QuickWrite" 
+                width={30} 
+                height={30}
+                className="rounded"
+              />
+              <p className={`text-sm ${
+                theme === 'light' ? 'text-gray-500' : 'text-gray-400'
+              }`}>
+                © 2026 HEP-QuickWrite. Alle Rechte vorbehalten.
+              </p>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
