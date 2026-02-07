@@ -38,8 +38,10 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    // Erstelle Checkout Session mit allen Zahlungsmethoden
     const session = await stripe.checkout.sessions.create({
       customer: customer.id,
+      payment_method_types: ['card', 'paypal'], // PayPal aktiviert!
       line_items: [
         {
           price: process.env.STRIPE_PRICE_ID!,
