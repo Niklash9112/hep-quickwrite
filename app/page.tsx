@@ -5,8 +5,8 @@ import { CheckCircle, Lock, Sun, Moon, Copy, Loader2, Download, FileText, Chevro
 import { UserButton, useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import jsPDF from 'jspdf';
-import { getTemplatesForMode, getTemplatesByCategory, type Template } from '@/lib/templates';
-import { saveReport } from '@/lib/clientHistory';
+import { getTemplatesForMode, getTemplatesByCategory, type Template } from '../lib/templates';
+import { saveReport } from '../lib/clientHistory';
 
 type Mode = 'hep' | 'ergo';
 type SubscriptionStatus = 'active' | 'inactive';
