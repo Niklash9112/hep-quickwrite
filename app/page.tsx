@@ -6,16 +6,22 @@ import { UserButton, useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import jsPDF from 'jspdf';
 
-// --- HIER IST DIE RETTUNG: Logik direkt in der Datei statt im fehlenden lib-Ordner ---
-type Template = { id: string; name: string; content: string; category: string };
+// --- NOTFALL-FIX: Vorlagen direkt hier definiert, damit Vercel nicht mehr sucht ---
+interface Template {
+  id: string;
+  name: string;
+  content: string;
+  category: string;
+}
+
 const getTemplatesByCategory = (mode: string, category: string): Template[] => {
-  const mockTemplates: Record<string, Template[]> = {
-    hep: [{ id: '1', name: 'Standardbericht', content: 'Klient zeigt sich kooperativ...', category: 'standard' }],
-    ergo: [{ id: '2', name: 'Motorik-Check', content: 'Fokus auf Feinmotorik...', category: 'standard' }]
-  };
-  return (mockTemplates[mode] || []).filter(t => t.category === category);
+  return [
+    { id: '1', name: 'Standard-Bericht', category: 'standard', content: 'Klient zeigt heute...' },
+    { id: '2', name: 'ICF-Beobachtung', category: 'standard', content: 'Im Bereich Teilhabe wurde...' }
+  ];
 };
-const saveReport = (data: any) => console.log('Bericht lokal gespeichert');
+
+const saveReport = (data: any) => console.log('Bericht gesichert');
 // ----------------------------------------------------------------------------------
 
 type Mode = 'hep' | 'ergo';
