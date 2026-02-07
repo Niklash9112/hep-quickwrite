@@ -5,7 +5,6 @@ import { CheckCircle, Lock, Sun, Moon, Copy, Loader2, Download, FileText, Chevro
 import { UserButton, useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import jsPDF from 'jspdf';
-import Image from 'next/image';
 import { getTemplatesForMode, getTemplatesByCategory, type Template } from '@/lib/templates';
 import { saveReport } from '@/lib/clientHistory';
 
@@ -221,14 +220,11 @@ export default function Home() {
           <div className="flex items-center justify-between gap-2">
             {/* Logo */}
             <div className="flex items-center gap-3 cursor-pointer" onClick={() => router.push('/')}>
-              <Image 
-                src="/logo.jpg" 
+              <img src="/logo.jpg" 
                 alt="HEP-QuickWrite Logo" 
-                width={50} 
-                height={50}
-                className="rounded-lg"
-                priority
-              />
+                style={{width: '50px', height: 'auto'}} 
+                
+                className="rounded-lg" />
               <h1 className={`hidden sm:block text-2xl font-bold ${
                 theme === 'light' ? 'text-indigo-600' : 'text-indigo-400'
               }`}>HEP-QuickWrite</h1>
@@ -644,11 +640,10 @@ export default function Home() {
             <div className="text-center">
               {/* Logo im Paywall */}
               <div className="mb-4 flex justify-center">
-                <Image 
-                  src="/logo.jpg" 
+                <img src="/logo.jpg" 
                   alt="HEP-QuickWrite Logo" 
-                  width={80} 
-                  height={80}
+                  style={{width: '80px', height: 'auto'}} 
+                  
                   className="rounded-lg"
                 />
               </div>
@@ -763,11 +758,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-3">
-              <Image 
-                src="/logo.jpg" 
+              <img src="/logo.jpg" 
                 alt="HEP-QuickWrite" 
-                width={30} 
-                height={30}
+                style={{width: '30px', height: 'auto'}} 
+                
                 className="rounded"
               />
               <p className={`text-sm ${
