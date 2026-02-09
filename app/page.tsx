@@ -505,42 +505,69 @@ export default function Home() {
             }`}>Dokument erstellen</h3>
             <div className="space-y-4">
               <button
-                onClick={() => handleGenerate('Fachbericht (ICF)')}
-                disabled={!notes.trim() || (subscriptionStatus !== 'active' && reportCount >= FREE_REPORT_LIMIT)}
+                onClick={() => {
+                  if (!notes.trim()) return;
+                  if (subscriptionStatus !== 'active' && reportCount >= FREE_REPORT_LIMIT) {
+                    setShowPaywall(true); // Paywall automatisch öffnen!
+                    return;
+                  }
+                  handleGenerate('Fachbericht (ICF)');
+                }}
+                disabled={!notes.trim()}
                 className={`w-full py-4 px-6 rounded-lg font-medium transition-all ${
-                  notes.trim() && (subscriptionStatus === 'active' || reportCount < FREE_REPORT_LIMIT)
-                    ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-md hover:shadow-lg'
+                  notes.trim()
+                    ? (subscriptionStatus === 'active' || reportCount < FREE_REPORT_LIMIT)
+                      ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-md hover:shadow-lg'
+                      : 'bg-indigo-500 hover:bg-indigo-600 text-white shadow-md hover:shadow-lg cursor-pointer'
                     : theme === 'light'
                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-gray-600 text-gray-300 cursor-not-allowed border border-gray-500'
+                    : 'bg-gray-600 text-gray-300 cursor-not-allowed'
                 }`}
               >
                 📋 Fachbericht (ICF)
               </button>
 
               <button
-                onClick={() => handleGenerate('Tagesdokumentation')}
-                disabled={!notes.trim() || (subscriptionStatus !== 'active' && reportCount >= FREE_REPORT_LIMIT)}
+                onClick={() => {
+                  if (!notes.trim()) return;
+                  if (subscriptionStatus !== 'active' && reportCount >= FREE_REPORT_LIMIT) {
+                    setShowPaywall(true); // Paywall automatisch öffnen!
+                    return;
+                  }
+                  handleGenerate('Tagesdokumentation');
+                }}
+                disabled={!notes.trim()}
                 className={`w-full py-4 px-6 rounded-lg font-medium transition-all ${
-                  notes.trim() && (subscriptionStatus === 'active' || reportCount < FREE_REPORT_LIMIT)
-                    ? 'bg-teal-600 hover:bg-teal-700 text-white shadow-md hover:shadow-lg'
+                  notes.trim()
+                    ? (subscriptionStatus === 'active' || reportCount < FREE_REPORT_LIMIT)
+                      ? 'bg-teal-600 hover:bg-teal-700 text-white shadow-md hover:shadow-lg'
+                      : 'bg-teal-500 hover:bg-teal-600 text-white shadow-md hover:shadow-lg cursor-pointer'
                     : theme === 'light'
                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-gray-600 text-gray-300 cursor-not-allowed border border-gray-500'
+                    : 'bg-gray-600 text-gray-300 cursor-not-allowed'
                 }`}
               >
                 📝 Tagesdokumentation
               </button>
 
               <button
-                onClick={() => handleGenerate('Leichte Sprache')}
-                disabled={!notes.trim() || (subscriptionStatus !== 'active' && reportCount >= FREE_REPORT_LIMIT)}
+                onClick={() => {
+                  if (!notes.trim()) return;
+                  if (subscriptionStatus !== 'active' && reportCount >= FREE_REPORT_LIMIT) {
+                    setShowPaywall(true); // Paywall automatisch öffnen!
+                    return;
+                  }
+                  handleGenerate('Leichte Sprache');
+                }}
+                disabled={!notes.trim()}
                 className={`w-full py-4 px-6 rounded-lg font-medium transition-all ${
-                  notes.trim() && (subscriptionStatus === 'active' || reportCount < FREE_REPORT_LIMIT)
-                    ? 'bg-green-600 hover:bg-green-700 text-white shadow-md hover:shadow-lg'
+                  notes.trim()
+                    ? (subscriptionStatus === 'active' || reportCount < FREE_REPORT_LIMIT)
+                      ? 'bg-green-600 hover:bg-green-700 text-white shadow-md hover:shadow-lg'
+                      : 'bg-green-500 hover:bg-green-600 text-white shadow-md hover:shadow-lg cursor-pointer'
                     : theme === 'light'
                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-gray-600 text-gray-300 cursor-not-allowed border border-gray-500'
+                    : 'bg-gray-600 text-gray-300 cursor-not-allowed'
                 }`}
               >
                 💬 Leichte Sprache
@@ -550,13 +577,13 @@ export default function Home() {
             {subscriptionStatus !== 'active' && reportCount >= FREE_REPORT_LIMIT && (
               <div className={`mt-6 p-4 border rounded-lg ${
                 theme === 'light'
-                  ? 'bg-red-50 border-red-200'
-                  : 'bg-red-900/20 border-red-700'
+                  ? 'bg-amber-50 border-amber-200'
+                  : 'bg-amber-900/20 border-amber-700'
               }`}>
-                <p className={`text-sm ${
-                  theme === 'light' ? 'text-red-800' : 'text-red-200'
+                <p className={`text-sm font-medium ${
+                  theme === 'light' ? 'text-amber-800' : 'text-amber-200'
                 }`}>
-                  🚫 Limit erreicht! Upgrade auf Pro für unbegrenzte Berichte.
+                  ⚡ Du hast deine 3 kostenlosen Berichte erstellt! Klicke auf einen Button für Pro-Upgrade.
                 </p>
               </div>
             )}
