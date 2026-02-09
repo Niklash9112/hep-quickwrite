@@ -38,10 +38,14 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Erstelle Checkout Session mit allen Zahlungsmethoden
+    // Erstelle Checkout Session mit deutschen Zahlungsmethoden
     const session = await stripe.checkout.sessions.create({
       customer: customer.id,
-      payment_method_types: ['card', 'paypal'], // PayPal aktiviert!
+      payment_method_types: [
+        'card',           // Kreditkarte
+        'paypal',         // PayPal
+        'sepa_debit',     // SEPA Lastschrift (sehr beliebt in DE!)
+      ],
       line_items: [
         {
           price: process.env.STRIPE_PRICE_ID!,
@@ -60,6 +64,8 @@ export async function POST(request: NextRequest) {
       metadata: {
         clerkUserId: userId,
       },
+      // Automatisches Anzeigen von digitalen Wallets (Google Pay, Apple Pay)
+      automatic_tax: { enabled: false },
     });
 
     return NextResponse.json({ url: session.url });
