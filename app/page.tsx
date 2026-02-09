@@ -271,6 +271,181 @@ export default function Home() {
     );
   }
 
+  // Login-Screen für nicht-eingeloggte User
+  if (!user) {
+    return (
+      <div className={`min-h-screen transition-colors duration-300 ${
+        theme === 'light' 
+          ? 'bg-gradient-to-br from-blue-50 to-indigo-100' 
+          : 'bg-gradient-to-br from-gray-900 to-gray-800'
+      }`}>
+        {/* Header mit Theme-Toggle */}
+        <header className={`shadow-sm border-b transition-colors duration-300 ${
+          theme === 'light' 
+            ? 'bg-white border-gray-200' 
+            : 'bg-gray-800 border-gray-700'
+        }`}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex items-center justify-between">
+              <h1 className={`text-2xl font-bold ${
+                theme === 'light' ? 'text-indigo-600' : 'text-indigo-400'
+              }`}>HEP-QuickWrite</h1>
+              <button
+                onClick={toggleTheme}
+                className={`p-2 rounded-lg transition-all ${
+                  theme === 'light'
+                    ? 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                    : 'bg-gray-700 hover:bg-gray-600 text-yellow-300'
+                }`}
+              >
+                {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+              </button>
+            </div>
+          </div>
+        </header>
+
+        {/* Login-Screen Content */}
+        <div className="max-w-4xl mx-auto px-4 py-12">
+          <div className={`rounded-2xl shadow-2xl p-8 md:p-12 ${
+            theme === 'light' ? 'bg-white' : 'bg-gray-800'
+          }`}>
+            {/* Hero */}
+            <div className="text-center mb-10">
+              <h2 className={`text-4xl font-bold mb-4 ${
+                theme === 'light' ? 'text-gray-900' : 'text-gray-100'
+              }`}>
+                Willkommen bei HEP-QuickWrite! 👋
+              </h2>
+              <p className={`text-xl ${
+                theme === 'light' ? 'text-gray-600' : 'text-gray-300'
+              }`}>
+                KI-gestützte Fachberichte für Heilerziehungspflege und Ergotherapie
+              </p>
+            </div>
+
+            {/* Vorteile */}
+            <div className="grid md:grid-cols-2 gap-6 mb-10">
+              <div className={`p-6 rounded-lg ${
+                theme === 'light' ? 'bg-green-50' : 'bg-green-900/20'
+              }`}>
+                <CheckCircle className="w-8 h-8 text-green-600 mb-3" />
+                <h3 className={`text-lg font-semibold mb-2 ${
+                  theme === 'light' ? 'text-gray-900' : 'text-gray-100'
+                }`}>
+                  3 kostenlose Berichte
+                </h3>
+                <p className={`text-sm ${
+                  theme === 'light' ? 'text-gray-600' : 'text-gray-400'
+                }`}>
+                  Nach Registrierung sofort 3 Fachberichte gratis erstellen
+                </p>
+              </div>
+
+              <div className={`p-6 rounded-lg ${
+                theme === 'light' ? 'bg-blue-50' : 'bg-blue-900/20'
+              }`}>
+                <FileText className="w-8 h-8 text-blue-600 mb-3" />
+                <h3 className={`text-lg font-semibold mb-2 ${
+                  theme === 'light' ? 'text-gray-900' : 'text-gray-100'
+                }`}>
+                  ICF-konforme Dokumentation
+                </h3>
+                <p className={`text-sm ${
+                  theme === 'light' ? 'text-gray-600' : 'text-gray-400'
+                }`}>
+                  Professionelle Berichte nach ICF-Kriterien
+                </p>
+              </div>
+
+              <div className={`p-6 rounded-lg ${
+                theme === 'light' ? 'bg-purple-50' : 'bg-purple-900/20'
+              }`}>
+                <History className="w-8 h-8 text-purple-600 mb-3" />
+                <h3 className={`text-lg font-semibold mb-2 ${
+                  theme === 'light' ? 'text-gray-900' : 'text-gray-100'
+                }`}>
+                  Klienten-Historie
+                </h3>
+                <p className={`text-sm ${
+                  theme === 'light' ? 'text-gray-600' : 'text-gray-400'
+                }`}>
+                  Alle Berichte zentral gespeichert und jederzeit abrufbar
+                </p>
+              </div>
+
+              <div className={`p-6 rounded-lg ${
+                theme === 'light' ? 'bg-indigo-50' : 'bg-indigo-900/20'
+              }`}>
+                <Lock className="w-8 h-8 text-indigo-600 mb-3" />
+                <h3 className={`text-lg font-semibold mb-2 ${
+                  theme === 'light' ? 'text-gray-900' : 'text-gray-100'
+                }`}>
+                  Datenschutz-konform
+                </h3>
+                <p className={`text-sm ${
+                  theme === 'light' ? 'text-gray-600' : 'text-gray-400'
+                }`}>
+                  DSGVO-konforme Speicherung deiner Daten
+                </p>
+              </div>
+            </div>
+
+            {/* Trial Info */}
+            <div className={`mb-8 p-6 rounded-lg border-2 ${
+              theme === 'light' 
+                ? 'bg-amber-50 border-amber-200' 
+                : 'bg-amber-900/20 border-amber-700'
+            }`}>
+              <p className={`text-center font-semibold mb-2 ${
+                theme === 'light' ? 'text-amber-800' : 'text-amber-300'
+              }`}>
+                ⚡ Nach den 3 gratis Berichten:
+              </p>
+              <p className={`text-center text-sm ${
+                theme === 'light' ? 'text-amber-700' : 'text-amber-400'
+              }`}>
+                7 Tage kostenlos testen, dann nur 10€/Monat für unbegrenzte Berichte
+              </p>
+            </div>
+
+            {/* Login-Buttons */}
+            <div className="space-y-4">
+              <a 
+                href="/sign-in"
+                className="block w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-lg transition-all transform hover:scale-105 shadow-lg text-center"
+              >
+                🚀 Jetzt kostenlos anmelden & 3 Berichte gratis erstellen
+              </a>
+
+              <p className={`text-center text-sm ${
+                theme === 'light' ? 'text-gray-500' : 'text-gray-400'
+              }`}>
+                Anmeldung mit Google, E-Mail oder anderen Diensten möglich
+              </p>
+
+              <p className={`text-center text-xs ${
+                theme === 'light' ? 'text-gray-400' : 'text-gray-500'
+              }`}>
+                Bereits registriert? <a href="/sign-in" className="underline hover:text-indigo-600">Hier anmelden</a>
+              </p>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="mt-8 text-center">
+            <p className={`text-sm ${
+              theme === 'light' ? 'text-gray-600' : 'text-gray-400'
+            }`}>
+              <a href="/impressum" className="hover:underline">Impressum</a>
+              {' • '}
+              <a href="/datenschutz" className="hover:underline">Datenschutz</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`min-h-screen transition-colors duration-300 ${
       theme === 'light' 

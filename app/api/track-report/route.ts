@@ -7,7 +7,15 @@ export async function POST(request: NextRequest) {
   try {
     const { userId: clerkUserId } = await auth();
 
-    // Fall 1: Eingeloggter User
+    // Login-Zwang: Nur eingeloggte User dürfen Reports erstellen
+    if (!clerkUserId) {
+      return NextResponse.json(
+        { error: 'Login erforderlich', requiresLogin: true },
+        { status: 401 }
+      );
+    }
+
+    // Eingeloggter User
     if (clerkUserId) {
       const client = await clerkClient();
       const user = await client.users.getUser(clerkUserId);
@@ -48,27 +56,6 @@ export async function POST(request: NextRequest) {
         limitReached: newCount >= FREE_REPORT_LIMIT 
       });
     }
-
-    // Fall 2: Anonymer User (Cookie-basiert)
-    const cookies = request.cookies;
-    const anonReportCount = parseInt(cookies.get('anonReportCount')?.value || '0', 10);
-    const newAnonCount = anonReportCount + 1;
-
-    const response = NextResponse.json({ 
-      reportCount: newAnonCount, 
-      limitReached: newAnonCount >= FREE_REPORT_LIMIT,
-      isAnonymous: true 
-    });
-
-    // Setze Cookie (7 Tage gültig)
-    response.cookies.set('anonReportCount', newAnonCount.toString(), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7, // 7 Tage
-    });
-
-    return response;
   } catch (error: any) {
     console.error('Track Report Error:', error);
     return NextResponse.json(
@@ -83,7 +70,15 @@ export async function GET(request: NextRequest) {
   try {
     const { userId: clerkUserId } = await auth();
 
-    // Fall 1: Eingeloggter User
+    // Login-Zwang: Nur eingeloggte User
+    if (!clerkUserId) {
+      return NextResponse.json(
+        { error: 'Login erforderlich', requiresLogin: true },
+        { status: 401 }
+      );
+    }
+
+    // Eingeloggter User
     if (clerkUserId) {
       const client = await clerkClient();
       const user = await client.users.getUser(clerkUserId);
@@ -116,16 +111,6 @@ export async function GET(request: NextRequest) {
         limitReached: currentCount >= FREE_REPORT_LIMIT 
       });
     }
-
-    // Fall 2: Anonymer User (Cookie-basiert)
-    const cookies = request.cookies;
-    const anonReportCount = parseInt(cookies.get('anonReportCount')?.value || '0', 10);
-
-    return NextResponse.json({ 
-      reportCount: anonReportCount, 
-      limitReached: anonReportCount >= FREE_REPORT_LIMIT,
-      isAnonymous: true 
-    });
   } catch (error: any) {
     console.error('Get Report Count Error:', error);
     return NextResponse.json(
