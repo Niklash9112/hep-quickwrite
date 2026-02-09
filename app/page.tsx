@@ -718,6 +718,26 @@ export default function Home() {
                 </div>
               </div>
 
+              {/* Trial-Hinweis */}
+              <div className={`mb-6 p-4 rounded-lg border-2 ${
+                theme === 'light' 
+                  ? 'bg-green-50 border-green-200' 
+                  : 'bg-green-900/20 border-green-700'
+              }`}>
+                <p className={`text-sm font-semibold mb-2 ${
+                  theme === 'light' ? 'text-green-800' : 'text-green-300'
+                }`}>
+                  ✅ 7 Tage komplett kostenlos
+                </p>
+                <p className={`text-xs ${
+                  theme === 'light' ? 'text-green-700' : 'text-green-400'
+                }`}>
+                  • Keine Zahlung während der Testphase<br />
+                  • Jederzeit kündbar<br />
+                  • Erste Abbuchung erst am Tag 8 (10€/Monat)
+                </p>
+              </div>
+
               <button
                 onClick={async () => {
                   if (!user) return;
@@ -744,6 +764,12 @@ export default function Home() {
               >
                 Jetzt 7 Tage kostenlos testen
               </button>
+
+              <p className={`text-xs text-center mb-3 ${
+                theme === 'light' ? 'text-gray-500' : 'text-gray-500'
+              }`}>
+                Kündigung jederzeit möglich über dein Kundenkonto
+              </p>
 
               <button
                 onClick={() => setShowPaywall(false)}
