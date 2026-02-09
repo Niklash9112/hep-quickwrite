@@ -66,6 +66,17 @@ export default function Home() {
     }
   }, []);
 
+  // Auto-Paywall: Zeige Paywall automatisch an, wenn Limit erreicht
+  useEffect(() => {
+    if (isLoaded && user && subscriptionStatus !== 'active' && reportCount >= FREE_REPORT_LIMIT) {
+      // Warte 1 Sekunde, damit User die Seite sieht, bevor Paywall erscheint
+      const timer = setTimeout(() => {
+        setShowPaywall(true);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoaded, user, subscriptionStatus, reportCount]);
+
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
