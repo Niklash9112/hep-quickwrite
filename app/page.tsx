@@ -719,7 +719,7 @@ export default function Home() {
               </div>
 
               {/* Trial-Hinweis */}
-              <div className={`mb-6 p-4 rounded-lg border-2 ${
+              <div className={`mb-4 p-4 rounded-lg border-2 ${
                 theme === 'light' 
                   ? 'bg-green-50 border-green-200' 
                   : 'bg-green-900/20 border-green-700'
@@ -735,6 +735,19 @@ export default function Home() {
                   • Keine Zahlung während der Testphase<br />
                   • Jederzeit kündbar<br />
                   • Erste Abbuchung erst am Tag 8 (10€/Monat)
+                </p>
+              </div>
+
+              {/* Zahlungsmethoden-Hinweis */}
+              <div className={`mb-6 p-3 rounded-lg ${
+                theme === 'light' 
+                  ? 'bg-blue-50 border border-blue-200' 
+                  : 'bg-blue-900/20 border border-blue-700'
+              }`}>
+                <p className={`text-xs text-center ${
+                  theme === 'light' ? 'text-blue-700' : 'text-blue-300'
+                }`}>
+                  💳 Bezahlung per <strong>Kreditkarte, Debitkarte oder Bankverbindung</strong>
                 </p>
               </div>
 
