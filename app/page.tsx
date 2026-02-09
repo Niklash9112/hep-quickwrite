@@ -52,6 +52,7 @@ export default function Home() {
   const FREE_REPORT_LIMIT = 3;
   const [showTemplates, setShowTemplates] = useState(false);
 
+  // Hole Report-Counter vom Server
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') as Theme;
     if (savedTheme) {
@@ -60,10 +61,29 @@ export default function Home() {
       setTheme('dark');
     }
 
-    const savedCount = localStorage.getItem('reportCount');
-    if (savedCount) {
-      setReportCount(parseInt(savedCount, 10));
-    }
+    // Hole aktuellen Counter vom Server
+    const fetchReportCount = async () => {
+      try {
+        const response = await fetch('/api/track-report', {
+          method: 'GET',
+          cache: 'no-store',
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setReportCount(data.reportCount || 0);
+          // LocalStorage als Backup
+          localStorage.setItem('reportCount', (data.reportCount || 0).toString());
+        }
+      } catch (error) {
+        // Fallback: Nutze localStorage
+        const savedCount = localStorage.getItem('reportCount');
+        if (savedCount) {
+          setReportCount(parseInt(savedCount, 10));
+        }
+      }
+    };
+
+    fetchReportCount();
   }, []);
 
   // Auto-Paywall: Zeige Paywall automatisch an, wenn Limit erreicht
@@ -142,10 +162,29 @@ export default function Home() {
           });
         }
         
-        if (subscriptionStatus !== 'active') {
-          const newCount = reportCount + 1;
-          setReportCount(newCount);
-          localStorage.setItem('reportCount', newCount.toString());
+        // Erhöhe Counter über Server (robuster als localStorage!)
+        if (subscriptionStatus !== 'active' && !isAdmin) {
+          try {
+            const trackResponse = await fetch('/api/track-report', {
+              method: 'POST',
+              cache: 'no-store',
+            });
+            const trackData = await trackResponse.json();
+            if (trackResponse.ok) {
+              setReportCount(trackData.reportCount || 0);
+              localStorage.setItem('reportCount', (trackData.reportCount || 0).toString());
+              
+              // Zeige Paywall sofort, wenn Limit erreicht
+              if (trackData.limitReached) {
+                setTimeout(() => setShowPaywall(true), 2000);
+              }
+            }
+          } catch (error) {
+            // Fallback: LocalStorage
+            const newCount = reportCount + 1;
+            setReportCount(newCount);
+            localStorage.setItem('reportCount', newCount.toString());
+          }
         }
       } else {
         alert(`Fehler: ${data.error}`);
