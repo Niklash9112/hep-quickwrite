@@ -319,7 +319,7 @@ export default function Home() {
               <p className={`text-xl ${
                 theme === 'light' ? 'text-gray-600' : 'text-gray-300'
               }`}>
-                KI-gestützte Fachberichte für Heilerziehungspflege und Ergotherapie
+                KI-gestützte Fachberichte für Heilerziehungspflege und Erzieher
               </p>
             </div>
 
@@ -609,7 +609,7 @@ export default function Home() {
                   : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
               }`}
             >
-              Ergotherapeutin
+              Erzieherin
             </button>
           </div>
         </div>
@@ -709,7 +709,7 @@ export default function Home() {
               placeholder={
                 mode === 'hep'
                   ? 'Geben Sie hier Ihre täglichen Beobachtungen als Heilerziehungspfleger ein...'
-                  : 'Notieren Sie Ihre ergotherapeutischen Beobachtungen...'
+                  : 'Notieren Sie Ihre pädagogischen Beobachtungen...'
               }
               className={`w-full h-64 p-4 border-2 rounded-lg focus:ring-2 transition-all resize-none ${
                 theme === 'light'
@@ -885,12 +885,12 @@ export default function Home() {
           <h3 className={`text-lg font-semibold mb-3 ${
             theme === 'light' ? 'text-gray-800' : 'text-gray-100'
           }`}>
-            {mode === 'hep' ? 'Heilerziehungspfleger' : 'Ergotherapeutin'} aktiv
+            {mode === 'hep' ? 'Heilerziehungspfleger' : 'Erzieherin'} aktiv
           </h3>
           <p className={theme === 'light' ? 'text-gray-600' : 'text-gray-300'}>
             {mode === 'hep'
               ? 'Ihre Notizen werden für Heilerziehungspflege optimiert: ICF-Kriterien, ressourcenorientierte Sprache und professionelle Dokumentation.'
-              : 'Ihre Notizen werden für Ergotherapie optimiert: Fokus auf Handlungsfähigkeit, Alltagsaktivitäten und therapeutische Ziele.'}
+              : 'Ihre Notizen werden für die Erzieherin optimiert: Fokus auf ganzheitliche Entwicklung, Beobachtung und erzieherische Ziele.'}
           </p>
         </div>
       </main>

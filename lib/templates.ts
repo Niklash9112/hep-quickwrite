@@ -40,31 +40,31 @@ const HEP_TEMPLATES: Template[] = [
 const ERGO_TEMPLATES: Template[] = [
   {
     id: 'ergo-1',
-    name: 'Handlungsbeobachtung',
+    name: 'Beobachtung im Gruppenalltag',
     category: 'standard',
     mode: 'ergo',
-    content: `Klient führt selbstständige Aktivitäten im Alltag (b2500) aus. Feinmotorik zeigt Fortschritte. Bei komplexen Aufgaben wird Unterstützung benötigt.`,
+    content: `Kind zeigt im Gruppenalltag zunehmend eigenständiges Verhalten. Beteiligt sich aktiv an gemeinsamen Aktivitäten. Soziale Interaktion mit Gleichaltrigen gelingt zunehmend.`,
   },
   {
     id: 'ergo-2',
-    name: 'Therapieverlauf',
+    name: 'Entwicklungsbeobachtung',
     category: 'standard',
     mode: 'ergo',
-    content: `Ergotherapeutische Maßnahme fokussiert auf Alltagsbewältigung. Klient zeigt Motivation bei Aktivitäten wie Kochen und selbstständigem An- und Auskleiden.`,
+    content: `Erzieherische Maßnahme fokussiert auf die ganzheitliche Entwicklung. Kind zeigt Motivation bei Aktivitäten wie Basteln, Bewegungsspielen und selbstständigem An- und Auskleiden.`,
   },
   {
     id: 'ergo-3',
     name: 'Entwicklungsschritt',
     category: 'entwicklung',
     mode: 'ergo',
-    content: `Deutliche Verbesserung in der Handlungsfähigkeit beobachtet. Therapeutische Ziele werden zunehmend eigenständig erreicht. Transfer in Alltagssituationen erfolgreich.`,
+    content: `Deutliche Verbesserung in der Selbstständigkeit beobachtet. Erzieherische Ziele werden zunehmend eigenständig erreicht. Transfer in Alltagssituationen erfolgreich.`,
   },
   {
     id: 'ergo-4',
     name: 'Rückschritt Notiz',
     category: 'notfall',
     mode: 'ergo',
-    content: `Aktuell verminderte Interaktionsbereitschaft. Therapeutische Interventionen werden schwerer initiert. Ärztliche Abklärung und Teambesprechung empfohlen.`,
+    content: `Aktuell verminderte Interaktionsbereitschaft. Erzieherische Interventionen werden schwerer initiiert. Elterngespräch und Teambesprechung empfohlen.`,
   },
 ];
 

@@ -8,8 +8,8 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: "HEP-QuickWrite | KI-gestützte Fachberichte",
-  description: "Professionelle Fachberichte für Heilerziehungspflege und Ergotherapie - powered by KI. ICF-konform, schnell, datenschutzsicher.",
-  keywords: ["Fachbericht", "Heilerziehungspflege", "Ergotherapie", "ICF", "KI", "Dokumentation"],
+  description: "Professionelle Fachberichte für Heilerziehungspflege und Erzieher - powered by KI. ICF-konform, schnell, datenschutzsicher.",
+  keywords: ["Fachbericht", "Heilerziehungspflege", "Erzieher", "ICF", "KI", "Dokumentation"],
 };
 
 export default function RootLayout({
