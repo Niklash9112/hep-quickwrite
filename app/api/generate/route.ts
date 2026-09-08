@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const OLLAMA_BASE_URL = 'https://api.ollama.com/v1';
+const OLLAMA_BASE_URL = 'https://ollama.com/api/chat';
 
 const SYSTEM_PROMPTS = {
   hep: `Du bist ein erfahrener Heilerziehungspfleger und hilfst bei der Erstellung professioneller Fachberichte.
@@ -70,20 +70,22 @@ ${notes}
 
 Bitte erstelle nun den professionellen Bericht:`;
 
-    const response = await fetch(`${OLLAMA_BASE_URL}/chat/completions`, {
+    const response = await fetch(OLLAMA_BASE_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${process.env.OLLAMA_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'qwen2.5:72b',
+        model: 'mistral-large-3:675b',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt }
         ],
-        temperature: 0.7,
-        max_tokens: 1500,
+        options: {
+          temperature: 0.7,
+          num_predict: 1500,
+        },
         stream: false,
       }),
     });
@@ -99,14 +101,14 @@ Bitte erstelle nun den professionellen Bericht:`;
 
     const data = await response.json();
     
-    if (!data.choices?.[0]?.message?.content) {
+    if (!data.message?.content) {
       return NextResponse.json(
         { error: 'Keine Antwort vom Modell erhalten' },
         { status: 500 }
       );
     }
 
-    return NextResponse.json({ result: data.choices[0].message.content.trim() });
+    return NextResponse.json({ result: data.message.content.trim() });
 
   } catch (error: any) {
     console.error('Generate API Error:', error);
