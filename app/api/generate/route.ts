@@ -77,7 +77,7 @@ Bitte erstelle nun den professionellen Bericht:`;
         'Authorization': `Bearer ${process.env.OLLAMA_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'llama3.2',
+        model: 'qwen2.5:72b',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt }
