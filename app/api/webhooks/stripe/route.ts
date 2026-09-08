@@ -2,9 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { clerkClient } from '@clerk/nextjs/server';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2026-01-28.clover',
-});
+function getStripe(): Stripe {
+  return new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+    apiVersion: '2025-02-24.acacia',
+  });
+}
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
 
@@ -23,7 +25,7 @@ export async function POST(request: NextRequest) {
     let event: Stripe.Event;
 
     try {
-      event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+      event = getStripe().webhooks.constructEvent(body, signature, webhookSecret);
     } catch (err: any) {
       console.error('Webhook-Signatur-Fehler:', err.message);
       return NextResponse.json(
@@ -38,7 +40,8 @@ export async function POST(request: NextRequest) {
         const clerkUserId = session.metadata?.clerkUserId;
 
         if (clerkUserId) {
-          await clerkClient.users.updateUserMetadata(clerkUserId, {
+          const client = await clerkClient();
+          await client.users.updateUserMetadata(clerkUserId, {
             publicMetadata: {
               subscriptionStatus: 'trialing',
               stripeCustomerId: session.customer,
@@ -55,7 +58,7 @@ export async function POST(request: NextRequest) {
         const subscription = event.data.object as Stripe.Subscription;
         const customerId = subscription.customer as string;
 
-        const customer = await stripe.customers.retrieve(customerId);
+        const customer = await getStripe().customers.retrieve(customerId);
         if ('metadata' in customer) {
           const clerkUserId = customer.metadata?.clerkUserId;
 
@@ -64,7 +67,8 @@ export async function POST(request: NextRequest) {
               ? 'active' 
               : 'inactive';
 
-            await clerkClient.users.updateUserMetadata(clerkUserId, {
+            const client = await clerkClient();
+            await client.users.updateUserMetadata(clerkUserId, {
               publicMetadata: {
                 subscriptionStatus: status,
                 stripeCustomerId: customerId,
@@ -81,12 +85,13 @@ export async function POST(request: NextRequest) {
         const subscription = event.data.object as Stripe.Subscription;
         const customerId = subscription.customer as string;
 
-        const customer = await stripe.customers.retrieve(customerId);
+        const customer = await getStripe().customers.retrieve(customerId);
         if ('metadata' in customer) {
           const clerkUserId = customer.metadata?.clerkUserId;
 
           if (clerkUserId) {
-            await clerkClient.users.updateUserMetadata(clerkUserId, {
+            const client = await clerkClient();
+            await client.users.updateUserMetadata(clerkUserId, {
               publicMetadata: {
                 subscriptionStatus: 'inactive',
               },

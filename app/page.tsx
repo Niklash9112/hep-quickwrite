@@ -903,7 +903,7 @@ export default function Home() {
             <div className="text-center">
               {/* Logo im Paywall */}
               <div className="mb-4 flex justify-center">
-                  
+                  <img src="/logo.jpg" alt="HEP-QuickWrite Logo"
                   className="rounded-lg"
                 />
               </div>
@@ -1057,7 +1057,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-3">
-                
+                <img src="/logo.jpg" alt="HEP-QuickWrite Logo"
                 className="rounded"
               />
               <p className={`text-sm ${
