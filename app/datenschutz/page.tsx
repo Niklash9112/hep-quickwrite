@@ -155,18 +155,18 @@ export default function Datenschutz() {
                 </a>
               </p>
 
-              <h3 className="font-semibold text-gray-900 mt-4 mb-2">Google Gemini API (KI-Textgenerierung)</h3>
+              <h3 className="font-semibold text-gray-900 mt-4 mb-2">Ollama (KI-Textgenerierung)</h3>
               <p className="leading-relaxed">
-                Wir nutzen die Google Gemini API zur Generierung von Berichten. Ihre eingegebenen Notizen werden an 
-                Google übermittelt, um den Bericht zu erstellen. Diese Daten werden nach der Verarbeitung nicht gespeichert. 
+                Wir nutzen die Ollama-API zur Generierung von Berichten. Ihre eingegebenen Notizen werden an 
+                Ollama übermittelt, um den Bericht zu erstellen. Diese Daten werden nach der Verarbeitung nicht gespeichert. 
                 Weitere Informationen: 
                 <a 
-                  href="https://policies.google.com/privacy" 
+                  href="https://ollama.com/privacy" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-indigo-600 hover:underline ml-1"
                 >
-                  https://policies.google.com/privacy
+                  https://ollama.com/privacy
                 </a>
               </p>
             </section>
