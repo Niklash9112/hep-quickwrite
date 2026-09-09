@@ -1,4 +1,4 @@
-interface Template {
+export interface Template {
   id: string;
   name: string;
   content: string;

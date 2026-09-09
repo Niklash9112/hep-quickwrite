@@ -5,23 +5,8 @@ import { CheckCircle, Lock, Sun, Moon, Copy, Loader2, Download, FileText, Chevro
 import { UserButton, useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import jsPDF from 'jspdf';
+import { getTemplatesByCategory, Template } from '../lib/templates';
 
-// --- NOTFALL-FIX: Vorlagen direkt hier definiert, damit Vercel nicht mehr sucht ---
-interface Template {
-  id: string;
-  name: string;
-  content: string;
-  category: string;
-}
-
-const getTemplatesByCategory = (mode: string, category: string): Template[] => {
-  return [
-    { id: '1', name: 'Standard-Bericht', category: 'standard', content: 'Klient zeigt heute...' },
-    { id: '2', name: 'ICF-Beobachtung', category: 'standard', content: 'Im Bereich Teilhabe wurde...' }
-  ];
-};
-
-const saveReport = (data: any) => console.log('Bericht gesichert');
 // ----------------------------------------------------------------------------------
 
 type Mode = 'hep' | 'ergo';
@@ -51,6 +36,22 @@ export default function Home() {
   const [showPaywall, setShowPaywall] = useState(false);
   const FREE_REPORT_LIMIT = 3;
   const [showTemplates, setShowTemplates] = useState(false);
+
+  // Speichert den Bericht (ruft track-report auf, um den Freemium-Counter zu erhöhen)
+  const saveReport = async (data: any) => {
+    try {
+      const res = await fetch('/api/track-report', { method: 'POST' });
+      const result = await res.json();
+      if (result.reportCount !== undefined) {
+        setReportCount(result.reportCount);
+      }
+      if (result.limitReached) {
+        setShowPaywall(true);
+      }
+    } catch (e) {
+      console.error('saveReport Fehler:', e);
+    }
+  };
 
   // Hole Report-Counter vom Server
   useEffect(() => {
