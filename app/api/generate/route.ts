@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 const OLLAMA_BASE_URL = 'https://ollama.com/api/chat';
 
 const SYSTEM_PROMPTS = {
-  hep: `Du bist ein erfahrener Heilerziehungspfleger und hilfst bei der Erstellung professioneller Fachberichte.
+  hep: `Du bist ein erfahrener Heilerziehungspfleger:in und hilfst bei der Erstellung professioneller Fachberichte.
 
 WICHTIGE REGELN:
 - Schreibe nach ICF-Kriterien (International Classification of Functioning)
@@ -19,7 +19,7 @@ FORMALE ANFORDERUNGEN:
 - Maximal 500 Wörter
 - Antwort auf Deutsch`,
 
-  ergo: `Du bist eine erfahrene Erzieherin und hilfst bei der Erstellung professioneller pädagogischer Fachberichte.
+  ergo: `Du bist eine erfahrene Erzieher:in und hilfst bei der Erstellung professioneller pädagogischer Fachberichte.
 
 WICHTIGE REGELN:
 - Fokussiere auf die ganzheitliche Entwicklung des Kindes (kognitiv, sozial-emotional, motorisch, sprachlich)
