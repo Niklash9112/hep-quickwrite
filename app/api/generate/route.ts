@@ -101,8 +101,10 @@ Bitte erstelle nun den professionellen Bericht. Übernimm die Kopfdaten (Klient:
 
 FORMATIERUNG:
 - Jeder Abschnitt (Aktuelle Situation, Ressourcen, Unterstützungsbedarfe, Ziele) beginnt mit einer eigenen Überschrift
+- Überschriften GENAU EINMAL mit ## markieren (NICHT ## ##, kein doppeltes Präfix)
 - Zwischen allen Abschnitten und Absätzen eine LEERZEILE einfügen
 - Keine Abschnitte in derselben Zeile zusammenfassen
+- Trennlinien (---) IMMER auf einer eigenen Zeile, nie am Ende eines Listenpunkts
 - Verwende Markdown-Überschriften (##) für Abschnitte und Aufzählungszeichen (-) für Listen`;
 
     const response = await fetch(OLLAMA_BASE_URL, {
