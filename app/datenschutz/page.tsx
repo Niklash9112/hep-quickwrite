@@ -121,6 +121,13 @@ export default function Datenschutz() {
                 Wenn Sie sich auf dieser Website registrieren, werden Ihre eingegebenen Daten (E-Mail-Adresse, Name) 
                 bei uns gespeichert. Diese Daten werden ausschließlich für die Bereitstellung der Dienste verwendet.
               </p>
+
+              <h3 className="font-semibold text-gray-900 mt-4 mb-2">Support-Formular</h3>
+              <p className="leading-relaxed">
+                Wenn Sie über das Support-Formular eine Anfrage senden, werden Ihre eingegebenen Daten (Name, 
+                E-Mail-Adresse, Nachricht) per E-Mail an den Websitebetreiber übermittelt. Diese Daten werden 
+                ausschließlich zur Bearbeitung Ihrer Anfrage verwendet und nicht an Dritte weitergegeben.
+              </p>
             </section>
 
             <section>
