@@ -632,7 +632,7 @@ export default function Home() {
           <h2 className={`text-lg font-semibold mb-4 ${
             theme === 'light' ? 'text-gray-800' : 'text-gray-100'
           }`}>Berufsgruppe wählen</h2>
-          <div className="flex gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <button
               onClick={() => setMode('hep')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
