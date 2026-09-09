@@ -62,6 +62,12 @@ export default function Home() {
   const [showPaywall, setShowPaywall] = useState(false);
   const FREE_REPORT_LIMIT = 3;
   const [showTemplates, setShowTemplates] = useState(false);
+  const [showSupport, setShowSupport] = useState(false);
+  const [supportName, setSupportName] = useState('');
+  const [supportEmail, setSupportEmail] = useState('');
+  const [supportMessage, setSupportMessage] = useState('');
+  const [supportSending, setSupportSending] = useState(false);
+  const [supportSent, setSupportSent] = useState(false);
 
   // Speichert den Bericht (ruft track-report auf, um den Freemium-Counter zu erhöhen)
   const saveReport = async (data: any) => {
@@ -584,6 +590,18 @@ export default function Home() {
                 <span className="hidden sm:inline">Historie</span>
               </button>
 
+              <button
+                onClick={() => setShowSupport(true)}
+                className={`px-3 sm:px-4 py-2 rounded-lg transition-colors text-xs sm:text-sm font-medium flex items-center gap-1 sm:gap-2 ${
+                  theme === 'light'
+                    ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
+                }`}
+              >
+                <span>💬</span>
+                <span className="hidden sm:inline">Support</span>
+              </button>
+
               {isAdmin && (
                 <a
                   href="/admin"
@@ -1060,6 +1078,125 @@ export default function Home() {
                 Später
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {showSupport && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className={`max-w-md w-full rounded-lg shadow-2xl p-8 ${
+            theme === 'light' ? 'bg-white' : 'bg-gray-800'
+          }`}>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className={`text-xl font-bold ${
+                theme === 'light' ? 'text-gray-800' : 'text-gray-100'
+              }`}>💬 Support</h2>
+              <button
+                onClick={() => { setShowSupport(false); setSupportSent(false); }}
+                className={`p-2 rounded-lg ${
+                  theme === 'light' ? 'hover:bg-gray-100' : 'hover:bg-gray-700'
+                }`}
+              >
+                ✕
+              </button>
+            </div>
+
+            {supportSent ? (
+              <div className="text-center py-8">
+                <div className="text-5xl mb-4">✅</div>
+                <p className={`font-medium ${theme === 'light' ? 'text-gray-700' : 'text-gray-200'}`}>
+                  Vielen Dank! Deine Anfrage wurde gesendet.
+                </p>
+                <p className={`text-sm mt-2 ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>
+                  Wir melden uns so schnell wie möglich.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div>
+                  <label className={`block text-sm font-medium mb-1 ${
+                    theme === 'light' ? 'text-gray-700' : 'text-gray-300'
+                  }`}>Name</label>
+                  <input
+                    type="text"
+                    value={supportName}
+                    onChange={(e) => setSupportName(e.target.value)}
+                    placeholder="Dein Name"
+                    className={`w-full p-3 rounded-lg border-2 focus:ring-2 transition-all ${
+                      theme === 'light'
+                        ? 'bg-white border-gray-300 focus:ring-indigo-500'
+                        : 'bg-gray-700 border-gray-600 focus:ring-indigo-400 text-white'
+                    }`}
+                  />
+                </div>
+                <div>
+                  <label className={`block text-sm font-medium mb-1 ${
+                    theme === 'light' ? 'text-gray-700' : 'text-gray-300'
+                  }`}>E-Mail</label>
+                  <input
+                    type="email"
+                    value={supportEmail}
+                    onChange={(e) => setSupportEmail(e.target.value)}
+                    placeholder="deine@email.de"
+                    className={`w-full p-3 rounded-lg border-2 focus:ring-2 transition-all ${
+                      theme === 'light'
+                        ? 'bg-white border-gray-300 focus:ring-indigo-500'
+                        : 'bg-gray-700 border-gray-600 focus:ring-indigo-400 text-white'
+                    }`}
+                  />
+                </div>
+                <div>
+                  <label className={`block text-sm font-medium mb-1 ${
+                    theme === 'light' ? 'text-gray-700' : 'text-gray-300'
+                  }`}>Nachricht</label>
+                  <textarea
+                    value={supportMessage}
+                    onChange={(e) => setSupportMessage(e.target.value)}
+                    placeholder="Wie können wir helfen?"
+                    rows={4}
+                    className={`w-full p-3 rounded-lg border-2 focus:ring-2 transition-all resize-none ${
+                      theme === 'light'
+                        ? 'bg-white border-gray-300 focus:ring-indigo-500'
+                        : 'bg-gray-700 border-gray-600 focus:ring-indigo-400 text-white'
+                    }`}
+                  />
+                </div>
+                <button
+                  onClick={async () => {
+                    if (!supportName.trim() || !supportEmail.trim() || !supportMessage.trim()) {
+                      alert('Bitte alle Felder ausfüllen.');
+                      return;
+                    }
+                    setSupportSending(true);
+                    try {
+                      const res = await fetch('/api/support', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          name: supportName,
+                          email: supportEmail,
+                          message: supportMessage,
+                        }),
+                      });
+                      if (res.ok) {
+                        setSupportSent(true);
+                      } else {
+                        const data = await res.json();
+                        alert('Fehler: ' + (data.error || 'Unbekannter Fehler'));
+                      }
+                    } catch (e) {
+                      alert('Fehler beim Senden der Anfrage.');
+                    } finally {
+                      setSupportSending(false);
+                    }
+                  }}
+                  disabled={supportSending}
+                  className="w-full py-3 px-6 rounded-lg font-medium bg-indigo-600 hover:bg-indigo-700 text-white shadow-md transition-all disabled:opacity-50"
+                >
+                  {supportSending ? 'Sende...' : 'Anfrage senden'}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
