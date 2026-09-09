@@ -79,6 +79,9 @@ export async function POST(request: NextRequest) {
     const today = new Date().toLocaleDateString('de-DE', {
       day: '2-digit', month: '2-digit', year: 'numeric',
     });
+    const nowTime = new Date().toLocaleTimeString('de-DE', {
+      hour: '2-digit', minute: '2-digit',
+    });
 
     const systemPrompt = SYSTEM_PROMPTS[mode as keyof typeof SYSTEM_PROMPTS] || SYSTEM_PROMPTS.hep;
     const typePrompt = DOCUMENT_TYPE_PROMPTS[documentType] || DOCUMENT_TYPE_PROMPTS['Fachbericht (ICF)'];
@@ -88,12 +91,19 @@ export async function POST(request: NextRequest) {
 KOPFDATEN DES BERICHTS:
 - Klient:in: ${clientName || '[Name]'}
 - Datum: ${today}
+- Uhrzeit: ${nowTime} Uhr
 - Verfasser:in: ${authorName || '[Name]'}
 
 NOTIZEN DES THERAPEUTEN:
 ${notes}
 
-Bitte erstelle nun den professionellen Bericht. Übernimm die Kopfdaten (Klient:in, Datum, Verfasser:in) exakt in den Berichtskopf.`;
+Bitte erstelle nun den professionellen Bericht. Übernimm die Kopfdaten (Klient:in, Datum, Uhrzeit, Verfasser:in) exakt in den Berichtskopf.
+
+FORMATIERUNG:
+- Jeder Abschnitt (Aktuelle Situation, Ressourcen, Unterstützungsbedarfe, Ziele) beginnt mit einer eigenen Überschrift
+- Zwischen allen Abschnitten und Absätzen eine LEERZEILE einfügen
+- Keine Abschnitte in derselben Zeile zusammenfassen
+- Verwende Markdown-Überschriften (##) für Abschnitte und Aufzählungszeichen (-) für Listen`;
 
     const response = await fetch(OLLAMA_BASE_URL, {
       method: 'POST',
