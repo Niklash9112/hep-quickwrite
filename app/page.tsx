@@ -72,6 +72,13 @@ export default function Home() {
   // Speichert den Bericht (ruft track-report auf, um den Freemium-Counter zu erhöhen)
   const saveReport = async (data: any) => {
     try {
+      // Bericht in Clerk-Metadata speichern (für Historie)
+      await fetch('/api/reports', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      // Counter erhöhen
       const res = await fetch('/api/track-report', { method: 'POST' });
       const result = await res.json();
       if (result.reportCount !== undefined) {
