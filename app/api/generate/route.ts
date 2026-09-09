@@ -71,6 +71,10 @@ FORMALE ANFORDERUNGEN:
 
 const DOCUMENT_TYPE_PROMPTS: Record<string, string> = {
   'Fachbericht (ICF)': 'Erstelle einen vollständigen Fachbericht nach ICF-Kriterien mit allen relevanten Aspekten.',
+  'Entwicklungsbericht': 'Erstelle einen Entwicklungsbericht mit Fokus auf die ganzheitliche Entwicklung, Beobachtungen und erzieherische Ziele.',
+  'Pflegebericht': 'Erstelle einen Pflegebericht nach dem Pflegeprozess mit AEDL/ATL-Struktur, Pflegezustand, Ressourcen, Risiken, Zielen und Maßnahmen.',
+  'Befundbericht': 'Erstelle einen logopädischen Befundbericht mit Anamnese, Befund, Diagnose und Empfehlungen.',
+  'Therapiebericht': 'Erstelle einen logopädischen Therapiebericht mit Therapiezielen, durchgeführten Maßnahmen und Verlauf.',
   'Tagesdokumentation': 'Erstelle eine kompakte Tagesdokumentation mit den wichtigsten Ereignissen und Beobachtungen des Tages.',
   'Leichte Sprache': 'Erstelle eine vereinfachte Dokumentation in leichter Sprache (B1-Niveau), kurze Sätze, einfache Wörter, verständlich für Laien.'
 };

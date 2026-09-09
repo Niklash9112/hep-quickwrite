@@ -13,7 +13,32 @@ import { getTemplatesByCategory, Template } from '../lib/templates';
 type Mode = 'hep' | 'ergo' | 'altenpflege' | 'logopaedie';
 type SubscriptionStatus = 'active' | 'inactive';
 type Theme = 'light' | 'dark';
-type DocumentType = 'Fachbericht (ICF)' | 'Tagesdokumentation' | 'Leichte Sprache';
+type DocumentType = 'Fachbericht (ICF)' | 'Entwicklungsbericht' | 'Pflegebericht' | 'Befundbericht' | 'Therapiebericht' | 'Tagesdokumentation' | 'Leichte Sprache';
+
+// Dokumenttypen je Berufsgruppe
+const DOC_TYPES_BY_MODE: Record<Mode, { type: DocumentType; label: string; icon: string; color: string }[]> = {
+  hep: [
+    { type: 'Fachbericht (ICF)', label: 'Fachbericht (ICF)', icon: '📋', color: 'bg-indigo-600 hover:bg-indigo-700' },
+    { type: 'Tagesdokumentation', label: 'Tagesdokumentation', icon: '📝', color: 'bg-teal-600 hover:bg-teal-700' },
+    { type: 'Leichte Sprache', label: 'Leichte Sprache', icon: '💬', color: 'bg-green-600 hover:bg-green-700' },
+  ],
+  ergo: [
+    { type: 'Entwicklungsbericht', label: 'Entwicklungsbericht', icon: '🌱', color: 'bg-teal-600 hover:bg-teal-700' },
+    { type: 'Tagesdokumentation', label: 'Tagesdokumentation', icon: '📝', color: 'bg-teal-600 hover:bg-teal-700' },
+    { type: 'Leichte Sprache', label: 'Leichte Sprache', icon: '💬', color: 'bg-green-600 hover:bg-green-700' },
+  ],
+  altenpflege: [
+    { type: 'Pflegebericht', label: 'Pflegebericht', icon: '🩺', color: 'bg-rose-600 hover:bg-rose-700' },
+    { type: 'Tagesdokumentation', label: 'Tagesdokumentation', icon: '📝', color: 'bg-teal-600 hover:bg-teal-700' },
+    { type: 'Leichte Sprache', label: 'Leichte Sprache', icon: '💬', color: 'bg-green-600 hover:bg-green-700' },
+  ],
+  logopaedie: [
+    { type: 'Befundbericht', label: 'Befundbericht', icon: '🔍', color: 'bg-amber-600 hover:bg-amber-700' },
+    { type: 'Therapiebericht', label: 'Therapiebericht', icon: '🗣️', color: 'bg-amber-600 hover:bg-amber-700' },
+    { type: 'Tagesdokumentation', label: 'Tagesdokumentation', icon: '📝', color: 'bg-teal-600 hover:bg-teal-700' },
+    { type: 'Leichte Sprache', label: 'Leichte Sprache', icon: '💬', color: 'bg-green-600 hover:bg-green-700' },
+  ],
+};
 
 export default function Home() {
   const { user, isLoaded } = useUser();
@@ -756,74 +781,31 @@ export default function Home() {
               theme === 'light' ? 'text-gray-800' : 'text-gray-100'
             }`}>Dokument erstellen</h3>
             <div className="space-y-4">
-              <button
-                onClick={() => {
-                  if (!notes.trim()) return;
-                  if (subscriptionStatus !== 'active' && reportCount >= FREE_REPORT_LIMIT) {
-                    setShowPaywall(true); // Paywall automatisch öffnen!
-                    return;
-                  }
-                  handleGenerate('Fachbericht (ICF)');
-                }}
-                disabled={!notes.trim()}
-                className={`w-full py-4 px-6 rounded-lg font-medium transition-all ${
-                  notes.trim()
-                    ? (subscriptionStatus === 'active' || reportCount < FREE_REPORT_LIMIT)
-                      ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-md hover:shadow-lg'
-                      : 'bg-indigo-500 hover:bg-indigo-600 text-white shadow-md hover:shadow-lg cursor-pointer'
-                    : theme === 'light'
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-gray-600 text-gray-300 cursor-not-allowed'
-                }`}
-              >
-                📋 Fachbericht (ICF)
-              </button>
-
-              <button
-                onClick={() => {
-                  if (!notes.trim()) return;
-                  if (subscriptionStatus !== 'active' && reportCount >= FREE_REPORT_LIMIT) {
-                    setShowPaywall(true); // Paywall automatisch öffnen!
-                    return;
-                  }
-                  handleGenerate('Tagesdokumentation');
-                }}
-                disabled={!notes.trim()}
-                className={`w-full py-4 px-6 rounded-lg font-medium transition-all ${
-                  notes.trim()
-                    ? (subscriptionStatus === 'active' || reportCount < FREE_REPORT_LIMIT)
-                      ? 'bg-teal-600 hover:bg-teal-700 text-white shadow-md hover:shadow-lg'
-                      : 'bg-teal-500 hover:bg-teal-600 text-white shadow-md hover:shadow-lg cursor-pointer'
-                    : theme === 'light'
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-gray-600 text-gray-300 cursor-not-allowed'
-                }`}
-              >
-                📝 Tagesdokumentation
-              </button>
-
-              <button
-                onClick={() => {
-                  if (!notes.trim()) return;
-                  if (subscriptionStatus !== 'active' && reportCount >= FREE_REPORT_LIMIT) {
-                    setShowPaywall(true); // Paywall automatisch öffnen!
-                    return;
-                  }
-                  handleGenerate('Leichte Sprache');
-                }}
-                disabled={!notes.trim()}
-                className={`w-full py-4 px-6 rounded-lg font-medium transition-all ${
-                  notes.trim()
-                    ? (subscriptionStatus === 'active' || reportCount < FREE_REPORT_LIMIT)
-                      ? 'bg-green-600 hover:bg-green-700 text-white shadow-md hover:shadow-lg'
-                      : 'bg-green-500 hover:bg-green-600 text-white shadow-md hover:shadow-lg cursor-pointer'
-                    : theme === 'light'
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-gray-600 text-gray-300 cursor-not-allowed'
-                }`}
-              >
-                💬 Leichte Sprache
-              </button>
+              {DOC_TYPES_BY_MODE[mode].map((doc) => (
+                <button
+                  key={doc.type}
+                  onClick={() => {
+                    if (!notes.trim()) return;
+                    if (subscriptionStatus !== 'active' && reportCount >= FREE_REPORT_LIMIT) {
+                      setShowPaywall(true); // Paywall automatisch öffnen!
+                      return;
+                    }
+                    handleGenerate(doc.type);
+                  }}
+                  disabled={!notes.trim()}
+                  className={`w-full py-4 px-6 rounded-lg font-medium transition-all ${
+                    notes.trim()
+                      ? (subscriptionStatus === 'active' || reportCount < FREE_REPORT_LIMIT)
+                        ? `${doc.color} text-white shadow-md hover:shadow-lg`
+                        : `${doc.color} text-white shadow-md hover:shadow-lg cursor-pointer`
+                      : theme === 'light'
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : 'bg-gray-600 text-gray-300 cursor-not-allowed'
+                  }`}
+                >
+                  {doc.icon} {doc.label}
+                </button>
+              ))}
             </div>
 
             {subscriptionStatus !== 'active' && reportCount >= FREE_REPORT_LIMIT && (
