@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { auth, clerkClient } from '@clerk/nextjs/server';
 
 const OLLAMA_BASE_URL = 'https://ollama.com/api/chat';
 
@@ -44,7 +45,7 @@ const DOCUMENT_TYPE_PROMPTS: Record<string, string> = {
 
 export async function POST(request: NextRequest) {
   try {
-    const { notes, mode, documentType } = await request.json();
+    const { notes, mode, documentType, clientName } = await request.json();
 
     if (!notes || !mode) {
       return NextResponse.json(
@@ -60,15 +61,39 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Verfasser aus dem angemeldeten Clerk-Profil holen
+    let authorName = '';
+    try {
+      const { userId } = await auth();
+      if (userId) {
+        const client = await clerkClient();
+        const user = await client.users.getUser(userId);
+        authorName = user.firstName && user.lastName
+          ? `${user.firstName} ${user.lastName}`
+          : (user.firstName || user.username || user.primaryEmailAddress?.emailAddress || '');
+      }
+    } catch (e) {
+      console.error('Clerk-Auth Fehler:', e);
+    }
+
+    const today = new Date().toLocaleDateString('de-DE', {
+      day: '2-digit', month: '2-digit', year: 'numeric',
+    });
+
     const systemPrompt = SYSTEM_PROMPTS[mode as keyof typeof SYSTEM_PROMPTS] || SYSTEM_PROMPTS.hep;
     const typePrompt = DOCUMENT_TYPE_PROMPTS[documentType] || DOCUMENT_TYPE_PROMPTS['Fachbericht (ICF)'];
     
     const userPrompt = `${typePrompt}
 
+KOPFDATEN DES BERICHTS:
+- Klient:in: ${clientName || '[Name]'}
+- Datum: ${today}
+- Verfasser:in: ${authorName || '[Name]'}
+
 NOTIZEN DES THERAPEUTEN:
 ${notes}
 
-Bitte erstelle nun den professionellen Bericht:`;
+Bitte erstelle nun den professionellen Bericht. Übernimm die Kopfdaten (Klient:in, Datum, Verfasser:in) exakt in den Berichtskopf.`;
 
     const response = await fetch(OLLAMA_BASE_URL, {
       method: 'POST',

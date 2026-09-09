@@ -133,6 +133,7 @@ export default function Home() {
           notes,
           mode,
           documentType,
+          clientName,
         }),
         signal: controller.signal,
         cache: 'no-store',
