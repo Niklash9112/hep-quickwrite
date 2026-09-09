@@ -10,7 +10,7 @@ import { getTemplatesByCategory, Template } from '../lib/templates';
 
 // ----------------------------------------------------------------------------------
 
-type Mode = 'hep' | 'ergo';
+type Mode = 'hep' | 'ergo' | 'altenpflege' | 'logopaedie';
 type SubscriptionStatus = 'active' | 'inactive';
 type Theme = 'light' | 'dark';
 type DocumentType = 'Fachbericht (ICF)' | 'Tagesdokumentation' | 'Leichte Sprache';
@@ -614,6 +614,30 @@ export default function Home() {
             >
               Erzieher:in
             </button>
+            <button
+              onClick={() => setMode('altenpflege')}
+              className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
+                mode === 'altenpflege'
+                  ? 'bg-rose-600 text-white shadow-lg'
+                  : theme === 'light'
+                  ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
+              }`}
+            >
+              Altenpflege
+            </button>
+            <button
+              onClick={() => setMode('logopaedie')}
+              className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
+                mode === 'logopaedie'
+                  ? 'bg-amber-600 text-white shadow-lg'
+                  : theme === 'light'
+                  ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
+              }`}
+            >
+              Logopädie
+            </button>
           </div>
         </div>
 
@@ -888,12 +912,16 @@ export default function Home() {
           <h3 className={`text-lg font-semibold mb-3 ${
             theme === 'light' ? 'text-gray-800' : 'text-gray-100'
           }`}>
-            {mode === 'hep' ? 'Heilerziehungspfleger:in' : 'Erzieher:in'} aktiv
+            {mode === 'hep' ? 'Heilerziehungspfleger:in' : mode === 'ergo' ? 'Erzieher:in' : mode === 'altenpflege' ? 'Altenpflege' : 'Logopädie'} aktiv
           </h3>
           <p className={theme === 'light' ? 'text-gray-600' : 'text-gray-300'}>
             {mode === 'hep'
               ? 'Ihre Notizen werden für Heilerziehungspflege optimiert: ICF-Kriterien, ressourcenorientierte Sprache und professionelle Dokumentation.'
-              : 'Ihre Notizen werden für die Erzieher:in optimiert: Fokus auf ganzheitliche Entwicklung, Beobachtung und erzieherische Ziele.'}
+              : mode === 'ergo'
+              ? 'Ihre Notizen werden für die Erzieher:in optimiert: Fokus auf ganzheitliche Entwicklung, Beobachtung und erzieherische Ziele.'
+              : mode === 'altenpflege'
+              ? 'Ihre Notizen werden für die Altenpflege optimiert: Pflegeprozess, AEDL-Struktur, Ressourcen und Risiken.'
+              : 'Ihre Notizen werden für die Logopädie optimiert: Befund, Diagnose, Therapieziele und Maßnahmen.'}
           </p>
         </div>
       </main>
