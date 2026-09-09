@@ -1061,7 +1061,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-3">
                 <img src="/logo.jpg" alt="HEP-QuickWrite Logo"
-                className="rounded"
+                className="rounded h-8 w-8 object-contain"
               />
               <p className={`text-sm ${
                 theme === 'light' ? 'text-gray-500' : 'text-gray-400'
