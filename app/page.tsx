@@ -5,6 +5,7 @@ import { CheckCircle, Lock, Sun, Moon, Copy, Loader2, Download, FileText, Chevro
 import { UserButton, useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import jsPDF from 'jspdf';
+import ReactMarkdown from 'react-markdown';
 import { getTemplatesByCategory, Template } from '../lib/templates';
 
 // ----------------------------------------------------------------------------------
@@ -870,12 +871,12 @@ export default function Home() {
                 </div>
               </div>
             ) : (
-              <div className={`p-4 rounded-lg whitespace-pre-wrap font-serif leading-relaxed ${
+              <div className={`p-4 rounded-lg font-serif leading-relaxed ${
                 theme === 'light'
                   ? 'bg-gray-50 text-gray-800'
                   : 'bg-gray-700 text-gray-100'
               }`}>
-                {generatedText}
+                <ReactMarkdown>{generatedText}</ReactMarkdown>
               </div>
             )}
           </div>
