@@ -11,7 +11,6 @@ export const metadata: Metadata = {
   title: "HEP-QuickWrite | KI-gestützte Fachberichte",
   description: "Professionelle Fachberichte für Heilerziehungspflege und Erzieher - powered by KI. ICF-konform, schnell, datenschutzsicher.",
   keywords: ["Fachbericht", "Heilerziehungspflege", "Erzieher", "ICF", "KI", "Dokumentation"],
-  manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
