@@ -624,7 +624,7 @@ export default function Home() {
                   : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
               }`}
             >
-              Altenpflege
+              Altenpfleger:in
             </button>
             <button
               onClick={() => setMode('logopaedie')}
@@ -636,7 +636,7 @@ export default function Home() {
                   : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
               }`}
             >
-              Logopädie
+              Logopäde:in
             </button>
           </div>
         </div>
@@ -912,7 +912,7 @@ export default function Home() {
           <h3 className={`text-lg font-semibold mb-3 ${
             theme === 'light' ? 'text-gray-800' : 'text-gray-100'
           }`}>
-            {mode === 'hep' ? 'Heilerziehungspfleger:in' : mode === 'ergo' ? 'Erzieher:in' : mode === 'altenpflege' ? 'Altenpflege' : 'Logopädie'} aktiv
+            {mode === 'hep' ? 'Heilerziehungspfleger:in' : mode === 'ergo' ? 'Erzieher:in' : mode === 'altenpflege' ? 'Altenpfleger:in' : 'Logopäde:in'} aktiv
           </h3>
           <p className={theme === 'light' ? 'text-gray-600' : 'text-gray-300'}>
             {mode === 'hep'
