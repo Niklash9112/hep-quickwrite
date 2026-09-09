@@ -78,9 +78,11 @@ export async function POST(request: NextRequest) {
 
     const today = new Date().toLocaleDateString('de-DE', {
       day: '2-digit', month: '2-digit', year: 'numeric',
+      timeZone: 'Europe/Berlin',
     });
     const nowTime = new Date().toLocaleTimeString('de-DE', {
       hour: '2-digit', minute: '2-digit',
+      timeZone: 'Europe/Berlin',
     });
 
     const systemPrompt = SYSTEM_PROMPTS[mode as keyof typeof SYSTEM_PROMPTS] || SYSTEM_PROMPTS.hep;
@@ -145,7 +147,16 @@ FORMATIERUNG:
       );
     }
 
-    return NextResponse.json({ result: data.message.content.trim() });
+    // Nachbearbeitung: Markdown-Formatierung bereinigen
+    let result = data.message.content.trim();
+    // Doppelte Überschriften-Markierung entfernen: "## ## X" -> "## X"
+    result = result.replace(/##\s*##/g, '##');
+    // Trennlinie auf eigene Zeile: "...punkt. ---" -> "...punkt.\n\n---"
+    result = result.replace(/([^\n])\s*---\s*/g, '$1\n\n---\n\n');
+    // Mehrfache Leerzeilen auf eine reduzieren
+    result = result.replace(/\n{3,}/g, '\n\n');
+
+    return NextResponse.json({ result });
 
   } catch (error: any) {
     console.error('Generate API Error:', error);
