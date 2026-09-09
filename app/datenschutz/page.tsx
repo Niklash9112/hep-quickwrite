@@ -90,14 +90,10 @@ export default function Datenschutz() {
               </p>
 
               <h3 className="font-semibold text-gray-900 mt-4 mb-2">Hinweis zur verantwortlichen Stelle</h3>
-              <p className="bg-yellow-50 border border-yellow-200 rounded p-4 text-sm">
-                <strong>⚠️ PLATZHALTER - Bitte ausfüllen:</strong>
-              </p>
               <p className="mt-4">
-                <strong>[Dein vollständiger Name / Firmenname]</strong><br />
-                [Straße und Hausnummer]<br />
-                [PLZ und Ort]<br />
-                E-Mail: [deine@email.de]
+                <strong>Niklas Hornung</strong><br />
+                48531 Nordhorn<br />
+                E-Mail: niklas.h112@gmail.com
               </p>
             </section>
 
@@ -193,7 +189,7 @@ export default function Datenschutz() {
                 <li>Beschwerde bei einer Aufsichtsbehörde</li>
               </ul>
               <p className="mt-4 leading-relaxed">
-                Kontaktieren Sie uns unter: <strong>[deine@email.de]</strong>
+                Kontaktieren Sie uns unter: <strong>niklas.h112@gmail.com</strong>
               </p>
             </section>
 

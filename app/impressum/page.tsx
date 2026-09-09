@@ -41,21 +41,16 @@ export default function Impressum() {
           <div className="space-y-6 text-gray-700">
             <section>
               <h2 className="text-xl font-semibold text-gray-900 mb-3">Angaben gemäß § 5 TMG</h2>
-              <p className="bg-yellow-50 border border-yellow-200 rounded p-4 text-sm">
-                <strong>⚠️ PLATZHALTER - Bitte ausfüllen:</strong>
-              </p>
               <div className="mt-4 space-y-2">
-                <p><strong>[Dein vollständiger Name / Firmenname]</strong></p>
-                <p>[Straße und Hausnummer]</p>
-                <p>[PLZ und Ort]</p>
+                <p><strong>Niklas Hornung</strong></p>
+                <p>48531 Nordhorn</p>
               </div>
             </section>
 
             <section>
               <h2 className="text-xl font-semibold text-gray-900 mb-3">Kontakt</h2>
               <div className="space-y-2">
-                <p><strong>E-Mail:</strong> [deine@email.de]</p>
-                <p><strong>Telefon:</strong> [+49 123 456789] (optional)</p>
+                <p><strong>E-Mail:</strong> niklas.h112@gmail.com</p>
               </div>
             </section>
 
@@ -70,8 +65,8 @@ export default function Impressum() {
             <section>
               <h2 className="text-xl font-semibold text-gray-900 mb-3">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
               <p>
-                [Dein vollständiger Name]<br />
-                [Adresse wie oben]
+                Niklas Hornung<br />
+                48531 Nordhorn
               </p>
             </section>
 
