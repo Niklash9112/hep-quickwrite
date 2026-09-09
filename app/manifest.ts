@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
+import type { MetadataRoute } from 'next';
 
-export function GET() {
-  const manifest = {
+export default function manifest(): MetadataRoute.Manifest {
+  return {
     name: "HEP-QuickWrite",
     short_name: "HEP-QuickWrite",
     description: "KI-gestützte Fachberichte für Heilerziehungspflege, Erzieher, Altenpflege und Logopädie.",
@@ -15,7 +15,4 @@ export function GET() {
       { src: "/icons/icon-512-maskable.png", sizes: "512x512", type: "image/png", purpose: "maskable" }
     ]
   };
-  return NextResponse.json(manifest, {
-    headers: { 'Content-Type': 'application/manifest+json' }
-  });
 }
