@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth, clerkClient } from '@clerk/nextjs/server';
 
 const OLLAMA_BASE_URL = 'https://ollama.com/api/chat';
+const FREE_REPORT_LIMIT = 3;
+const ADMIN_EMAIL = 'niklas.h112@gmail.com';
 
 const SYSTEM_PROMPTS = {
   hep: `Du bist ein erfahrener Heilerziehungspfleger:in und hilfst bei der Erstellung professioneller Fachberichte.
@@ -97,17 +99,39 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // --- AUTH + LIMIT-CHECK (server-seitig, nicht umgehbar) ---
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Login erforderlich', requiresLogin: true },
+        { status: 401 }
+      );
+    }
+
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
+    const userEmail = user.primaryEmailAddress?.emailAddress || user.emailAddresses[0]?.emailAddress || '';
+    const subscriptionStatus = user.publicMetadata.subscriptionStatus as string | undefined;
+    const currentCount = (user.publicMetadata.reportCount as number) || 0;
+
+    // Admin bekommt unbegrenzt
+    const isAdmin = userEmail === ADMIN_EMAIL;
+    // Abonnent bekommt unbegrenzt
+    const hasSubscription = subscriptionStatus === 'active';
+
+    if (!isAdmin && !hasSubscription && currentCount >= FREE_REPORT_LIMIT) {
+      return NextResponse.json(
+        { error: 'Freemium-Limit erreicht', limitReached: true },
+        { status: 403 }
+      );
+    }
+
     // Verfasser aus dem angemeldeten Clerk-Profil holen
     let authorName = '';
     try {
-      const { userId } = await auth();
-      if (userId) {
-        const client = await clerkClient();
-        const user = await client.users.getUser(userId);
-        authorName = user.firstName && user.lastName
-          ? `${user.firstName} ${user.lastName}`
-          : (user.firstName || user.username || user.primaryEmailAddress?.emailAddress || '');
-      }
+      authorName = user.firstName && user.lastName
+        ? `${user.firstName} ${user.lastName}`
+        : (user.firstName || user.username || userEmail || '');
     } catch (e) {
       console.error('Clerk-Auth Fehler:', e);
     }
