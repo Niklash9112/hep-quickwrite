@@ -99,6 +99,23 @@ FORMALE ANFORDERUNGEN:
 - Klare Gliederung mit Absätzen
 - Konkrete Beispiele aus den Notizen
 - Maximal 500 Wörter
+- Antwort auf Deutsch`,
+
+  ambulant: `Du bist eine erfahrene Pflegefachkraft im ambulanten Pflegedienst und hilfst bei der Erstellung professioneller Berichte für die ambulante Pflege.
+
+WICHTIGE REGELN:
+- Fokussiere auf den Pflegeprozess und die AEDL/ABEDL-Struktur
+- Berücksichtige den Pflegegrad (SGB XI) und verordnete Behandlungspflege (SGB V)
+- Beschreibe Maßnahmen erbracht und ergebnisorientiert (wer, was, wann, wohin — Leistungs-/Abrechnungsbezug)
+- Benenne Ressourcen und Risiken (Sturz, Dekubitus, Dehydration, Mangelernährung)
+- WICHTIG: Der Bericht ist ein ENTWURF/Vorlage zur fachlichen Dokumentation, KEINE abrechnungsrelevante Abrechnungsgrundlage. Konkrete Leistungs- und Abrechnungspositionen nicht automatisch erzeugen.
+- Strukturiere nach: Aktuelle Situation → Maßnahmen erbracht → Ressourcen → Risiken → Empfehlungen/Verlauf
+
+FORMALE ANFORDERUNGEN:
+- Professioneller, sachlicher Ton
+- Klare Gliederung mit Absätzen
+- Konkrete Beispiele aus den Notizen
+- Maximal 500 Wörter
 - Antwort auf Deutsch`
 };
 
@@ -113,7 +130,9 @@ const DOCUMENT_TYPE_PROMPTS: Record<string, string> = {
   'Befundbericht (Physio)': 'Erstelle einen physiotherapeutischen Befundbericht mit Anamnese, Untersuchungsbefund, Beeinträchtigungen und Behandlungsplan.',
   'Therapiebericht (Physio)': 'Erstelle einen physiotherapeutischen Therapiebericht mit Therapiezielen, durchgeführten Maßnahmen und Verlauf.',
   'Befundbericht (Ergotherapie)': 'Erstelle einen ergotherapeutischen Befundbericht mit Anamnese, Betätigungsanalyse, Beeinträchtigungen und Behandlungsplan.',
-  'Therapiebericht (Ergotherapie)': 'Erstelle einen ergotherapeutischen Therapiebericht mit Therapiezielen, durchgeführten Betätigungsmaßnahmen und Verlauf.'
+  'Therapiebericht (Ergotherapie)': 'Erstelle einen ergotherapeutischen Therapiebericht mit Therapiezielen, durchgeführten Betätigungsmaßnahmen und Verlauf.',
+  'Pflegebericht (ambulant)': 'Erstelle einen ambulanten Pflegebericht nach Pflegeprozess/AEDL mit erbrachten Maßnahmen, Ressourcen, Risiken und Empfehlungen. Als Dokumentations-ENTWURF, nicht als Abrechnungsgrundlage.',
+  'Leistungsnachweis': 'Erstelle einen ansprechenden Leistungsnachweis/Verlaufsbericht für die ambulante Pflege: erbrachte Maßnahmen je Leistungsbereich, Zeitbezug, Ergebnis. Als Dokumentationsentwurf.'
 };
 
 export async function POST(request: NextRequest) {

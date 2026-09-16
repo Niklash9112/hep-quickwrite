@@ -24,6 +24,7 @@ const MODE_NAMES: Record<string, string> = {
   logopaedie: 'Logopäde:in',
   physio: 'Physiotherapeut:in',
   ergotherapie: 'Ergotherapeut:in',
+  ambulant: 'Ambulante Pflege',
 };
 
 export default function Historie() {

@@ -3,7 +3,7 @@ export interface Template {
   name: string;
   content: string;
   category: 'standard' | 'notfall' | 'entwicklung';
-  mode: 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie';
+  mode: 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie' | 'ambulant';
 }
 
 const HEP_TEMPLATES: Template[] = [
@@ -192,15 +192,46 @@ const ERGOTHERAPIE_TEMPLATES: Template[] = [
   },
 ];
 
-export const ALL_TEMPLATES: Template[] = [...HEP_TEMPLATES, ...ERGO_TEMPLATES, ...ALTENPFLEGE_TEMPLATES, ...LOGOPAEDIE_TEMPLATES, ...PHYSIO_TEMPLATES, ...ERGOTHERAPIE_TEMPLATES];
+const AMBULANT_TEMPLATES: Template[] = [
+  {
+    id: 'amb-1',
+    name: 'Verlaufsbeobachtung (AEDL)',
+    category: 'standard',
+    mode: 'ambulant',
+    content: `Körperpflege und Anziehen heute überwiegend selbstständig, Unterstützung untere Körperhälfte. Nahrungs- und Flüssigkeitsaufnahme regelmäßig. Mobilität innerhaus sicher, Gehstrecke außerhalb reduziert. Ressourcen: gute Orientierung, stabiler Gang. Risiken: Sturzgefahr bei Nässe. Maßnahmen nach Pflegeplan umgesetzt.`,
+  },
+  {
+    id: 'amb-2',
+    name: 'Pflegeplan & Leistungen',
+    category: 'standard',
+    mode: 'ambulant',
+    content: `Leistungen nach Pflegeplan erbracht (Körperpflege, Mobilisation, Begleitung). Pflegezustand unverändert stabil. Risiken: erhöhte Sturzgefahr, beobachtet. Beratungseinsatz und Angehörigengespräch angezeigt.`,
+  },
+  {
+    id: 'amb-3',
+    name: 'Entwicklungsfortschritt',
+    category: 'entwicklung',
+    mode: 'ambulant',
+    content: `Positive Entwicklung erlebt: Klient:in übernimmt zunehmend eigenständig Morgenroutine (Anziehen, Waschen). Selbstständigkeit bei der Körperpflege verbessert sich. Vereinbarte Ziele aus dem Pflegeplan werden erreicht, Maßnahmen können schrittweise reduziert werden.`,
+  },
+  {
+    id: 'amb-4',
+    name: 'Risiko / Veränderung (Notiz)',
+    category: 'notfall',
+    mode: 'ambulant',
+    content: `Aktuell erhöhter Unterstützungsbedarf beobachtet. Klient:in zeigt Verwirrtheit und Unsicherheit beim Gang, Sturzgefahr erhöht. Verordnete Behandlungspflege (Medikament) nicht zuverlässig selbst durchführbar. Angehörige informiert, ärztliche Abklärung und ggf. Erhöhung des Pflegegrads empfohlen.`,
+  },
+];
 
-export function getTemplatesByCategory(mode: 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie', category: string): Template[] {
+export const ALL_TEMPLATES: Template[] = [...HEP_TEMPLATES, ...ERGO_TEMPLATES, ...ALTENPFLEGE_TEMPLATES, ...LOGOPAEDIE_TEMPLATES, ...PHYSIO_TEMPLATES, ...ERGOTHERAPIE_TEMPLATES, ...AMBULANT_TEMPLATES];
+
+export function getTemplatesByCategory(mode: 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie' | 'ambulant', category: string): Template[] {
   const modeTemplates = getTemplatesByMode(mode);
   if (category === 'all') return modeTemplates;
   return modeTemplates.filter(t => t.category === category);
 }
 
-export function getTemplatesByMode(mode: 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie'): Template[] {
+export function getTemplatesByMode(mode: 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie' | 'ambulant'): Template[] {
   switch (mode) {
     case 'hep': return HEP_TEMPLATES;
     case 'ergo': return ERGO_TEMPLATES;
@@ -208,6 +239,7 @@ export function getTemplatesByMode(mode: 'hep' | 'ergo' | 'altenpflege' | 'logop
     case 'logopaedie': return LOGOPAEDIE_TEMPLATES;
     case 'physio': return PHYSIO_TEMPLATES;
     case 'ergotherapie': return ERGOTHERAPIE_TEMPLATES;
+    case 'ambulant': return AMBULANT_TEMPLATES;
     default: return HEP_TEMPLATES;
   }
 }
