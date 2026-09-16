@@ -3,7 +3,7 @@ export interface Template {
   name: string;
   content: string;
   category: 'standard' | 'notfall' | 'entwicklung';
-  mode: 'hep' | 'ergo' | 'altenpflege' | 'logopaedie';
+  mode: 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie';
 }
 
 const HEP_TEMPLATES: Template[] = [
@@ -130,20 +130,85 @@ const LOGOPAEDIE_TEMPLATES: Template[] = [
   },
 ];
 
-export const ALL_TEMPLATES: Template[] = [...HEP_TEMPLATES, ...ERGO_TEMPLATES, ...ALTENPFLEGE_TEMPLATES, ...LOGOPAEDIE_TEMPLATES];
+const PHYSIO_TEMPLATES: Template[] = [
+  {
+    id: 'physio-1',
+    name: 'Befund-Beobachtung',
+    category: 'standard',
+    mode: 'physio',
+    content: `Patient:in zeigt heute eine stabile Bewegungsfähigkeit. Gelenkbeweglichkeit im betroffenen Bereich leicht eingeschränkt, Mobilisation wird zunehmend toleriert. Schmerzangabe gering, Übungsdurchführung aktiv und motiviert.`,
+  },
+  {
+    id: 'physio-2',
+    name: 'Therapieverlauf',
+    category: 'standard',
+    mode: 'physio',
+    content: `Therapieverlauf positiv. Patient:in setzt die erlernten Übungen zur Kräftigung und Mobilisation zunehmend eigenständig um. Transfer in den Alltag gelingt. Gangbild stabil und zunehmend sicher.`,
+  },
+  {
+    id: 'physio-3',
+    name: 'Entwicklungsschritt',
+    category: 'entwicklung',
+    mode: 'physio',
+    content: `Deutlicher Fortschritt in der Mobilität beobachtet. Patient:in erreicht die Therapieziele zunehmend selbstständig. Kräftigung der Muskulatur verbessert, Bewegungsausmaß nimmt zu. Ressourcen werden gezielt genutzt.`,
+  },
+  {
+    id: 'physio-4',
+    name: 'Rückschritt Notiz',
+    category: 'notfall',
+    mode: 'physio',
+    content: `Aktuell erhöhte Schmerzangabe und eingeschränkte Beweglichkeit beobachtet. Patient:in zeigt Vermeidungsverhalten bei bestimmten Übungen. Schonhaltung deutlich. Arztgespräch und Anpassung des Behandlungsplans empfohlen.`,
+  },
+];
 
-export function getTemplatesByCategory(mode: 'hep' | 'ergo' | 'altenpflege' | 'logopaedie', category: string): Template[] {
+const ERGOTHERAPIE_TEMPLATES: Template[] = [
+  {
+    id: 'ergothera-1',
+    name: 'Befund-Beobachtung',
+    category: 'standard',
+    mode: 'ergotherapie',
+    content: `Patient:in zeigt in den Alltagsaktivitäten (ADL) einen stabilen Zustand. Feinmotorik und Handgeschicklichkeit teilweise eingeschränkt. Selbstständigkeit bei der Bewältigung des Alltags nimmt zu. Kooperation und Motivation sind gut.`,
+  },
+  {
+    id: 'ergothera-2',
+    name: 'Therapieverlauf',
+    category: 'standard',
+    mode: 'ergotherapie',
+    content: `Ergotherapeutischer Verlauf positiv. Patient:in setzt die erlernten Handlungsstrategien für den Alltag zunehmend um. Selbstständigkeit verbessert sich, Betätigungsorientierung wird gestärkt. Transfer in den Alltag gelingt.`,
+  },
+  {
+    id: 'ergothera-3',
+    name: 'Entwicklungsschritt',
+    category: 'entwicklung',
+    mode: 'ergotherapie',
+    content: `Deutliche Verbesserung der Alltagskompetenz beobachtet. Patient:in bewältigt ausgewählte Aktivitäten zunehmend selbstständig. Handlungsplanung und Feinmotorik verbessern sich. Betätigungsziele werden erreicht.`,
+  },
+  {
+    id: 'ergothera-4',
+    name: 'Rückschritt Notiz',
+    category: 'notfall',
+    mode: 'ergotherapie',
+    content: `Aktuell verminderte Selbstständigkeit bei Alltagsaktivitäten beobachtet. Patient:in zeigt erhöhte Unsicherheit und verminderte Handlungsfähigkeit. Rückgang der Feinmotorik. Team- und Arztgespräch zur Anpassung der Ziele empfohlen.`,
+  },
+];
+
+export const ALL_TEMPLATES: Template[] = [...HEP_TEMPLATES, ...ERGO_TEMPLATES, ...ALTENPFLEGE_TEMPLATES, ...LOGOPAEDIE_TEMPLATES, ...PHYSIO_TEMPLATES, ...ERGOTHERAPIE_TEMPLATES];
+
+export function getTemplatesByCategory(mode: 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie', category: string): Template[] {
   const modeTemplates = getTemplatesByMode(mode);
   if (category === 'all') return modeTemplates;
   return modeTemplates.filter(t => t.category === category);
 }
 
-export function getTemplatesByMode(mode: 'hep' | 'ergo' | 'altenpflege' | 'logopaedie'): Template[] {
+export function getTemplatesByMode(mode: 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie'): Template[] {
   switch (mode) {
     case 'hep': return HEP_TEMPLATES;
     case 'ergo': return ERGO_TEMPLATES;
     case 'altenpflege': return ALTENPFLEGE_TEMPLATES;
     case 'logopaedie': return LOGOPAEDIE_TEMPLATES;
+    case 'physio': return PHYSIO_TEMPLATES;
+    case 'ergotherapie': return ERGOTHERAPIE_TEMPLATES;
     default: return HEP_TEMPLATES;
   }
 }
+

@@ -22,6 +22,8 @@ const MODE_NAMES: Record<string, string> = {
   ergo: 'Erzieher:in',
   altenpflege: 'Altenpfleger:in',
   logopaedie: 'Logopäde:in',
+  physio: 'Physiotherapeut:in',
+  ergotherapie: 'Ergotherapeut:in',
 };
 
 export default function Historie() {

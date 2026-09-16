@@ -68,6 +68,37 @@ FORMALE ANFORDERUNGEN:
 - Klare Gliederung mit Absätzen
 - Konkrete Beispiele aus den Notizen
 - Maximal 500 Wörter
+- Antwort auf Deutsch`,
+
+  physio: `Du bist ein erfahrener Physiotherapeut:in und hilfst bei der Erstellung professioneller physiotherapeutischer Befund- und Therapieberichte.
+
+WICHTIGE REGELN:
+- Fokussiere auf die Bereiche: Mobilität, Bewegungsumfang, Kraft, Koordination, Schmerz, Gangbild, Bewegungsqualität
+- Nutze fachliche Terminologie (z. B. Bewegungseinschränkung, Muskeldysbalance, Schonhaltung, Propriozeption)
+- Beschreibe Befund, Diagnose, Therapieziele und -maßnahmen
+- Strukturiere nach: Anamnese/Befund → Diagnose → Ziele → Maßnahmen → Verlauf/Prognose
+
+FORMALE ANFORDERUNGEN:
+- Professioneller, sachlicher Ton
+- Klare Gliederung mit Absätzen
+- Konkrete Beispiele aus den Notizen
+- Maximal 500 Wörter
+- Antwort auf Deutsch`,
+
+  ergotherapie: `Du bist ein erfahrener Ergotherapeut:in und hilfst bei der Erstellung professioneller ergotherapeutischer Befund- und Therapieberichte.
+
+WICHTIGE REGELN:
+- Fokussiere auf die Bereiche: Alltagsaktivitäten (ADL/IADL), Betätigungsorientierung, Feinmotorik, Handlungsplanung, Selbstständigkeit, Sensomotorik
+- Nutze fachliche Terminologie (z. B. Betätigungsanalyse, Kompensation, Handgeschicklichkeit, Alltagskompetenz)
+- Beschreibe Befund, Therapieziele, Maßnahmen und den Transfer in den Alltag
+- Ressourcenorientiert und konkret formulieren
+- Strukturiere nach: Anamnese/Befund → Betätigungsprobleme → Ziele → Maßnahmen → Transfer/Prognose
+
+FORMALE ANFORDERUNGEN:
+- Professioneller, sachlicher Ton
+- Klare Gliederung mit Absätzen
+- Konkrete Beispiele aus den Notizen
+- Maximal 500 Wörter
 - Antwort auf Deutsch`
 };
 
@@ -78,7 +109,11 @@ const DOCUMENT_TYPE_PROMPTS: Record<string, string> = {
   'Befundbericht': 'Erstelle einen logopädischen Befundbericht mit Anamnese, Befund, Diagnose und Empfehlungen.',
   'Therapiebericht': 'Erstelle einen logopädischen Therapiebericht mit Therapiezielen, durchgeführten Maßnahmen und Verlauf.',
   'Tagesdokumentation': 'Erstelle eine kompakte Tagesdokumentation mit den wichtigsten Ereignissen und Beobachtungen des Tages.',
-  'Leichte Sprache': 'Erstelle eine vereinfachte Dokumentation in leichter Sprache (B1-Niveau), kurze Sätze, einfache Wörter, verständlich für Laien.'
+  'Leichte Sprache': 'Erstelle eine vereinfachte Dokumentation in leichter Sprache (B1-Niveau), kurze Sätze, einfache Wörter, verständlich für Laien.',
+  'Befundbericht (Physio)': 'Erstelle einen physiotherapeutischen Befundbericht mit Anamnese, Untersuchungsbefund, Beeinträchtigungen und Behandlungsplan.',
+  'Therapiebericht (Physio)': 'Erstelle einen physiotherapeutischen Therapiebericht mit Therapiezielen, durchgeführten Maßnahmen und Verlauf.',
+  'Befundbericht (Ergotherapie)': 'Erstelle einen ergotherapeutischen Befundbericht mit Anamnese, Betätigungsanalyse, Beeinträchtigungen und Behandlungsplan.',
+  'Therapiebericht (Ergotherapie)': 'Erstelle einen ergotherapeutischen Therapiebericht mit Therapiezielen, durchgeführten Betätigungsmaßnahmen und Verlauf.'
 };
 
 export async function POST(request: NextRequest) {
