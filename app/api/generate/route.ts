@@ -168,7 +168,7 @@ const DOCUMENT_TYPE_PROMPTS: Record<string, string> = {
 
 export async function POST(request: NextRequest) {
   try {
-    const { notes, mode, documentType, clientName } = await request.json();
+    const { notes, mode, documentType, clientName, template } = await request.json();
 
     if (!notes || !mode) {
       return NextResponse.json(
@@ -235,7 +235,11 @@ export async function POST(request: NextRequest) {
     
     const userPrompt = `${typePrompt}
 
-KOPFDATEN DES BERICHTS:
+${template && template.content ? `GEWÄHLTE VORLAGE/STRUKTUR-VORGABE:
+Die folgende Vorlage beschreibt die gewünschte Struktur und inhaltlichen Kriterien. Richte den Bericht an dieser Vorlagenlogik aus, übernimm aber NICHT den Vorlagentext wörtlich — nutze ihn als Rahmen und fülle ihn mit den konkreten Notizen:
+"${template.content}"
+
+` : ''}KOPFDATEN DES BERICHTS:
 - Klient:in: ${clientName || '[Name]'}
 - Datum: ${today}
 - Uhrzeit: ${nowTime} Uhr

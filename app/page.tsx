@@ -188,23 +188,12 @@ export default function Home() {
     localStorage.setItem('theme', newTheme);
   };
 
-  const [lastTemplate, setLastTemplate] = useState<{ id: string; content: string } | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
 
-  const insertTemplate = (template: Template) => {
-    let newText: string;
-    const last = lastTemplate;
-    // Wenn die aktuelle Notiz exakt mit der zuletzt eingefügten Vorlage endet,
-    // diese entfernen und durch die neue ersetzen (nicht hinten anhängen).
-    if (last && notes.trim() === last.content.trim()) {
-      newText = template.content;
-    } else if (last && notes.trim().endsWith(last.content.trim())) {
-      const base = notes.trim().replace(new RegExp(last.content.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$'), '').trim();
-      newText = base ? `${base}\n\n${template.content}` : template.content;
-    } else {
-      newText = notes ? `${notes}\n\n${template.content}` : template.content;
-    }
-    setNotes(newText);
-    setLastTemplate({ id: template.id, content: template.content });
+  const selectTemplate = (template: Template) => {
+    // Vorlage als Kriterien markieren (Variante B): KEIN Text wird ins Feld geschrieben,
+    // der User sieht nur die Auswahl, die KI generiert nach den Kriterien.
+    setSelectedTemplate(template.id === selectedTemplate?.id ? null : template);
     setShowTemplates(false);
   };
 
@@ -231,6 +220,7 @@ export default function Home() {
           mode,
           documentType,
           clientName,
+          template: selectedTemplate ? { id: selectedTemplate.id, content: selectedTemplate.content } : null,
         }),
         signal: controller.signal,
         cache: 'no-store',
@@ -852,9 +842,11 @@ export default function Home() {
                             {templates.map(template => (
                               <button
                                 key={template.id}
-                                onClick={() => insertTemplate(template)}
+                                onClick={() => selectTemplate(template)}
                                 className={`w-full text-left px-3 py-2 rounded text-sm transition-colors ${
-                                  theme === 'light'
+                                  selectedTemplate?.id === template.id
+                                    ? 'bg-indigo-600 text-white'
+                                    : theme === 'light'
                                     ? 'hover:bg-indigo-50 text-gray-700'
                                     : 'hover:bg-gray-600 text-gray-200'
                                 }`}
@@ -911,6 +903,28 @@ export default function Home() {
             <p className={`mt-2 text-sm ${
               theme === 'light' ? 'text-gray-500' : 'text-gray-400'
             }`}>{notes.length} Zeichen</p>
+            {selectedTemplate && (
+              <div className={`mt-3 flex items-center justify-between gap-3 px-3 py-2 rounded-lg border ${
+                theme === 'light'
+                  ? 'bg-indigo-50 border-indigo-200'
+                  : 'bg-indigo-900/40 border-indigo-700'
+              }`}>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className={`w-4 h-4 ${theme === 'light' ? 'text-indigo-600' : 'text-indigo-300'}`} />
+                  <span className={`text-sm font-medium ${theme === 'light' ? 'text-indigo-800' : 'text-indigo-200'}`}>
+                    Vorlage: {selectedTemplate.name}
+                  </span>
+                </div>
+                <button
+                  onClick={() => setSelectedTemplate(null)}
+                  className={`text-sm font-medium hover:underline ${
+                    theme === 'light' ? 'text-indigo-600' : 'text-indigo-300'
+                  }`}
+                >
+                  Entfernen
+                </button>
+              </div>
+            )}
           </div>
 
           <div className={`rounded-lg shadow-md p-6 transition-colors duration-300 ${
