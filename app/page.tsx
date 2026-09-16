@@ -10,10 +10,10 @@ import { getTemplatesByCategory, Template } from '../lib/templates';
 
 // ----------------------------------------------------------------------------------
 
-type Mode = 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie' | 'ambulant';
+type Mode = 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie' | 'ambulant' | 'cm_hep';
 type SubscriptionStatus = 'active' | 'inactive';
 type Theme = 'light' | 'dark';
-type DocumentType = 'Fachbericht (ICF)' | 'Entwicklungsbericht' | 'Pflegebericht' | 'Befundbericht' | 'Therapiebericht' | 'Tagesdokumentation' | 'Leichte Sprache' | 'Befundbericht (Physio)' | 'Therapiebericht (Physio)' | 'Befundbericht (Ergotherapie)' | 'Therapiebericht (Ergotherapie)' | 'Pflegebericht (ambulant)' | 'Leistungsnachweis';
+type DocumentType = 'Fachbericht (ICF)' | 'Entwicklungsbericht' | 'Pflegebericht' | 'Befundbericht' | 'Therapiebericht' | 'Tagesdokumentation' | 'Leichte Sprache' | 'Befundbericht (Physio)' | 'Therapiebericht (Physio)' | 'Befundbericht (Ergotherapie)' | 'Therapiebericht (Ergotherapie)' | 'Pflegebericht (ambulant)' | 'Leistungsnachweis' | 'Teilhabeplan (ICF)' | 'Hilfeplanbericht' | 'Verlaufsbericht CM';
 
 // Dokumenttypen je Berufsgruppe
 const DOC_TYPES_BY_MODE: Record<Mode, { type: DocumentType; label: string; icon: string; color: string }[]> = {
@@ -53,6 +53,13 @@ const DOC_TYPES_BY_MODE: Record<Mode, { type: DocumentType; label: string; icon:
   ambulant: [
     { type: 'Pflegebericht (ambulant)', label: 'Pflegebericht', icon: '🏠', color: 'bg-cyan-600 hover:bg-cyan-700' },
     { type: 'Leistungsnachweis', label: 'Leistungsnachweis', icon: '🧾', color: 'bg-cyan-600 hover:bg-cyan-700' },
+    { type: 'Tagesdokumentation', label: 'Tagesdokumentation', icon: '📝', color: 'bg-teal-600 hover:bg-teal-700' },
+    { type: 'Leichte Sprache', label: 'Leichte Sprache', icon: '💬', color: 'bg-green-600 hover:bg-green-700' },
+  ],
+  cm_hep: [
+    { type: 'Teilhabeplan (ICF)', label: 'Teilhabeplan (ICF)', icon: '🧭', color: 'bg-fuchsia-600 hover:bg-fuchsia-700' },
+    { type: 'Hilfeplanbericht', label: 'Hilfeplanbericht', icon: '🤝', color: 'bg-fuchsia-600 hover:bg-fuchsia-700' },
+    { type: 'Verlaufsbericht CM', label: 'Verlaufsbericht', icon: '📊', color: 'bg-fuchsia-600 hover:bg-fuchsia-700' },
     { type: 'Tagesdokumentation', label: 'Tagesdokumentation', icon: '📝', color: 'bg-teal-600 hover:bg-teal-700' },
     { type: 'Leichte Sprache', label: 'Leichte Sprache', icon: '💬', color: 'bg-green-600 hover:bg-green-700' },
   ],
@@ -670,7 +677,7 @@ export default function Home() {
           <h2 className={`text-lg font-semibold mb-4 ${
             theme === 'light' ? 'text-gray-800' : 'text-gray-100'
           }`}>Berufsgruppe wählen</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <button
               onClick={() => setMode('altenpflege')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
@@ -694,6 +701,18 @@ export default function Home() {
               }`}
             >
               Ambulante Pflege
+            </button>
+            <button
+              onClick={() => setMode('cm_hep')}
+              className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
+                mode === 'cm_hep'
+                  ? 'bg-fuchsia-600 text-white shadow-lg'
+                  : theme === 'light'
+                  ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
+              }`}
+            >
+              Case Management
             </button>
             <button
               onClick={() => setMode('ergotherapie')}
@@ -859,6 +878,8 @@ export default function Home() {
                   ? 'Geben Sie hier Ihre ergotherapeutischen Beobachtungen ein (Alltagsaktivitäten, Feinmotorik)...'
                   : mode === 'ambulant'
                   ? 'Geben Sie hier Ihre Beobachtungen als ambulante Pflegekraft ein (AEDL, Maßnahmen, Risiken)...'
+                  : mode === 'cm_hep'
+                  ? 'Geben Sie hier Ihre Notizen als Case-Manager:in ein (Klärung, Bedarfe, Ziele, Netzwerk)...'
                   : 'Notieren Sie Ihre pädagogischen Beobachtungen...'
               }
               className={`w-full h-64 p-4 border-2 rounded-lg focus:ring-2 transition-all resize-none ${
@@ -992,7 +1013,7 @@ export default function Home() {
           <h3 className={`text-lg font-semibold mb-3 ${
             theme === 'light' ? 'text-gray-800' : 'text-gray-100'
           }`}>
-            {mode === 'hep' ? 'Heilerziehungspfleger:in' : mode === 'ergo' ? 'Erzieher:in' : mode === 'altenpflege' ? 'Altenpfleger:in' : mode === 'logopaedie' ? 'Logopäde:in' : mode === 'physio' ? 'Physiotherapeut:in' : mode === 'ergotherapie' ? 'Ergotherapeut:in' : 'Ambulante Pflege'} aktiv
+            {mode === 'hep' ? 'Heilerziehungspfleger:in' : mode === 'ergo' ? 'Erzieher:in' : mode === 'altenpflege' ? 'Altenpfleger:in' : mode === 'logopaedie' ? 'Logopäde:in' : mode === 'physio' ? 'Physiotherapeut:in' : mode === 'ergotherapie' ? 'Ergotherapeut:in' : mode === 'ambulant' ? 'Ambulante Pflege' : 'Case Management'} aktiv
           </h3>
           <p className={theme === 'light' ? 'text-gray-600' : 'text-gray-300'}>
             {mode === 'hep'
@@ -1007,7 +1028,9 @@ export default function Home() {
               ? 'Ihre Notizen werden für die Physiotherapie optimiert: Befund, Mobilität, Schmerz, Therapieziele und Maßnahmen.'
               : mode === 'ergotherapie'
               ? 'Ihre Notizen werden für die Ergotherapie optimiert: Befund, Alltagsaktivitäten, Feinmotorik, Therapieziele und Maßnahmen.'
-              : 'Ihre Notizen werden für die Ambulante Pflege optimiert: Pflegeprozess, AEDL, Pflegegrad, erbrachte Maßnahmen und Risiken.'}
+              : mode === 'ambulant'
+              ? 'Ihre Notizen werden für die Ambulante Pflege optimiert: Pflegeprozess, AEDL, Pflegegrad, erbrachte Maßnahmen und Risiken.'
+              : 'Ihre Notizen werden für das Case Management optimiert: Teilhabeplanung nach SGB IX und ICF, personenzentrierte Ziele und Netzwerkkoordination.'}
           </p>
         </div>
       </main>

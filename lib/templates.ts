@@ -3,7 +3,7 @@ export interface Template {
   name: string;
   content: string;
   category: 'standard' | 'notfall' | 'entwicklung';
-  mode: 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie' | 'ambulant';
+  mode: 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie' | 'ambulant' | 'cm_hep';
 }
 
 const HEP_TEMPLATES: Template[] = [
@@ -223,15 +223,46 @@ const AMBULANT_TEMPLATES: Template[] = [
   },
 ];
 
-export const ALL_TEMPLATES: Template[] = [...HEP_TEMPLATES, ...ERGO_TEMPLATES, ...ALTENPFLEGE_TEMPLATES, ...LOGOPAEDIE_TEMPLATES, ...PHYSIO_TEMPLATES, ...ERGOTHERAPIE_TEMPLATES, ...AMBULANT_TEMPLATES];
+const CM_HEP_TEMPLATES: Template[] = [
+  {
+    id: 'cm-1',
+    name: 'Teilhabeplan (ICF)',
+    category: 'standard',
+    mode: 'cm_hep',
+    content: `Eingliederungshilfe nach SGB IX. Betätigung: selbstständige Lebensführung, soziale Teilhabe. Ressourcen: stabile Alltagsstruktur, unterstützendes Umfeld. ICF: Aktivität und Teilhabe (Körperfunktionen, Aktivitäten, Partizipation).`,
+  },
+  {
+    id: 'cm-2',
+    name: 'Case-Management-Verlauf',
+    category: 'standard',
+    mode: 'cm_hep',
+    content: `Hilfeplan-Begleitung. Ziele: Steigerung Selbständigkeit, Teilhabe im Sozialraum. Maßnahmen: Vernetzung Ämter, Begleitung Behörden, Koordination Leistungen. Stand: Ziele überwiegend erreicht, Unterstützungsbedarf weiterhin.`,
+  },
+  {
+    id: 'cm-3',
+    name: 'Entwicklungsfortschritt',
+    category: 'entwicklung',
+    mode: 'cm_hep',
+    content: `Positive Teilhabeentwicklung. Klient:in nutzt Sozialsystem zunehmend selbstbestimmt. Übernahme von Verantwortung in Alltag. Ressourcen stärken, Unterstützung schrittweise reduzieren.`,
+  },
+  {
+    id: 'cm-4',
+    name: 'Risiko / Zuspitzung (Notiz)',
+    category: 'notfall',
+    mode: 'cm_hep',
+    content: `Aktuell Überforderung in Alltagsführung, Unterstützungsbedarf gestiegen. Gefahr des Verlusts selbstständiger Lebensführung. Krisengespräch Angehörige, Überprüfung Teilhabeplan, ggf. zusätzliche Leistungen beantragen.`,
+  },
+];
 
-export function getTemplatesByCategory(mode: 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie' | 'ambulant', category: string): Template[] {
+export const ALL_TEMPLATES: Template[] = [...HEP_TEMPLATES, ...ERGO_TEMPLATES, ...ALTENPFLEGE_TEMPLATES, ...LOGOPAEDIE_TEMPLATES, ...PHYSIO_TEMPLATES, ...ERGOTHERAPIE_TEMPLATES, ...AMBULANT_TEMPLATES, ...CM_HEP_TEMPLATES];
+
+export function getTemplatesByCategory(mode: 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie' | 'ambulant' | 'cm_hep', category: string): Template[] {
   const modeTemplates = getTemplatesByMode(mode);
   if (category === 'all') return modeTemplates;
   return modeTemplates.filter(t => t.category === category);
 }
 
-export function getTemplatesByMode(mode: 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie' | 'ambulant'): Template[] {
+export function getTemplatesByMode(mode: 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie' | 'ambulant' | 'cm_hep'): Template[] {
   switch (mode) {
     case 'hep': return HEP_TEMPLATES;
     case 'ergo': return ERGO_TEMPLATES;
@@ -240,6 +271,7 @@ export function getTemplatesByMode(mode: 'hep' | 'ergo' | 'altenpflege' | 'logop
     case 'physio': return PHYSIO_TEMPLATES;
     case 'ergotherapie': return ERGOTHERAPIE_TEMPLATES;
     case 'ambulant': return AMBULANT_TEMPLATES;
+    case 'cm_hep': return CM_HEP_TEMPLATES;
     default: return HEP_TEMPLATES;
   }
 }
