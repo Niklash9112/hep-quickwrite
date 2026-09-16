@@ -13,52 +13,72 @@ import { getTemplatesByCategory, Template } from '../lib/templates';
 type Mode = 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie' | 'ambulant' | 'cm_hep';
 type SubscriptionStatus = 'active' | 'inactive';
 type Theme = 'light' | 'dark';
-type DocumentType = 'Fachbericht (ICF)' | 'Entwicklungsbericht' | 'Pflegebericht' | 'Befundbericht' | 'Therapiebericht' | 'Tagesdokumentation' | 'Leichte Sprache' | 'Befundbericht (Physio)' | 'Therapiebericht (Physio)' | 'Befundbericht (Ergotherapie)' | 'Therapiebericht (Ergotherapie)' | 'Pflegebericht (ambulant)' | 'Leistungsnachweis' | 'Teilhabeplan (ICF)' | 'Hilfeplanbericht' | 'Verlaufsbericht CM';
+type DocumentType = 'Fachbericht (ICF)' | 'Entwicklungsbericht' | 'Pflegebericht' | 'Befundbericht' | 'Therapiebericht' | 'Tagesdokumentation' | 'Leichte Sprache' | 'Befundbericht (Physio)' | 'Therapiebericht (Physio)' | 'Befundbericht (Ergotherapie)' | 'Therapiebericht (Ergotherapie)' | 'Pflegebericht (ambulant)' | 'Leistungsnachweis' | 'Teilhabeplan (ICF)' | 'Hilfeplanbericht' | 'Verlaufsbericht CM' | 'Förderplan (SGB VIII)' | 'Verlaufsbericht Hilfeplangespräch' | 'Rückmeldung Bezugspersonen' | 'Dokumentation herausforderndes Verhalten' | 'Rückmeldung Eltern' | 'Entlassbericht' | 'Wunddokumentation' | 'Sturzprotokoll' | 'Entlassbericht Verordner' | 'Therapieverlaufsbogen' | 'Teilhabeplan-Antrag Kostenträger' | 'Runder Tisch Protokoll';
 
 // Dokumenttypen je Berufsgruppe
 const DOC_TYPES_BY_MODE: Record<Mode, { type: DocumentType; label: string; icon: string; color: string }[]> = {
   hep: [
     { type: 'Fachbericht (ICF)', label: 'Fachbericht (ICF)', icon: '📋', color: 'bg-indigo-600 hover:bg-indigo-700' },
+    { type: 'Verlaufsbericht Hilfeplangespräch', label: 'Hilfeplangespräch', icon: '🗂️', color: 'bg-indigo-600 hover:bg-indigo-700' },
+    { type: 'Dokumentation herausforderndes Verhalten', label: 'Herausforderndes Verhalten', icon: '🛡️', color: 'bg-indigo-600 hover:bg-indigo-700' },
+    { type: 'Rückmeldung Bezugspersonen', label: 'Rückmeldung Bezugspersonen', icon: '👥', color: 'bg-indigo-600 hover:bg-indigo-700' },
     { type: 'Tagesdokumentation', label: 'Tagesdokumentation', icon: '📝', color: 'bg-teal-600 hover:bg-teal-700' },
     { type: 'Leichte Sprache', label: 'Leichte Sprache', icon: '💬', color: 'bg-green-600 hover:bg-green-700' },
   ],
   ergo: [
     { type: 'Entwicklungsbericht', label: 'Entwicklungsbericht', icon: '🌱', color: 'bg-teal-600 hover:bg-teal-700' },
+    { type: 'Förderplan (SGB VIII)', label: 'Förderplan (SGB VIII)', icon: '📐', color: 'bg-teal-600 hover:bg-teal-700' },
+    { type: 'Rückmeldung Eltern', label: 'Rückmeldung Eltern', icon: '👨‍👩‍👧', color: 'bg-teal-600 hover:bg-teal-700' },
+    { type: 'Dokumentation herausforderndes Verhalten', label: 'Herausforderndes Verhalten', icon: '🛡️', color: 'bg-teal-600 hover:bg-teal-700' },
     { type: 'Tagesdokumentation', label: 'Tagesdokumentation', icon: '📝', color: 'bg-teal-600 hover:bg-teal-700' },
     { type: 'Leichte Sprache', label: 'Leichte Sprache', icon: '💬', color: 'bg-green-600 hover:bg-green-700' },
   ],
   altenpflege: [
     { type: 'Pflegebericht', label: 'Pflegebericht', icon: '🩺', color: 'bg-rose-600 hover:bg-rose-700' },
+    { type: 'Entlassbericht', label: 'Entlassbericht', icon: '🚪', color: 'bg-rose-600 hover:bg-rose-700' },
+    { type: 'Wunddokumentation', label: 'Wunddokumentation', icon: '🩹', color: 'bg-rose-600 hover:bg-rose-700' },
+    { type: 'Sturzprotokoll', label: 'Sturzprotokoll', icon: '⚠️', color: 'bg-rose-600 hover:bg-rose-700' },
     { type: 'Tagesdokumentation', label: 'Tagesdokumentation', icon: '📝', color: 'bg-teal-600 hover:bg-teal-700' },
     { type: 'Leichte Sprache', label: 'Leichte Sprache', icon: '💬', color: 'bg-green-600 hover:bg-green-700' },
   ],
   logopaedie: [
     { type: 'Befundbericht', label: 'Befundbericht', icon: '🔍', color: 'bg-amber-600 hover:bg-amber-700' },
     { type: 'Therapiebericht', label: 'Therapiebericht', icon: '🗣️', color: 'bg-amber-600 hover:bg-amber-700' },
+    { type: 'Therapieverlaufsbogen', label: 'Therapieverlaufsbogen', icon: '📈', color: 'bg-amber-600 hover:bg-amber-700' },
+    { type: 'Entlassbericht Verordner', label: 'Entlassbericht Verordner', icon: '📤', color: 'bg-amber-600 hover:bg-amber-700' },
     { type: 'Tagesdokumentation', label: 'Tagesdokumentation', icon: '📝', color: 'bg-teal-600 hover:bg-teal-700' },
     { type: 'Leichte Sprache', label: 'Leichte Sprache', icon: '💬', color: 'bg-green-600 hover:bg-green-700' },
   ],
   physio: [
     { type: 'Befundbericht (Physio)', label: 'Befundbericht', icon: '🦵', color: 'bg-sky-600 hover:bg-sky-700' },
     { type: 'Therapiebericht (Physio)', label: 'Therapiebericht', icon: '🤸', color: 'bg-sky-600 hover:bg-sky-700' },
+    { type: 'Therapieverlaufsbogen', label: 'Therapieverlaufsbogen', icon: '📈', color: 'bg-sky-600 hover:bg-sky-700' },
+    { type: 'Entlassbericht Verordner', label: 'Entlassbericht Verordner', icon: '📤', color: 'bg-sky-600 hover:bg-sky-700' },
     { type: 'Tagesdokumentation', label: 'Tagesdokumentation', icon: '📝', color: 'bg-teal-600 hover:bg-teal-700' },
     { type: 'Leichte Sprache', label: 'Leichte Sprache', icon: '💬', color: 'bg-green-600 hover:bg-green-700' },
   ],
   ergotherapie: [
     { type: 'Befundbericht (Ergotherapie)', label: 'Befundbericht', icon: '🧩', color: 'bg-violet-600 hover:bg-violet-700' },
     { type: 'Therapiebericht (Ergotherapie)', label: 'Therapiebericht', icon: '🧠', color: 'bg-violet-600 hover:bg-violet-700' },
+    { type: 'Therapieverlaufsbogen', label: 'Therapieverlaufsbogen', icon: '📈', color: 'bg-violet-600 hover:bg-violet-700' },
+    { type: 'Entlassbericht Verordner', label: 'Entlassbericht Verordner', icon: '📤', color: 'bg-violet-600 hover:bg-violet-700' },
     { type: 'Tagesdokumentation', label: 'Tagesdokumentation', icon: '📝', color: 'bg-teal-600 hover:bg-teal-700' },
     { type: 'Leichte Sprache', label: 'Leichte Sprache', icon: '💬', color: 'bg-green-600 hover:bg-green-700' },
   ],
   ambulant: [
     { type: 'Pflegebericht (ambulant)', label: 'Pflegebericht', icon: '🏠', color: 'bg-cyan-600 hover:bg-cyan-700' },
+    { type: 'Entlassbericht', label: 'Überleitungsbericht', icon: '🚪', color: 'bg-cyan-600 hover:bg-cyan-700' },
+    { type: 'Wunddokumentation', label: 'Wunddokumentation', icon: '🩹', color: 'bg-cyan-600 hover:bg-cyan-700' },
+    { type: 'Sturzprotokoll', label: 'Sturzprotokoll', icon: '⚠️', color: 'bg-cyan-600 hover:bg-cyan-700' },
     { type: 'Leistungsnachweis', label: 'Leistungsnachweis', icon: '🧾', color: 'bg-cyan-600 hover:bg-cyan-700' },
     { type: 'Tagesdokumentation', label: 'Tagesdokumentation', icon: '📝', color: 'bg-teal-600 hover:bg-teal-700' },
     { type: 'Leichte Sprache', label: 'Leichte Sprache', icon: '💬', color: 'bg-green-600 hover:bg-green-700' },
   ],
   cm_hep: [
     { type: 'Teilhabeplan (ICF)', label: 'Teilhabeplan (ICF)', icon: '🧭', color: 'bg-fuchsia-600 hover:bg-fuchsia-700' },
+    { type: 'Teilhabeplan-Antrag Kostenträger', label: 'Antrag Kostenträger', icon: '📨', color: 'bg-fuchsia-600 hover:bg-fuchsia-700' },
     { type: 'Hilfeplanbericht', label: 'Hilfeplanbericht', icon: '🤝', color: 'bg-fuchsia-600 hover:bg-fuchsia-700' },
+    { type: 'Runder Tisch Protokoll', label: 'Runder Tisch', icon: '🔗', color: 'bg-fuchsia-600 hover:bg-fuchsia-700' },
     { type: 'Verlaufsbericht CM', label: 'Verlaufsbericht', icon: '📊', color: 'bg-fuchsia-600 hover:bg-fuchsia-700' },
     { type: 'Tagesdokumentation', label: 'Tagesdokumentation', icon: '📝', color: 'bg-teal-600 hover:bg-teal-700' },
     { type: 'Leichte Sprache', label: 'Leichte Sprache', icon: '💬', color: 'bg-green-600 hover:bg-green-700' },

@@ -151,7 +151,19 @@ const DOCUMENT_TYPE_PROMPTS: Record<string, string> = {
   'Leistungsnachweis': 'Erstelle einen ansprechenden Leistungsnachweis/Verlaufsbericht für die ambulante Pflege: erbrachte Maßnahmen je Leistungsbereich, Zeitbezug, Ergebnis. Als Dokumentationsentwurf.',
   'Teilhabeplan (ICF)': 'Erstelle einen personenzentrierten Teilhabeplan nach SGB IX und ICF mit Bedarfsermittlung, Teilhabezielen, Maßnahmen und Ressourcen.',
   'Hilfeplanbericht': 'Erstelle einen Hilfeplanbericht für die Eingliederungshilfe: Ausgangslage, Ziele, Maßnahmen zur Teilhabe, Koordination des Hilfenetzes und Empfehlungen.',
-  'Verlaufsbericht CM': 'Erstelle einen Case-Management-Verlaufsbericht: umgesetzte Leistungen, Fortschritt der Teilhabeziele, Netzwerkkoordination und nächste Schritte.'
+  'Verlaufsbericht CM': 'Erstelle einen Case-Management-Verlaufsbericht: umgesetzte Leistungen, Fortschritt der Teilhabeziele, Netzwerkkoordination und nächste Schritte.',
+  'Förderplan (SGB VIII)': 'Erstelle einen Förderplan nach SGB VIII: Ist-Stand der Entwicklung, Förderziele, pädagogische Maßnahmen und Verlaufskontrolle (ressourcenorientiert).',
+  'Verlaufsbericht Hilfeplangespräch': 'Erstelle einen Verlaufsbericht für das Jugendamt-Hilfeplangespräch: Entwicklung seit letztem Gespräch, Zielerreichung, aktueller Hilfebedarf, Empfehlungen an das Jugendamt.',
+  'Rückmeldung Bezugspersonen': 'Erstelle eine verständliche, wertschätzende Rückmeldung an die Bezugspersonen: aktueller Stand, positive Beobachtungen, fördernde Schritte im Alltag.',
+  'Dokumentation herausforderndes Verhalten': 'Erstelle einen fachlichen Vermerk bei herausforderndem Verhalten: situationsbezogene Beschreibung des Vorfalls (wer, wann, wo, was), Auslöser, durchgeführte Deeskalationsmaßnahmen, Wirkung, nächste Schritte und ggf. Team-/Leitungsinformation.',
+  'Rückmeldung Eltern': 'Erstelle eine verständliche Rückmeldung an die Eltern: Entwicklungsschritte des Kindes, Beobachtungen, Förderangebote und nächste Termine (wertschätzend, laienverständlich).',
+  'Entlassbericht': 'Erstelle einen Entlass-/Überleitungsbericht: Aufnahmegrund, Entwicklung während des Aufenthalts, aktueller Pflege-/Unterstützungsbedarf, durchgeführte Maßnahmen, Empfehlungen für die weiterführende Versorgung.',
+  'Wunddokumentation': 'Erstelle eine strukturierte Wunddokumentation: Wundart, Lokalisation, Größe, Aussehen, Wundzustand, durchgeführte Maßnahmen, Risikofaktoren und Verlauf (ohne Diagnosestellung).',
+  'Sturzprotokoll': 'Erstelle ein Sturzprotokoll: Zeitpunkt/Ort/Umstände des Sturzes, Folgen, Reaktionen, durchgeführte Erstmaßnahmen und Information von Angehörigen/Arzt, Präventionsempfehlungen.',
+  'Entlassbericht Verordner': 'Erstelle einen Entlassbericht an den verordnenden Arzt: durchgeführte Therapie, Verlauf, erreichte Ziele und Empfehlungen für die Weiterbehandlung.',
+  'Therapieverlaufsbogen': 'Erstelle einen Therapieverlaufsbogen: Maßnahme, Therapieziel, durchgeführte Übungen/Inhalte je Termin, Fortschritt, aktuelle Einschränkung und weitere Planung.',
+  'Teilhabeplan-Antrag Kostenträger': 'Erstelle einen Teilhabeplan-Antrag an den Kostenträger: Bedarfslage nach ICF, beantragte Leistungen, Begründung, Ziele der Teilhabe.',
+  'Runder Tisch Protokoll': 'Erstelle ein Protokoll für einen Runden Tisch zum Hilfeprozess: Teilnehmende, behandelte Punkte, Entscheidungen, vereinbarte Maßnahmen mit Verantwortlichkeit und Fristen.'
 };
 
 export async function POST(request: NextRequest) {
