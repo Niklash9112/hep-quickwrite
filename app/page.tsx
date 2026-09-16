@@ -653,16 +653,28 @@ export default function Home() {
           }`}>Berufsgruppe wählen</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
             <button
-              onClick={() => setMode('hep')}
+              onClick={() => setMode('altenpflege')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
-                mode === 'hep'
-                  ? 'bg-indigo-600 text-white shadow-lg'
+                mode === 'altenpflege'
+                  ? 'bg-rose-600 text-white shadow-lg'
                   : theme === 'light'
                   ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
               }`}
             >
-              Heilerziehungspfleger:in
+              Altenpfleger:in
+            </button>
+            <button
+              onClick={() => setMode('ergotherapie')}
+              className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
+                mode === 'ergotherapie'
+                  ? 'bg-violet-600 text-white shadow-lg'
+                  : theme === 'light'
+                  ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
+              }`}
+            >
+              Ergotherapeut:in
             </button>
             <button
               onClick={() => setMode('ergo')}
@@ -677,16 +689,16 @@ export default function Home() {
               Erzieher:in
             </button>
             <button
-              onClick={() => setMode('altenpflege')}
+              onClick={() => setMode('hep')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
-                mode === 'altenpflege'
-                  ? 'bg-rose-600 text-white shadow-lg'
+                mode === 'hep'
+                  ? 'bg-indigo-600 text-white shadow-lg'
                   : theme === 'light'
                   ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
               }`}
             >
-              Altenpfleger:in
+              Heilerziehungspfleger:in
             </button>
             <button
               onClick={() => setMode('logopaedie')}
@@ -711,18 +723,6 @@ export default function Home() {
               }`}
             >
               Physiotherapeut:in
-            </button>
-            <button
-              onClick={() => setMode('ergotherapie')}
-              className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
-                mode === 'ergotherapie'
-                  ? 'bg-violet-600 text-white shadow-lg'
-                  : theme === 'light'
-                  ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
-              }`}
-            >
-              Ergotherapeut:in
             </button>
           </div>
         </div>
