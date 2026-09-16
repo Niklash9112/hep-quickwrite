@@ -700,7 +700,7 @@ export default function Home() {
                   : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
               }`}
             >
-              Ambulante Pflege
+              Ambulante Pflegefachkraft
             </button>
             <button
               onClick={() => setMode('cm_hep')}
@@ -877,7 +877,7 @@ export default function Home() {
                   : mode === 'ergotherapie'
                   ? 'Geben Sie hier Ihre ergotherapeutischen Beobachtungen ein (Alltagsaktivitäten, Feinmotorik)...'
                   : mode === 'ambulant'
-                  ? 'Geben Sie hier Ihre Beobachtungen als ambulante Pflegekraft ein (AEDL, Maßnahmen, Risiken)...'
+                  ? 'Geben Sie hier Ihre Beobachtungen als Ambulante Pflegefachkraft ein (AEDL, Maßnahmen, Risiken)...'
                   : mode === 'cm_hep'
                   ? 'Geben Sie hier Ihre Notizen als Case-Manager:in ein (Klärung, Bedarfe, Ziele, Netzwerk)...'
                   : 'Notieren Sie Ihre pädagogischen Beobachtungen...'
@@ -1013,7 +1013,7 @@ export default function Home() {
           <h3 className={`text-lg font-semibold mb-3 ${
             theme === 'light' ? 'text-gray-800' : 'text-gray-100'
           }`}>
-            {mode === 'hep' ? 'Heilerziehungspfleger:in' : mode === 'ergo' ? 'Erzieher:in' : mode === 'altenpflege' ? 'Altenpfleger:in' : mode === 'logopaedie' ? 'Logopäde:in' : mode === 'physio' ? 'Physiotherapeut:in' : mode === 'ergotherapie' ? 'Ergotherapeut:in' : mode === 'ambulant' ? 'Ambulante Pflege' : 'Case Management'} aktiv
+            {mode === 'hep' ? 'Heilerziehungspfleger:in' : mode === 'ergo' ? 'Erzieher:in' : mode === 'altenpflege' ? 'Altenpfleger:in' : mode === 'logopaedie' ? 'Logopäde:in' : mode === 'physio' ? 'Physiotherapeut:in' : mode === 'ergotherapie' ? 'Ergotherapeut:in' : mode === 'ambulant' ? 'Ambulante Pflegefachkraft' : 'Case Manager:in'} aktiv
           </h3>
           <p className={theme === 'light' ? 'text-gray-600' : 'text-gray-300'}>
             {mode === 'hep'
@@ -1029,7 +1029,7 @@ export default function Home() {
               : mode === 'ergotherapie'
               ? 'Ihre Notizen werden für die Ergotherapie optimiert: Befund, Alltagsaktivitäten, Feinmotorik, Therapieziele und Maßnahmen.'
               : mode === 'ambulant'
-              ? 'Ihre Notizen werden für die Ambulante Pflege optimiert: Pflegeprozess, AEDL, Pflegegrad, erbrachte Maßnahmen und Risiken.'
+              ? 'Ihre Notizen werden für die Ambulante Pflegefachkraft optimiert: Pflegeprozess, AEDL, Pflegegrad, erbrachte Maßnahmen und Risiken.'
               : 'Ihre Notizen werden für das Case Management optimiert: Teilhabeplanung nach SGB IX und ICF, personenzentrierte Ziele und Netzwerkkoordination.'}
           </p>
         </div>
