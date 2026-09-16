@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "HEP-QuickWrite",
     short_name: "HEP-QuickWrite",
-    description: "KI-gestützte Fachberichte für Heilerziehungspflege, Erzieher, Altenpflege, Logopädie, Physiotherapie, Ergotherapie, Ambulante Pflegefachkraft und Case Management.",
+    description: "KI-gestützte Fachberichte für Heilerziehungspflege, Erzieher, Altenpflege, Logopädie, Physiotherapie, Ergotherapie, Ambulante Pflegefachkraft und Case Manager:in.",
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",

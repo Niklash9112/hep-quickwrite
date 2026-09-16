@@ -712,7 +712,7 @@ export default function Home() {
                   : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
               }`}
             >
-              Case Management
+              Case Manager:in
             </button>
             <button
               onClick={() => setMode('ergotherapie')}
@@ -879,7 +879,7 @@ export default function Home() {
                   : mode === 'ambulant'
                   ? 'Geben Sie hier Ihre Beobachtungen als Ambulante Pflegefachkraft ein (AEDL, Maßnahmen, Risiken)...'
                   : mode === 'cm_hep'
-                  ? 'Geben Sie hier Ihre Notizen als Case-Manager:in ein (Klärung, Bedarfe, Ziele, Netzwerk)...'
+                  ? 'Geben Sie hier Ihre Notizen als Case Manager:in ein (Klärung, Bedarfe, Ziele, Netzwerk)...'
                   : 'Notieren Sie Ihre pädagogischen Beobachtungen...'
               }
               className={`w-full h-64 p-4 border-2 rounded-lg focus:ring-2 transition-all resize-none ${
@@ -1030,7 +1030,7 @@ export default function Home() {
               ? 'Ihre Notizen werden für die Ergotherapie optimiert: Befund, Alltagsaktivitäten, Feinmotorik, Therapieziele und Maßnahmen.'
               : mode === 'ambulant'
               ? 'Ihre Notizen werden für die Ambulante Pflegefachkraft optimiert: Pflegeprozess, AEDL, Pflegegrad, erbrachte Maßnahmen und Risiken.'
-              : 'Ihre Notizen werden für das Case Management optimiert: Teilhabeplanung nach SGB IX und ICF, personenzentrierte Ziele und Netzwerkkoordination.'}
+              : 'Ihre Notizen werden für den/die Case Manager:in optimiert: Teilhabeplanung nach SGB IX und ICF, personenzentrierte Ziele und Netzwerkkoordination.'}
           </p>
         </div>
       </main>
