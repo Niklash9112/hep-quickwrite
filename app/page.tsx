@@ -155,10 +155,23 @@ export default function Home() {
     localStorage.setItem('theme', newTheme);
   };
 
+  const [lastTemplate, setLastTemplate] = useState<{ id: string; content: string } | null>(null);
+
   const insertTemplate = (template: Template) => {
-    const currentNotes = notes;
-    const newText = currentNotes ? `${currentNotes}\n\n${template.content}` : template.content;
+    let newText: string;
+    const last = lastTemplate;
+    // Wenn die aktuelle Notiz exakt mit der zuletzt eingefügten Vorlage endet,
+    // diese entfernen und durch die neue ersetzen (nicht hinten anhängen).
+    if (last && notes.trim() === last.content.trim()) {
+      newText = template.content;
+    } else if (last && notes.trim().endsWith(last.content.trim())) {
+      const base = notes.trim().replace(new RegExp(last.content.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$'), '').trim();
+      newText = base ? `${base}\n\n${template.content}` : template.content;
+    } else {
+      newText = notes ? `${notes}\n\n${template.content}` : template.content;
+    }
     setNotes(newText);
+    setLastTemplate({ id: template.id, content: template.content });
     setShowTemplates(false);
   };
 
