@@ -139,15 +139,40 @@ export default function AGB() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-3">7. Verfügbarkeit und Kosten</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-3">7. Bezahltes Abo, Preise und Zahlung</h2>
               <p className="leading-relaxed">
-                Die Anwendung wird derzeit ohne Kosten-Nutzungsvertrag bereitgestellt. Eine spätere 
-                Einführung kostenpflichtiger Leistungen wird rechtzeitig vor Wirksamwerden mitgeteilt.
+                Die vollständige Funktionsnutzung erfolgt über ein kostenpflichtiges Abonnement 
+                (nachfolgend "Abo"), das als wiederkehrendes Abo (monatlich) über den 
+                Zahlungsdienstleister Stripe abgerechnet wird. Die jeweils geltenden Preise werden 
+                vor Abschluss des Abos transparent angezeigt.
+              </p>
+              <p className="mt-3 leading-relaxed">
+                Die Zahlung erfolgt über die von Stripe unterstützten Zahlungsmethoden. Bei 
+                Zahlungsverzug behalten wir uns vor, den Zugang zur Anwendung vorübergehend zu sperren.
               </p>
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-3">8. Verfügbarkeit der Anwendung</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-3">8. Laufzeit und Kündigung</h2>
+              <p className="leading-relaxed">
+                Das Abo verlängert sich automatisch um denselben Zeitraum, sofern es nicht fristgerecht 
+                gekündigt wird. Die Kündigung kann jederzeit in der Anwendung oder per E-Mail erfolgen 
+                und wird zum Ende des aktuellen Abrechnungszeitraums wirksam. Eine anteilige 
+                Rückerstattung bereits gezahlter Beträge für den Restzeitraum erfolgt nicht.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-semibold text-gray-900 mb-3">9. Widerrufsrecht</h2>
+              <p className="leading-relaxed">
+                Verbraucher:innen steht bei Abschluss des Abos ein gesetzliches Widerrufsrecht von 
+                14 Tagen zu. Die Widerrufsfrist beginnt mit Abschluss des Vertrags. Bei wirksamem 
+                Widerruf bereits in Anspruch genommener Leistungen ist der anteilige Betrag zu erstatten.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-semibold text-gray-900 mb-3">10. Verfügbarkeit der Anwendung</h2>
               <p className="leading-relaxed">
                 Wir sind bemüht, die Anwendung möglichst unterbrechungsfrei verfügbar zu halten. Wir 
                 übernehmen jedoch keine Gewähr für eine ununterbrochene oder fehlerfreie Verfügbarkeit, 
@@ -157,7 +182,7 @@ export default function AGB() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-3">9. Haftung</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-3">11. Haftung</h2>
               <p className="leading-relaxed">
                 Wir haften unbeschränkt für Vorsatz und grobe Fahrlässigkeit sowie für Schäden aus der 
                 Verletzung des Lebens, des Körpers oder der Gesundheit und nach Maßgabe des 
@@ -172,7 +197,7 @@ export default function AGB() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-3">10. Rechte an der Software</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-3">12. Rechte an der Software</h2>
               <p className="leading-relaxed">
                 Die Anwendung, ihre Bestandteile, das Logo, der Code und alle grafischen Elemente sind 
                 urheberrechtlich geschützt. Der Anbieter räumt den Nutzer:innen ein nicht ausschließliches, 
@@ -183,7 +208,7 @@ export default function AGB() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-3">11. Streitbeilegung</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-3">13. Streitbeilegung</h2>
               <p className="leading-relaxed">
                 Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: 
                 <a 
@@ -199,7 +224,7 @@ export default function AGB() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-3">12. Änderungen der AGB</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-3">14. Änderungen der AGB</h2>
               <p className="leading-relaxed">
                 Wir behalten uns vor, diese AGB anzupassen, soweit dies erforderlich ist (z. B. bei 
                 rechtlichen oder technischen Änderungen). Nutzer:innen werden über wesentliche Änderungen 
@@ -210,7 +235,7 @@ export default function AGB() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-3">13. Schlussbestimmungen</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-3">15. Schlussbestimmungen</h2>
               <p className="leading-relaxed">
                 Es gilt das Recht der Bundesrepublik Deutschland unter Ausschluss des UN-Kaufrechts 
                 (CISG). Gerichtsstand ist, soweit gesetzlich zulässig, der Sitz des Anbieters. 
