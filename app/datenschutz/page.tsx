@@ -240,6 +240,11 @@ export default function Datenschutz() {
                 © 2026 HEP-QuickWrite. Alle Rechte vorbehalten.
               </p>
             </div>
+            <nav className="flex gap-4">
+              <a href="/impressum" className="text-sm text-gray-500 hover:text-indigo-600 transition-colors">Impressum</a>
+              <a href="/agb" className="text-sm text-gray-500 hover:text-indigo-600 transition-colors">AGB</a>
+              <a href="/datenschutz" className="text-sm text-indigo-600 font-medium">Datenschutz</a>
+            </nav>
           </div>
         </div>
       </footer>

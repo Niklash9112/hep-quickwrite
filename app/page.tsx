@@ -456,6 +456,8 @@ export default function Home() {
             }`}>
               <a href="/impressum" className="hover:underline">Impressum</a>
               {' • '}
+              <a href="/agb" className="hover:underline">AGB</a>
+              {' • '}
               <a href="/datenschutz" className="hover:underline">Datenschutz</a>
             </p>
           </div>
