@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: "HEP-QuickWrite | KI-gestützte Fachberichte",
   description: "Professionelle Fachberichte für Heilerziehungspflege und Erzieher - powered by KI. ICF-konform, schnell, datenschutzsicher.",
   keywords: ["Fachbericht", "Heilerziehungspflege", "Erzieher", "ICF", "KI", "Dokumentation"],
+  verification: {
+    google: "JIPw3pMQJfkVdzRy3QbhMxsaGqmKmGnZiz_CB6niNEM",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
