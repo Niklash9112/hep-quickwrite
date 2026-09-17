@@ -804,6 +804,11 @@ export default function Home() {
                     : 'bg-gray-700 border-gray-600 focus:border-indigo-400 focus:ring-indigo-900 text-gray-100 placeholder-gray-400'
                 }`}
               />
+              <p className={`mt-1.5 text-xs ${
+                theme === 'light' ? 'text-gray-500' : 'text-gray-400'
+              }`}>
+                Datenschutz-Hinweis: Verwende bei Bedenken keine vollständigen Namen — Kürzel oder Fantasienamen genügen.
+              </p>
             </div>
             
             <textarea
