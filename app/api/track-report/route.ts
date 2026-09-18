@@ -3,8 +3,9 @@ import { auth, clerkClient } from '@clerk/nextjs/server';
 
 const FREE_REPORT_LIMIT = 3;
 
-// Admin-Account zählt in reportCount (Gesamt-Nutzung fürs Admin-Panel),
-// aber das Freemium-Limit (limitReached) bleibt für Admin aufgehoben.
+// Admin-Account wird NICHT gezählt und zeigt nie ein Limit/Paywall.
+// Alle anderen User (Freemium UND Abonnenten) zählen im reportCount —
+// die Gesamt-Nutzung zeigt, wie viele Texte generiert werden (KI-Budget).
 function isAdminEmail(user: any): boolean {
   const email = user?.primaryEmailAddress?.emailAddress || user?.emailAddresses?.[0]?.emailAddress;
   return email === 'niklas.h112@gmail.com';
@@ -24,39 +25,30 @@ export async function POST(request: NextRequest) {
     const client = await clerkClient();
     const user = await client.users.getUser(clerkUserId);
 
+    // Admin: wird NICHT gezählt, kein Limit, keine Paywall
     if (isAdminEmail(user)) {
-      // Admin zählt mit, aber Limit bleibt aufgehoben (nie Paywall)
-      const currentCount = (user.publicMetadata.reportCount as number) || 0;
-      const newCount = currentCount + 1;
-      await client.users.updateUserMetadata(clerkUserId, {
-        publicMetadata: { ...user.publicMetadata, reportCount: newCount },
-      });
       return NextResponse.json({
-        reportCount: newCount,
+        reportCount: 0,
         limitReached: false,
         isAdmin: true,
       });
     }
 
-    // Prüfe Abo-Status (zahlende User: unbegrenzt)
-    const subscriptionStatus = user.publicMetadata.subscriptionStatus as string | undefined;
-    if (subscriptionStatus === 'active') {
-      return NextResponse.json({
-        reportCount: 0,
-        limitReached: false,
-        hasSubscription: true,
-      });
-    }
-
-    // Freemium-User: Counter erhöhen
+    // Jeder andere User zählt (Freemium UND Abonnent) — Nutzung = generierte Texte
     const currentCount = (user.publicMetadata.reportCount as number) || 0;
     const newCount = currentCount + 1;
     await client.users.updateUserMetadata(clerkUserId, {
       publicMetadata: { ...user.publicMetadata, reportCount: newCount },
     });
+
+    // Abonnenten: unbegrenzt (kein Limit), zählen aber trotzdem
+    const subscriptionStatus = user.publicMetadata.subscriptionStatus as string | undefined;
+    const isSubscriber = subscriptionStatus === 'active';
+
     return NextResponse.json({
       reportCount: newCount,
-      limitReached: newCount >= FREE_REPORT_LIMIT,
+      limitReached: isSubscriber ? false : newCount >= FREE_REPORT_LIMIT,
+      hasSubscription: isSubscriber,
     });
   } catch (error: any) {
     console.error('Track Report Error:', error);
@@ -82,30 +74,23 @@ export async function GET(request: NextRequest) {
     const client = await clerkClient();
     const user = await client.users.getUser(clerkUserId);
 
+    // Admin: nicht gezählt, kein Limit
     if (isAdminEmail(user)) {
-      // Admin: lesen, Limit aufgehoben
-      const currentCount = (user.publicMetadata.reportCount as number) || 0;
       return NextResponse.json({
-        reportCount: currentCount,
+        reportCount: 0,
         limitReached: false,
         isAdmin: true,
       });
     }
 
-    // Prüfe Abo-Status (zahlende User: unbegrenzt)
-    const subscriptionStatus = user.publicMetadata.subscriptionStatus as string | undefined;
-    if (subscriptionStatus === 'active') {
-      return NextResponse.json({
-        reportCount: 0,
-        limitReached: false,
-        hasSubscription: true,
-      });
-    }
-
     const currentCount = (user.publicMetadata.reportCount as number) || 0;
+    const subscriptionStatus = user.publicMetadata.subscriptionStatus as string | undefined;
+    const isSubscriber = subscriptionStatus === 'active';
+
     return NextResponse.json({
       reportCount: currentCount,
-      limitReached: currentCount >= FREE_REPORT_LIMIT,
+      limitReached: isSubscriber ? false : currentCount >= FREE_REPORT_LIMIT,
+      hasSubscription: isSubscriber,
     });
   } catch (error: any) {
     console.error('Get Report Count Error:', error);

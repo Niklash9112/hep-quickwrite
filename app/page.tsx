@@ -180,8 +180,9 @@ export default function Home() {
           });
         }
         
-        // Erhöhe Counter über Server (auch für Admin, damit Gesamt-Nutzung zählt; Limit-Check bleibt im Paywall-Block)
-        if (subscriptionStatus !== 'active') {
+        // Counter über Server erhöhen (alle User außer Admin zählen — Freemium UND Abo;
+        // Admin bleibt ausgeblendet, siehe track-report-server-seitig)
+        if (!isAdmin) {
           try {
             const trackResponse = await fetch('/api/track-report', {
               method: 'POST',
