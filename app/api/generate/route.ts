@@ -173,7 +173,9 @@ WICHTIGE REGELN:
 - Beschreibe Arbeitsverhalten, Tätigkeitsbereiche und konkrete Fortschritte
 - Nutze ressourcenorientierte Sprache und benenne Qualifikationsziele
 - Benenne den Unterstützungsbedarf am Arbeitsplatz und Maßnahmen
-- Strukturiere nach: Arbeitsplatz/Lage → Arbeitsverhalten → Fortschritt → Ziele → Unterstützung/Maßnahmen
+- Berücksichtige die drei WfbM-Phasen: Eingangsverfahren (Eignungsprüfung), Berufsbildungsbereich (2 Jahre, Förderung der Leistungsfähigkeit) und Arbeitsbereich (Dauerarbeitsplätze) — und benenne, in welcher Phase der Mensch sich befindet
+- Nenne ggf. den Übergang auf den allgemeinen Arbeitsmarkt als Ziel (ausgelagerte Plätze)
+- Strukturiere nach: Arbeitsplatz/Lage (inkl. WfbM-Phase) → Arbeitsverhalten → Fortschritt → Ziele → Unterstützung/Maßnahmen
 
 FORMALE ANFORDERUNGEN:
 - Professioneller, sachlicher Ton
