@@ -102,7 +102,7 @@ export default function Home() {
 
   // Auto-Paywall: Zeige Paywall automatisch an, wenn Limit erreicht
   useEffect(() => {
-    if (isLoaded && user && subscriptionStatus !== 'active' && reportCount >= FREE_REPORT_LIMIT) {
+    if (isLoaded && user && subscriptionStatus !== 'active' && !isAdmin && reportCount >= FREE_REPORT_LIMIT) {
       // Warte 1 Sekunde, damit User die Seite sieht, bevor Paywall erscheint
       const timer = setTimeout(() => {
         setShowPaywall(true);
@@ -127,7 +127,7 @@ export default function Home() {
   };
 
   const handleGenerate = async (documentType: string) => {
-    if (subscriptionStatus !== 'active' && reportCount >= FREE_REPORT_LIMIT) {
+    if (subscriptionStatus !== 'active' && !isAdmin && reportCount >= FREE_REPORT_LIMIT) {
       setShowPaywall(true);
       return;
     }
@@ -180,8 +180,8 @@ export default function Home() {
           });
         }
         
-        // Erhöhe Counter über Server (robuster als localStorage!)
-        if (subscriptionStatus !== 'active' && !isAdmin) {
+        // Erhöhe Counter über Server (auch für Admin, damit Gesamt-Nutzung zählt; Limit-Check bleibt im Paywall-Block)
+        if (subscriptionStatus !== 'active') {
           try {
             const trackResponse = await fetch('/api/track-report', {
               method: 'POST',
@@ -872,7 +872,7 @@ export default function Home() {
             <button
               onClick={() => {
                 if (!notes.trim() || !selectedTemplate) return;
-                if (subscriptionStatus !== 'active' && reportCount >= FREE_REPORT_LIMIT) {
+                if (subscriptionStatus !== 'active' && !isAdmin && reportCount >= FREE_REPORT_LIMIT) {
                   setShowPaywall(true); // Paywall automatisch öffnen!
                   return;
                 }
