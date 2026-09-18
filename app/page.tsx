@@ -645,6 +645,18 @@ export default function Home() {
               Ambulante Pflegefachkraft
             </button>
             <button
+              onClick={() => setMode('arbeitserziehung')}
+              className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
+                mode === 'arbeitserziehung'
+                  ? 'bg-orange-600 text-white shadow-lg'
+                  : theme === 'light'
+                  ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
+              }`}
+            >
+              Arbeitserzieher:in
+            </button>
+            <button
               onClick={() => setMode('cm_hep')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
                 mode === 'cm_hep'
@@ -693,6 +705,18 @@ export default function Home() {
               Heilerziehungspfleger:in
             </button>
             <button
+              onClick={() => setMode('heilpaedagogik')}
+              className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
+                mode === 'heilpaedagogik'
+                  ? 'bg-lime-600 text-white shadow-lg'
+                  : theme === 'light'
+                  ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
+              }`}
+            >
+              Heilpädagoge:in
+            </button>
+            <button
               onClick={() => setMode('logopaedie')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
                 mode === 'logopaedie'
@@ -727,30 +751,6 @@ export default function Home() {
               }`}
             >
               Sozialpädagoge:in
-            </button>
-            <button
-              onClick={() => setMode('heilpaedagogik')}
-              className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
-                mode === 'heilpaedagogik'
-                  ? 'bg-lime-600 text-white shadow-lg'
-                  : theme === 'light'
-                  ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
-              }`}
-            >
-              Heilpädagoge:in
-            </button>
-            <button
-              onClick={() => setMode('arbeitserziehung')}
-              className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
-                mode === 'arbeitserziehung'
-                  ? 'bg-orange-600 text-white shadow-lg'
-                  : theme === 'light'
-                  ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
-              }`}
-            >
-              Arbeitserzieher:in
             </button>
           </div>
         </div>
