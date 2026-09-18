@@ -25,6 +25,10 @@ const MODE_NAMES: Record<string, string> = {
   physio: 'Physiotherapeut:in',
   ergotherapie: 'Ergotherapeut:in',
   ambulant: 'Ambulante Pflegefachkraft',
+  cm_hep: 'Case Manager:in',
+  sozialpaedagogik: 'Sozialpädagoge:in',
+  heilpaedagogik: 'Heilpädagoge:in',
+  arbeitserziehung: 'Arbeitserzieher:in',
 };
 
 export default function Historie() {

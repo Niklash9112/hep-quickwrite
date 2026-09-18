@@ -10,7 +10,7 @@ import { getTemplatesByCategory, Template } from '../lib/templates';
 
 // ----------------------------------------------------------------------------------
 
-type Mode = 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie' | 'ambulant' | 'cm_hep';
+type Mode = 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie' | 'ambulant' | 'cm_hep' | 'sozialpaedagogik' | 'heilpaedagogik' | 'arbeitserziehung';
 type SubscriptionStatus = 'active' | 'inactive';
 type Theme = 'light' | 'dark';
 
@@ -619,7 +619,7 @@ export default function Home() {
           <h2 className={`text-lg font-semibold mb-4 ${
             theme === 'light' ? 'text-gray-800' : 'text-gray-100'
           }`}>Berufsgruppe wählen</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-11 gap-3">
             <button
               onClick={() => setMode('altenpflege')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
@@ -715,6 +715,42 @@ export default function Home() {
               }`}
             >
               Physiotherapeut:in
+            </button>
+            <button
+              onClick={() => setMode('sozialpaedagogik')}
+              className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
+                mode === 'sozialpaedagogik'
+                  ? 'bg-emerald-600 text-white shadow-lg'
+                  : theme === 'light'
+                  ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
+              }`}
+            >
+              Sozialpädagoge:in
+            </button>
+            <button
+              onClick={() => setMode('heilpaedagogik')}
+              className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
+                mode === 'heilpaedagogik'
+                  ? 'bg-lime-600 text-white shadow-lg'
+                  : theme === 'light'
+                  ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
+              }`}
+            >
+              Heilpädagoge:in
+            </button>
+            <button
+              onClick={() => setMode('arbeitserziehung')}
+              className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
+                mode === 'arbeitserziehung'
+                  ? 'bg-orange-600 text-white shadow-lg'
+                  : theme === 'light'
+                  ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
+              }`}
+            >
+              Arbeitserzieher:in
             </button>
           </div>
         </div>
@@ -829,6 +865,12 @@ export default function Home() {
                   ? 'Geben Sie hier Ihre Beobachtungen als Ambulante Pflegefachkraft ein (AEDL, Maßnahmen, Risiken)...'
                   : mode === 'cm_hep'
                   ? 'Geben Sie hier Ihre Notizen als Case Manager:in ein (Klärung, Bedarfe, Ziele, Netzwerk)...'
+                  : mode === 'sozialpaedagogik'
+                  ? 'Geben Sie hier Ihre Notizen als Sozialpädagoge:in ein (Situation, Ressourcen, Ziele, Maßnahmen)...'
+                  : mode === 'heilpaedagogik'
+                  ? 'Geben Sie hier Ihre Notizen als Heilpädagoge:in ein (Entwicklungsbeobachtung, Förderbedarf)...'
+                  : mode === 'arbeitserziehung'
+                  ? 'Geben Sie hier Ihre Notizen als Arbeitserzieher:in ein (Arbeitsverhalten, Fortschritte, Ziele)...'
                   : 'Notieren Sie Ihre pädagogischen Beobachtungen...'
               }
               className={`w-full h-64 p-4 border-2 rounded-lg focus:ring-2 transition-all resize-none ${
@@ -983,7 +1025,7 @@ export default function Home() {
           <h3 className={`text-lg font-semibold mb-3 ${
             theme === 'light' ? 'text-gray-800' : 'text-gray-100'
           }`}>
-            {mode === 'hep' ? 'Heilerziehungspfleger:in' : mode === 'ergo' ? 'Erzieher:in' : mode === 'altenpflege' ? 'Altenpfleger:in' : mode === 'logopaedie' ? 'Logopäde:in' : mode === 'physio' ? 'Physiotherapeut:in' : mode === 'ergotherapie' ? 'Ergotherapeut:in' : mode === 'ambulant' ? 'Ambulante Pflegefachkraft' : 'Case Manager:in'} aktiv
+            {mode === 'hep' ? 'Heilerziehungspfleger:in' : mode === 'ergo' ? 'Erzieher:in' : mode === 'altenpflege' ? 'Altenpfleger:in' : mode === 'logopaedie' ? 'Logopäde:in' : mode === 'physio' ? 'Physiotherapeut:in' : mode === 'ergotherapie' ? 'Ergotherapeut:in' : mode === 'ambulant' ? 'Ambulante Pflegefachkraft' : mode === 'cm_hep' ? 'Case Manager:in' : mode === 'sozialpaedagogik' ? 'Sozialpädagoge:in' : mode === 'heilpaedagogik' ? 'Heilpädagoge:in' : 'Arbeitserzieher:in'} aktiv
           </h3>
           <p className={theme === 'light' ? 'text-gray-600' : 'text-gray-300'}>
             {mode === 'hep'
@@ -1000,6 +1042,12 @@ export default function Home() {
               ? 'Ihre Notizen werden für die Ergotherapie optimiert: Befund, Alltagsaktivitäten, Feinmotorik, Therapieziele und Maßnahmen.'
               : mode === 'ambulant'
               ? 'Ihre Notizen werden für die Ambulante Pflegefachkraft optimiert: Pflegeprozess, AEDL, Pflegegrad, erbrachte Maßnahmen und Risiken.'
+              : mode === 'sozialpaedagogik'
+              ? 'Ihre Notizen werden für die Sozialpädagogik optimiert: Soziale Arbeit nach SGB VIII, Ressourcen, Teilhabe und Sozialraumorientierung.'
+              : mode === 'heilpaedagogik'
+              ? 'Ihre Notizen werden für die Heilpädagogik optimiert: Entwicklungsförderung, Förderbedarf, ICF, heilpädagogische Ziele und Maßnahmen.'
+              : mode === 'arbeitserziehung'
+              ? 'Ihre Notizen werden für die Arbeitserziehung optimiert: berufliche Teilhabe nach SGB IX, Arbeitsverhalten, Fortschritte und Qualifikationsziele.'
               : 'Ihre Notizen werden für den/die Case Manager:in optimiert: Teilhabeplanung nach SGB IX und ICF, personenzentrierte Ziele und Netzwerkkoordination.'}
           </p>
         </div>
