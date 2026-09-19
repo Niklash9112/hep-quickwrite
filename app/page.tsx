@@ -843,10 +843,11 @@ export default function Home() {
                     : 'bg-gray-700 border-gray-600 focus:border-indigo-400 focus:ring-indigo-900 text-gray-100 placeholder-gray-400'
                 }`}
               />
-              <p className={`mt-1.5 text-xs ${
-                theme === 'light' ? 'text-gray-500' : 'text-gray-400'
+              <p className={`mt-1.5 text-xs flex items-start gap-1.5 ${
+                theme === 'light' ? 'text-amber-700' : 'text-amber-400'
               }`}>
-                Datenschutz-Hinweis: Verwende bei Bedenken keine vollständigen Namen — Kürzel oder Fantasienamen genügen.
+                <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
+                <span>Datenschutz-Hinweis: Bei Bedenken keine vollständigen Namen verwenden — Kürzel oder Fantasienamen genügen.</span>
               </p>
             </div>
             
