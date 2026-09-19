@@ -126,6 +126,13 @@ export default function Home() {
     setShowTemplates(false);
   };
 
+  // Berufsgruppen wechseln: Vorlage zurücksetzen, damit keine alte Vorlage einer anderen
+  // Berufsgruppe fälschlich weiterwirkt (User-Wunsch 2026-09-19).
+  const changeMode = (mode: Mode) => {
+    setMode(mode);
+    setSelectedTemplate(null);
+  };
+
   const handleGenerate = async (documentType: string) => {
     if (subscriptionStatus !== 'active' && !isAdmin && reportCount >= FREE_REPORT_LIMIT) {
       setShowPaywall(true);
@@ -621,7 +628,7 @@ export default function Home() {
           }`}>Berufsgruppe wählen</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-11 gap-3">
             <button
-              onClick={() => setMode('altenpflege')}
+              onClick={() => changeMode('altenpflege')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
                 mode === 'altenpflege'
                   ? 'bg-rose-600 text-white shadow-lg'
@@ -633,7 +640,7 @@ export default function Home() {
               Altenpfleger:in
             </button>
             <button
-              onClick={() => setMode('ambulant')}
+              onClick={() => changeMode('ambulant')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
                 mode === 'ambulant'
                   ? 'bg-cyan-600 text-white shadow-lg'
@@ -645,7 +652,7 @@ export default function Home() {
               Ambulante Pflegefachkraft
             </button>
             <button
-              onClick={() => setMode('arbeitserziehung')}
+              onClick={() => changeMode('arbeitserziehung')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
                 mode === 'arbeitserziehung'
                   ? 'bg-orange-600 text-white shadow-lg'
@@ -657,7 +664,7 @@ export default function Home() {
               Arbeitserzieher:in
             </button>
             <button
-              onClick={() => setMode('cm_hep')}
+              onClick={() => changeMode('cm_hep')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
                 mode === 'cm_hep'
                   ? 'bg-teal-600 text-white shadow-lg'
@@ -669,7 +676,7 @@ export default function Home() {
               Case Manager:in
             </button>
             <button
-              onClick={() => setMode('ergotherapie')}
+              onClick={() => changeMode('ergotherapie')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
                 mode === 'ergotherapie'
                   ? 'bg-violet-600 text-white shadow-lg'
@@ -681,7 +688,7 @@ export default function Home() {
               Ergotherapeut:in
             </button>
             <button
-              onClick={() => setMode('ergo')}
+              onClick={() => changeMode('ergo')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
                 mode === 'ergo'
                   ? 'bg-fuchsia-600 text-white shadow-lg'
@@ -693,7 +700,7 @@ export default function Home() {
               Erzieher:in
             </button>
             <button
-              onClick={() => setMode('hep')}
+              onClick={() => changeMode('hep')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
                 mode === 'hep'
                   ? 'bg-indigo-600 text-white shadow-lg'
@@ -705,7 +712,7 @@ export default function Home() {
               Heilerziehungspfleger:in
             </button>
             <button
-              onClick={() => setMode('heilpaedagogik')}
+              onClick={() => changeMode('heilpaedagogik')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
                 mode === 'heilpaedagogik'
                   ? 'bg-lime-600 text-white shadow-lg'
@@ -717,7 +724,7 @@ export default function Home() {
               Heilpädagoge:in
             </button>
             <button
-              onClick={() => setMode('logopaedie')}
+              onClick={() => changeMode('logopaedie')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
                 mode === 'logopaedie'
                   ? 'bg-amber-600 text-white shadow-lg'
@@ -729,7 +736,7 @@ export default function Home() {
               Logopäde:in
             </button>
             <button
-              onClick={() => setMode('physio')}
+              onClick={() => changeMode('physio')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
                 mode === 'physio'
                   ? 'bg-sky-600 text-white shadow-lg'
@@ -741,7 +748,7 @@ export default function Home() {
               Physiotherapeut:in
             </button>
             <button
-              onClick={() => setMode('sozialpaedagogik')}
+              onClick={() => changeMode('sozialpaedagogik')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
                 mode === 'sozialpaedagogik'
                   ? 'bg-emerald-600 text-white shadow-lg'
