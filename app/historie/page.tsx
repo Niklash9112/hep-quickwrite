@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Trash2, Copy, Download } from 'lucide-react';
+import { ArrowLeft, Trash2, Copy, Download, Moon, Sun } from 'lucide-react';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import jsPDF from 'jspdf';
@@ -16,6 +16,8 @@ interface Report {
   notes: string;
   report: string;
 }
+
+type Theme = 'light' | 'dark';
 
 const MODE_NAMES: Record<string, string> = {
   hep: 'Heilerziehungspfleger:in',
@@ -33,9 +35,16 @@ const MODE_NAMES: Record<string, string> = {
 
 export default function Historie() {
   const router = useRouter();
+  const [theme, setTheme] = useState<Theme>('light');
   const [reports, setReports] = useState<Report[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') as Theme;
+    if (savedTheme) setTheme(savedTheme);
+    else if (window.matchMedia('(prefers-color-scheme: dark)').matches) setTheme('dark');
+  }, []);
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -59,6 +68,18 @@ export default function Historie() {
     };
     fetchReports();
   }, [router]);
+
+  const toggleTheme = () => {
+    const next = theme === 'light' ? 'dark' : 'light';
+    setTheme(next);
+    localStorage.setItem('theme', next);
+  };
+
+  const card = theme === 'light' ? 'bg-white' : 'bg-gray-800';
+  const cardBorder = theme === 'light' ? 'border-gray-200' : 'border-gray-700';
+  const textMain = theme === 'light' ? 'text-gray-900' : 'text-gray-100';
+  const textSoft = theme === 'light' ? 'text-gray-500' : 'text-gray-400';
+  const textReport = theme === 'light' ? 'text-gray-700' : 'text-gray-200';
 
   const deleteReport = async (id: string) => {
     if (!confirm('Bericht wirklich löschen?')) return;
@@ -98,53 +119,64 @@ export default function Historie() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div className={`min-h-screen transition-colors ${
+      theme === 'light' ? 'bg-gradient-to-br from-blue-50 to-indigo-100' : 'bg-gray-900'
+    }`}>
+      <header className={`${card} shadow-sm border-b ${cardBorder}`}>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => router.push('/')}>
             <Image src="/logo.jpg" alt="HEP-QuickWrite Logo" width={40} height={40} className="rounded-lg" />
-            <h1 className="text-2xl font-bold text-indigo-600">HEP-QuickWrite</h1>
+            <h1 className={`text-2xl font-bold ${theme === 'light' ? 'text-indigo-600' : 'text-indigo-400'}`}>HEP-QuickWrite</h1>
           </div>
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            aria-label="Thema umschalten"
+          >
+            {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5 text-gray-200" />}
+          </button>
         </div>
       </header>
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <button
           onClick={() => router.push('/')}
-          className="flex items-center gap-2 text-indigo-600 hover:text-indigo-700 mb-8 transition-colors"
+          className={`flex items-center gap-2 mb-8 transition-colors ${textSoft}`}
         >
           <ArrowLeft className="w-5 h-5" />
           Zurück zur Startseite
         </button>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Historie</h1>
+        <h1 className={`text-3xl font-bold ${textMain} mb-8`}>Historie</h1>
 
-        {loading && <p className="text-gray-500">Lade Berichte...</p>}
+        {loading && <p className={textSoft}>Lade Berichte...</p>}
         {error && <p className="text-red-600">{error}</p>}
 
         {!loading && !error && reports.length === 0 && (
-          <div className="bg-white rounded-lg shadow-md p-8 text-center">
-            <p className="text-gray-500">Noch keine Berichte gespeichert.</p>
-            <p className="text-gray-400 text-sm mt-2">Generiere deinen ersten Bericht auf der Startseite.</p>
+          <div className={`${card} ${cardBorder} border rounded-lg shadow-md p-8 text-center`}>
+            <p className={textSoft}>Noch keine Berichte gespeichert.</p>
+            <p className={`${textSoft} text-sm mt-2 opacity-70`}>Generiere deinen ersten Bericht auf der Startseite.</p>
           </div>
         )}
 
         <div className="space-y-6">
           {reports.map((report) => (
-            <div key={report.id} className="bg-white rounded-lg shadow-md p-6">
+            <div key={report.id} className={`${card} ${cardBorder} border rounded-lg shadow-md p-6`}>
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h2 className="text-lg font-semibold text-gray-900">
+                  <h2 className={`text-lg font-semibold ${textMain}`}>
                     {report.clientName || 'Ohne Name'}
                   </h2>
-                  <p className="text-sm text-gray-500">
+                  <p className={`text-sm ${textSoft}`}>
                     {new Date(report.date).toLocaleDateString('de-DE')} · {MODE_NAMES[report.mode] || report.mode} · {report.documentType}
                   </p>
                 </div>
                 <div className="flex gap-2">
                   <button
                     onClick={() => copyReport(report.report)}
-                    className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700"
+                    className={`p-2 rounded-lg ${
+                      theme === 'light' ? 'bg-gray-100 hover:bg-gray-200 text-gray-700' : 'bg-gray-700 hover:bg-gray-600 text-gray-200'
+                    }`}
                     title="Kopieren"
                   >
                     <Copy className="w-4 h-4" />
@@ -165,7 +197,7 @@ export default function Historie() {
                   </button>
                 </div>
               </div>
-              <div className="prose prose-sm max-w-none text-gray-700">
+              <div className={`prose prose-sm max-w-none ${textReport}`}>
                 <ReactMarkdown>{report.report}</ReactMarkdown>
               </div>
             </div>
