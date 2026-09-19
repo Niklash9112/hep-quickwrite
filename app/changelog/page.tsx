@@ -38,6 +38,43 @@ const CHANGELOG: ChangelogEntry[] = [
       'Historien-Ansicht für generierte Berichte',
     ],
   },
+  {
+    version: '0.6',
+    date: '16.09.2026',
+    title: 'Neue Berufsgruppen: Physio, Ergo & Ambulante Pflege',
+    changes: [
+      'Physiotherapeut:in & Ergotherapeut:in mit Befund-/Therapie-Berichtstypen',
+      'Ambulante Pflegefachkraft (Pflegebericht/Leistungsnachweis, AEDL- und SGB-Bezug)',
+      'Berufsgruppen alphabetisch sortiert',
+      'Vorlagen-Wechsel ersetzt künftig statt anzuhängen',
+    ],
+  },
+  {
+    version: '0.5',
+    date: '09.09.2026',
+    title: 'Groß-Umbau: Berufe, Historie & PWA',
+    changes: [
+      'Berufsgruppen Altenpfleger:in und Logopäde:in ergänzt',
+      'Geschlechtsneutrale Berufsbezeichnungen (Heilerziehungspfleger:in, Erzieher:in, …)',
+      'Berufsspezifische Dokumenttypen (Pflegebericht, Befundbericht, Therapiebericht, Entwicklungsbericht)',
+      'Historie: Berichte speichern, anzeigen, kopieren, als PDF exportieren, löschen',
+      'PWA: App auf dem Handy installierbar (Icon, Service Worker)',
+      'Server-seitige Anmeldung + Freemium-Limit (nicht mehr umgehbar)',
+      'KI-Modell auf Ollama Pro (mistral-large) umgestellt, Berichtskopf mit Klient, Datum & Verfasser',
+    ],
+  },
+  {
+    version: '0.1',
+    date: '07.02.2026',
+    title: 'Launch & Zahlungssystem',
+    changes: [
+      'Erste Version der App: Berichte für Heilerziehungspflege generieren lassen',
+      'Stripe-Integration (Checkout, Webhooks, Abo)',
+      'Bezahlmethoden: Kreditkarte, PayPal, SEPA-Lastschrift',
+      'Auto-Paywall nach Freemium-Limit, 7-Tage-Testphase',
+      'Anmelde-Pflicht für die Nutzung (Clerk) + Onboarding',
+    ],
+  },
 ];
 
 export default function Changelog() {
