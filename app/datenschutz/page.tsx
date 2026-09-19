@@ -116,6 +116,9 @@ export default function Datenschutz() {
               <p className="leading-relaxed">
                 Wenn Sie sich auf dieser Website registrieren, werden Ihre eingegebenen Daten (E-Mail-Adresse, Name) 
                 bei uns gespeichert. Diese Daten werden ausschließlich für die Bereitstellung der Dienste verwendet.
+                Als Betreiber der Plattform können wir Ihre Kontodaten (insbesondere Name, E-Mail-Adresse und 
+                Registrierungsdatum) zur Verwaltung Ihres Benutzerkontos einsehen, z. B. um Zugriff zu gewähren, 
+                Support zu leisten oder Test-/Doppelkonten zu erkennen. Eine Weitergabe an Dritte erfolgt nicht.
               </p>
 
               <h3 className="font-semibold text-gray-900 mt-4 mb-2">Support-Formular</h3>
