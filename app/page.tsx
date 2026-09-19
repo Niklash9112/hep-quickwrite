@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { CheckCircle, Lock, Sun, Moon, Copy, Loader2, Download, FileText, ChevronDown, History } from 'lucide-react';
+import { CheckCircle, Lock, Sun, Moon, Copy, Loader2, Download, FileText, ChevronDown, History, Info } from 'lucide-react';
 import { UserButton, useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import jsPDF from 'jspdf';
@@ -882,6 +882,12 @@ export default function Home() {
             <p className={`mt-2 text-sm ${
               theme === 'light' ? 'text-gray-500' : 'text-gray-400'
             }`}>{notes.length} Zeichen</p>
+            <p className={`mt-1 text-xs flex items-start gap-1.5 ${
+              theme === 'light' ? 'text-amber-700' : 'text-amber-400'
+            }`}>
+              <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
+              <span>Der Bericht ist ein KI-Entwurf – bitte vor Verwendung sorgfältig gegenlesen. KI-generierte Texte können Fehler enthalten und ersetzen nicht Ihre fachliche Beurteilung. Keine vollständigen Namen verwenden, wenn Sie sich unsicher sind.</span>
+            </p>
             {selectedTemplate && (
               <div className={`mt-3 flex items-center justify-between gap-3 px-3 py-2 rounded-lg border ${
                 theme === 'light'

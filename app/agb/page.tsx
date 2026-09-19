@@ -102,6 +102,18 @@ export default function AGB() {
                 fachliche Beurteilung noch die eigenständige Dokumentationsverantwortung der 
                 Nutzer:innen.
               </p>
+              <p className="mt-3 leading-relaxed">
+                Die Anwendung ist als <strong>Formulierungshilfe für den beruflichen/ehrenamtlichen 
+                Arbeitsalltag</strong> der Fachkräfte gedacht. Die alleinige inhaltliche und rechtliche 
+                Verantwortung für den finalen Bericht trägt stets die jeweilige Nutzer:in beziehungsweise 
+                die verantwortliche Einrichtung. Für die Erbringung <strong>benoteter oder abzugebender 
+                schulischer, beruflicher oder prüfungsrelevanter Leistungen</strong> (z. B. Hausarbeiten, 
+                Praxisberichte, Dokumentations-Prüfungen) ist die Anwendung nicht als eigenständige 
+                Leistung vorgesehen. Wer KI-unterstützte Texte in solchen Kontexten nutzt, ist 
+                verpflichtet, die Regeln der jeweiligen Schule beziehungsweise Einrichtung zur 
+                Kennzeichnung von KI-Nutzung zu beachten und KI-generierte Inhalte als solche 
+                kenntlich zu machen.
+              </p>
             </section>
 
             <section>
