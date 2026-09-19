@@ -660,7 +660,7 @@ export default function Home() {
               onClick={() => setMode('cm_hep')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
                 mode === 'cm_hep'
-                  ? 'bg-fuchsia-600 text-white shadow-lg'
+                  ? 'bg-teal-600 text-white shadow-lg'
                   : theme === 'light'
                   ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
@@ -684,7 +684,7 @@ export default function Home() {
               onClick={() => setMode('ergo')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
                 mode === 'ergo'
-                  ? 'bg-teal-600 text-white shadow-lg'
+                  ? 'bg-fuchsia-600 text-white shadow-lg'
                   : theme === 'light'
                   ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
