@@ -39,10 +39,13 @@ export async function GET(request: NextRequest) {
       if (createdAt > 0 && now - createdAt < 30 * 24 * 3600 * 1000) neueAnmeldungen30++;
       const count = Number(meta.reportCount) || 0;
       summeNutzung += count;
+      // Leere Identifikation abfangen: nie Blank-Zeilen, immer ein erkennbarer Wert
+      const displayName = `${u.firstName || ''} ${u.lastName || ''}`.trim() || email || '(ohne Name)';
+      const displayEmail = email || '(keine E-Mail – ID ' + u.id.slice(-8) + ')';
       return {
         id: u.id,
-        email,
-        name: `${u.firstName || ''} ${u.lastName || ''}`.trim() || email,
+        email: displayEmail,
+        name: displayName,
         subscriptionStatus: subActive ? 'active' : (sub || 'none'),
         reportCount: count,
         createdAt: createdAt / 1000,
