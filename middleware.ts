@@ -8,6 +8,7 @@ const isPublicRoute = createRouteMatcher([
   '/agb(.*)',
   '/historie(.*)',
   '/admin(.*)',
+  '/changelog(.*)',
   '/',
   '/sitemap.xml',
   '/robots.txt',

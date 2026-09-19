@@ -573,6 +573,18 @@ export default function Home() {
               )}
 
               <button
+                onClick={() => router.push('/changelog')}
+                className={`px-3 sm:px-4 py-2 rounded-lg transition-colors text-xs sm:text-sm font-medium flex items-center gap-1 sm:gap-2 ${
+                  theme === 'light'
+                    ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
+                }`}
+              >
+                <span className="hidden sm:inline">Updates</span>
+                <span className="sm:hidden">⬆</span>
+              </button>
+
+              <button
                 onClick={() => router.push('/historie')}
                 className={`px-3 sm:px-4 py-2 rounded-lg transition-colors text-xs sm:text-sm font-medium flex items-center gap-1 sm:gap-2 ${
                   theme === 'light'
