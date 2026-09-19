@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { CheckCircle, Lock, Sun, Moon, Copy, Loader2, Download, FileText, ChevronDown, History, Info } from 'lucide-react';
+import { CheckCircle, Lock, Sun, Moon, Copy, Loader2, Download, FileText, ChevronDown, History, Info, Rocket } from 'lucide-react';
 import { UserButton, useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import jsPDF from 'jspdf';
@@ -580,8 +580,8 @@ export default function Home() {
                     : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
                 }`}
               >
+                <Rocket className="w-4 h-4" />
                 <span className="hidden sm:inline">Updates</span>
-                <span className="sm:hidden">⬆</span>
               </button>
 
               <button
