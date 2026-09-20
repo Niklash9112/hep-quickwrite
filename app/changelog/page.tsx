@@ -22,7 +22,7 @@ const CHANGELOG: ChangelogEntry[] = [
     changes: [
       'Gesundheits- und Krankenpfleger:in (stationäre Klinikpflege) mit eigenen Vorlagen: Pflegebericht (Klinik), Übergabebericht, Entlassungsbrief und Sturz-/Dekubitus-/Wunddokumentation',
       'Klinisch optimierte Berichtsentwürfe nach Pflegeprozess und Expertenstandards – klar abgegrenzt von Altenpflege und ambulanter Pflege',
-      'Berufsgruppen-Buttons neu geordnet: Gesundheits- und Krankenpfleger:in steht jetzt am Anfang der Liste',
+      'Berufsgruppen-Buttons jetzt alphabetisch nach Bezeichnung sortiert — Gesundheits- und Krankenpfleger:in steht damit an der richtigen Stelle (nach Erzieher:in), eigene Farbe (Blau) statt Doppelung mit Ambulante Pflegefachkraft',
     ],
   },
   {

@@ -640,18 +640,6 @@ export default function Home() {
           }`}>Berufsgruppe wählen</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3">
             <button
-              onClick={() => changeMode('krankenpflege')}
-              className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
-                mode === 'krankenpflege'
-                  ? 'bg-cyan-600 text-white shadow-lg'
-                  : theme === 'light'
-                  ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
-              }`}
-            >
-              Gesundheits- und Krankenpfleger:in
-            </button>
-          <button
               onClick={() => changeMode('altenpflege')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
                 mode === 'altenpflege'
@@ -722,6 +710,18 @@ export default function Home() {
               }`}
             >
               Erzieher:in
+            </button>
+            <button
+              onClick={() => changeMode('krankenpflege')}
+              className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
+                mode === 'krankenpflege'
+                  ? 'bg-blue-600 text-white shadow-lg'
+                  : theme === 'light'
+                  ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
+              }`}
+            >
+              Gesundheits- und Krankenpfleger:in
             </button>
             <button
               onClick={() => changeMode('hep')}
