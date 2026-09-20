@@ -10,7 +10,7 @@ import { getTemplatesByCategory, Template } from '../lib/templates';
 
 // ----------------------------------------------------------------------------------
 
-type Mode = 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie' | 'ambulant' | 'cm_hep' | 'sozialpaedagogik' | 'heilpaedagogik' | 'arbeitserziehung';
+type Mode = 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie' | 'ambulant' | 'cm_hep' | 'sozialpaedagogik' | 'heilpaedagogik' | 'arbeitserziehung' | 'krankenpflege';
 type SubscriptionStatus = 'active' | 'inactive';
 type Theme = 'light' | 'dark';
 
@@ -638,7 +638,7 @@ export default function Home() {
           <h2 className={`text-lg font-semibold mb-4 ${
             theme === 'light' ? 'text-gray-800' : 'text-gray-100'
           }`}>Berufsgruppe wählen</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-11 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3">
             <button
               onClick={() => changeMode('altenpflege')}
               className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
@@ -771,6 +771,18 @@ export default function Home() {
             >
               Sozialpädagoge:in
             </button>
+            <button
+              onClick={() => changeMode('krankenpflege')}
+              className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
+                mode === 'krankenpflege'
+                  ? 'bg-cyan-600 text-white shadow-lg'
+                  : theme === 'light'
+                  ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
+              }`}
+            >
+              Gesundheits- und Krankenpfleger:in
+            </button>
           </div>
         </div>
 
@@ -891,6 +903,8 @@ export default function Home() {
                   ? 'Geben Sie hier Ihre Notizen als Heilpädagoge:in ein (Entwicklungsbeobachtung, Förderbedarf)...'
                   : mode === 'arbeitserziehung'
                   ? 'Geben Sie hier Ihre Notizen als Arbeitserzieher:in ein (Arbeitsverhalten, Fortschritte, Ziele)...'
+                  : mode === 'krankenpflege'
+                  ? 'Geben Sie hier Ihre Notizen als Gesundheits- und Krankenpfleger:in ein (Pflegeprozess, Beobachtung, Maßnahmen)...'
                   : 'Notieren Sie Ihre pädagogischen Beobachtungen...'
               }
               className={`w-full h-64 p-4 border-2 rounded-lg focus:ring-2 transition-all resize-none ${
@@ -1051,7 +1065,7 @@ export default function Home() {
           <h3 className={`text-lg font-semibold mb-3 ${
             theme === 'light' ? 'text-gray-800' : 'text-gray-100'
           }`}>
-            {mode === 'hep' ? 'Heilerziehungspfleger:in' : mode === 'ergo' ? 'Erzieher:in' : mode === 'altenpflege' ? 'Altenpfleger:in' : mode === 'logopaedie' ? 'Logopäde:in' : mode === 'physio' ? 'Physiotherapeut:in' : mode === 'ergotherapie' ? 'Ergotherapeut:in' : mode === 'ambulant' ? 'Ambulante Pflegefachkraft' : mode === 'cm_hep' ? 'Case Manager:in' : mode === 'sozialpaedagogik' ? 'Sozialpädagoge:in' : mode === 'heilpaedagogik' ? 'Heilpädagoge:in' : 'Arbeitserzieher:in'} aktiv
+            {mode === 'hep' ? 'Heilerziehungspfleger:in' : mode === 'ergo' ? 'Erzieher:in' : mode === 'altenpflege' ? 'Altenpfleger:in' : mode === 'logopaedie' ? 'Logopäde:in' : mode === 'physio' ? 'Physiotherapeut:in' : mode === 'ergotherapie' ? 'Ergotherapeut:in' : mode === 'ambulant' ? 'Ambulante Pflegefachkraft' : mode === 'cm_hep' ? 'Case Manager:in' : mode === 'sozialpaedagogik' ? 'Sozialpädagoge:in' : mode === 'heilpaedagogik' ? 'Heilpädagoge:in' : mode === 'krankenpflege' ? 'Gesundheits- und Krankenpfleger:in' : 'Arbeitserzieher:in'} aktiv
           </h3>
           <p className={theme === 'light' ? 'text-gray-600' : 'text-gray-300'}>
             {mode === 'hep'
@@ -1074,6 +1088,8 @@ export default function Home() {
               ? 'Ihre Notizen werden für die Heilpädagogik optimiert: Entwicklungsförderung, Förderbedarf, ICF, heilpädagogische Ziele und Maßnahmen.'
               : mode === 'arbeitserziehung'
               ? 'Ihre Notizen werden für die Arbeitserziehung optimiert: berufliche Teilhabe nach SGB IX, Arbeitsverhalten, Fortschritte und Qualifikationsziele.'
+              : mode === 'krankenpflege'
+              ? 'Ihre Notizen werden für die Gesundheits- und Krankenpflege optimiert: Pflegeprozess, Pflegediagnose, klinische Beobachtung und Maßnahmen nach Expertenstandards.'
               : 'Ihre Notizen werden für den/die Case Manager:in optimiert: Teilhabeplanung nach SGB IX und ICF, personenzentrierte Ziele und Netzwerkkoordination.'}
           </p>
         </div>

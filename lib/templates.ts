@@ -4,7 +4,7 @@ export interface Template {
   // Leerer Struktur-Rahmen optional — der Dokument-Typ liefert die Struktur über den Prompt.
   content: string;
   category: 'standard' | 'notfall' | 'entwicklung';
-  mode: 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie' | 'ambulant' | 'cm_hep' | 'sozialpaedagogik' | 'heilpaedagogik' | 'arbeitserziehung';
+  mode: 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie' | 'ambulant' | 'cm_hep' | 'sozialpaedagogik' | 'heilpaedagogik' | 'arbeitserziehung' | 'krankenpflege';
   // Der Berichtstyp, den die KI beim Generieren erzeugen soll (= Prompt-Steuerung, Variante B).
   documentType: string;
 }
@@ -87,15 +87,22 @@ const ARBEITSERZIEHUNG_TEMPLATES: Template[] = [
   { id: 'arbei-4', name: 'Herausforderndes Verhalten', category: 'notfall', mode: 'arbeitserziehung', documentType: 'Dokumentation herausforderndes Verhalten', content: '' },
 ];
 
+const KRANKENPFLEGE_TEMPLATES: Template[] = [
+  { id: 'kranke-1', name: 'Pflegebericht (Klinik)', category: 'standard', mode: 'krankenpflege', documentType: 'Pflegebericht (Klinik)', content: '' },
+  { id: 'kranke-2', name: 'Übergabebericht', category: 'standard', mode: 'krankenpflege', documentType: 'Übergabebericht', content: '' },
+  { id: 'kranke-3', name: 'Entlassungsbrief', category: 'standard', mode: 'krankenpflege', documentType: 'Entlassungsbrief', content: '' },
+  { id: 'kranke-4', name: 'Sturz-/Dekubitus-/Wunddokumentation', category: 'notfall', mode: 'krankenpflege', documentType: 'Sturz-/Dekubitus-/Wunddokumentation', content: '' },
+];
+
 // Universelle Dokumente, gelten für jede Berufsgruppe
 const UNIVERSAL_TEMPLATES: Template[] = [
   { id: 'univ-1', name: 'Tagesdokumentation', category: 'standard', mode: 'hep', documentType: 'Tagesdokumentation', content: '' },
   { id: 'univ-2', name: 'Leichte Sprache', category: 'standard', mode: 'hep', documentType: 'Leichte Sprache', content: '' },
 ];
 
-type ModeKey = 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie' | 'ambulant' | 'cm_hep' | 'sozialpaedagogik' | 'heilpaedagogik' | 'arbeitserziehung';
+type ModeKey = 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergotherapie' | 'ambulant' | 'cm_hep' | 'sozialpaedagogik' | 'heilpaedagogik' | 'arbeitserziehung' | 'krankenpflege';
 
-export const ALL_TEMPLATES: Template[] = [...HEP_TEMPLATES, ...ERGO_TEMPLATES, ...ALTENPFLEGE_TEMPLATES, ...LOGOPAEDIE_TEMPLATES, ...PHYSIO_TEMPLATES, ...ERGOTHERAPIE_TEMPLATES, ...AMBULANT_TEMPLATES, ...CM_HEP_TEMPLATES, ...SOZIALPAEDAGOGIK_TEMPLATES, ...HEILPAEDAGOGIK_TEMPLATES, ...ARBEITSERZIEHUNG_TEMPLATES];
+export const ALL_TEMPLATES: Template[] = [...HEP_TEMPLATES, ...ERGO_TEMPLATES, ...ALTENPFLEGE_TEMPLATES, ...LOGOPAEDIE_TEMPLATES, ...PHYSIO_TEMPLATES, ...ERGOTHERAPIE_TEMPLATES, ...AMBULANT_TEMPLATES, ...CM_HEP_TEMPLATES, ...SOZIALPAEDAGOGIK_TEMPLATES, ...HEILPAEDAGOGIK_TEMPLATES, ...ARBEITSERZIEHUNG_TEMPLATES, ...KRANKENPFLEGE_TEMPLATES];
 
 export function getTemplatesByCategory(mode: ModeKey, category: string): Template[] {
   const modeTemplates = getTemplatesByMode(mode);
@@ -115,6 +122,7 @@ export function getTemplatesByMode(mode: ModeKey): Template[] {
     : mode === 'cm_hep' ? CM_HEP_TEMPLATES
     : mode === 'sozialpaedagogik' ? SOZIALPAEDAGOGIK_TEMPLATES
     : mode === 'heilpaedagogik' ? HEILPAEDAGOGIK_TEMPLATES
+    : mode === 'krankenpflege' ? KRANKENPFLEGE_TEMPLATES
     : ARBEITSERZIEHUNG_TEMPLATES;
   // Universelle Dokumente (Tagesdokumentation, Leichte Sprache) für jede Berufsgruppe anhängen
   const universal = UNIVERSAL_TEMPLATES.map(u => ({ ...u, mode: mode as ModeKey }));

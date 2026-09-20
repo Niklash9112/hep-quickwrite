@@ -182,7 +182,24 @@ FORMALE ANFORDERUNGEN:
 - Klare Gliederung mit Absätzen
 - Konkrete Beispiele aus den Notizen
 - Maximal 500 Wörter
-- Antwort auf Deutsch`
+- Antwort auf Deutsch`,
+
+  krankenpflege: `Du bist eine erfahrene Gesundheits- und Krankenpfleger:in (stationäre Klinikpflege) und hilfst bei der Erstellung professioneller pflegerischer Berichte.
+
+WICHTIGE REGELN:
+- Fokussiere auf die stationäre Krankenpflege im Krankenhaus (nicht ambulant, nicht Altenheim)
+- Nutze den Pflegeprozess: Assessment/Datenerhebung, Pflegediagnose, Planung, Durchführung, Evaluation
+- Orientiere dich an den Expertenstandards (z.B. Sturzprophylaxe, Dekubitus-, Wundprophylaxe) und Pflegediagnosen
+- Klinisch präzise, aber keine ärztlichen Diagnosen oder Therapieentscheidungen treffen — Pflege dokumentiert Beobachtung und Maßnahmen
+- Schichtübergabe, Verlegung und Entlassung werden als Anlässe sauber getrennt
+- Strukturiere nach: Situation/Anlass → Beobachtung/Befund → durchgeführte Maßnahmen → Ergebnis/Verlauf → Empfehlungen
+
+FORMALE ANFORDERUNGEN:
+- Professioneller, sachlicher Ton
+- Klare Gliederung mit Absätzen
+- Konkrete Beispiele aus den Notizen
+- Maximal 500 Wörter
+- Antwort auf Deutsch`,
 };
 
 const DOCUMENT_TYPE_PROMPTS: Record<string, string> = {
@@ -218,7 +235,11 @@ const DOCUMENT_TYPE_PROMPTS: Record<string, string> = {
   'Heilpädagogischer Förderbericht': 'Erstelle einen heilpädagogischen Förderbericht: Beobachtung von Entwicklungsständen, Förderbedarfe, heilpädagogische Ziele und Maßnahmen, ressourcenorientiert, mit ICF-Bezug.',
   'Teilhabeplan (WfbM)': 'Erstelle einen Teilhabeplan für eine Werkstatt für behinderte Menschen (WfbM): Arbeitsplatz, Teilhabeziele am Arbeitsplatz, benötigte Unterstützung, berufliche Entwicklung und Teilhabe nach SGB IX.',
   'Arbeitspädagogischer Bericht': 'Erstelle einen arbeitspädagogischen (arbeitserzieherischen) Bericht: Arbeitsverhalten, Tätigkeitsbereiche, erzielte Fortschritte, Qualifikationsziele und Unterstützungsbedarf am Arbeitsplatz.',
-  'Entwicklungsbericht Arbeit': 'Erstelle einen Entwicklungsbericht zur beruflichen Teilhabe: Entwicklung der Arbeitsfähigkeiten, Zielerreichung, Ressourcen und nächste Schritte für die Arbeitserziehung.'
+  'Entwicklungsbericht Arbeit': 'Erstelle einen Entwicklungsbericht zur beruflichen Teilhabe: Entwicklung der Arbeitsfähigkeiten, Zielerreichung, Ressourcen und nächste Schritte für die Arbeitserziehung.',
+  'Pflegebericht (Klinik)': 'Erstelle einen klinischen Pflegebericht nach dem Pflegeprozess: Pflegediagnose, Beobachtung/Befund, durchgeführte Maßnahmen, Ergebnis und Evaluation. Stationär-klinischer Fokus, keine Altenheim-/Ambulanz-Logik.',
+  'Übergabebericht': 'Erstelle einen pflegerischen Übergabebericht für die Schichtübergabe oder Verlegung: aktueller Zustand, durchgeführte Maßnahmen, offene Aufgaben, auffällige Befunde und Empfehlungen für die nachfolgende Pflegeschicht/Station.',
+  'Entlassungsbrief': 'Erstelle einen pflegerischen Entlassungsbrief (Klinik): Aufnahmegrund, Verlauf und Entwicklung während des Aufenthalts, aktueller Pflege-/Unterstützungsbedarf, durchgeführte Maßnahmen und Empfehlungen für die Weiterbetreuung (Hausarzt, Pflegedienst, Angehörige).',
+  'Sturz-/Dekubitus-/Wunddokumentation': 'Erstelle eine pflegerische Risiko-/Verlaufsdokumentation je Ereignis: Sturzprotokoll (Zeitpunkt, Ort, Umstände, Folgen, Erstmaßnahmen, Prävention) ODER Dekubitus-/Wunddokumentation (Lokalisation, Größe, Wundzustand, durchgeführte Maßnahmen, Expertenstandard-Bezug) — je nach Notiz, ohne Diagnosestellung.',
 };
 
 export async function POST(request: NextRequest) {

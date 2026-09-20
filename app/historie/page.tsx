@@ -31,6 +31,7 @@ const MODE_NAMES: Record<string, string> = {
   sozialpaedagogik: 'Sozialpädagoge:in',
   heilpaedagogik: 'Heilpädagoge:in',
   arbeitserziehung: 'Arbeitserzieher:in',
+  krankenpflege: 'Gesundheits- und Krankenpfleger:in',
 };
 
 export default function Historie() {

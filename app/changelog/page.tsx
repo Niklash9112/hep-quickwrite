@@ -16,6 +16,15 @@ interface ChangelogEntry {
 
 const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.0',
+    date: '20.09.2026',
+    title: 'Neue Berufsgruppe: Gesundheits- und Krankenpfleger:in',
+    changes: [
+      'Gesundheits- und Krankenpfleger:in (stationäre Klinikpflege) mit eigenen Vorlagen: Pflegebericht (Klinik), Übergabebericht, Entlassungsbrief und Sturz-/Dekubitus-/Wunddokumentation',
+      'Klinisch optimierte Berichtsentwürfe nach Pflegeprozess und Expertenstandards – klar abgegrenzt von Altenpflege und ambulanter Pflege',
+    ],
+  },
+  {
     version: '0.9',
     date: '19.09.2026',
     title: 'Dark Mode & Detail-Verbesserungen',
