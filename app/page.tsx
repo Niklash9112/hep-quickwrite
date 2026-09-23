@@ -14,6 +14,23 @@ type Mode = 'hep' | 'ergo' | 'altenpflege' | 'logopaedie' | 'physio' | 'ergother
 type SubscriptionStatus = 'active' | 'inactive';
 type Theme = 'light' | 'dark';
 
+// Randfarbe (Statusleiste der installierten App) je Berufsgruppe.
+// Werte = die bg-<farbe>-600 der jeweiligen Berufsgruppen-Schaltflaeche.
+const MODE_THEME_COLORS: Record<Mode, string> = {
+  hep: '#4f46e5',
+  ergo: '#c026d3',
+  altenpflege: '#e11d48',
+  logopaedie: '#d97706',
+  physio: '#0284c7',
+  ergotherapie: '#7c3aed',
+  ambulant: '#0891b2',
+  cm_hep: '#0d9488',
+  sozialpaedagogik: '#059669',
+  heilpaedagogik: '#65a30d',
+  arbeitserziehung: '#ea580c',
+  krankenpflege: '#2563eb',
+};
+
 export default function Home() {
   const { user, isLoaded } = useUser();
   const router = useRouter();
@@ -132,6 +149,22 @@ export default function Home() {
     setMode(mode);
     setSelectedTemplate(null);
   };
+
+  // Oberer Rand der installierten App in der Berufsfarbe (User-Wunsch 2026-09-23).
+  // Android-Chrome liest die Farbe aus <meta name="theme-color">. Wichtig: Chrome
+  // ignoriert setAttribute auf einem BESTEHENDEN Element — das alte Tag muss weg
+  // und ein neues angelegt werden, sonst bleibt der Rand auf der Startfarbe.
+  useEffect(() => {
+    const color = MODE_THEME_COLORS[mode];
+    const existing = document.querySelector('meta[name="theme-color"]');
+    if (existing && existing.getAttribute('content') === color) return;
+    if (existing) existing.remove();
+    const meta = document.createElement('meta');
+    meta.name = 'theme-color';
+    meta.content = color;
+    document.head.appendChild(meta);
+  }, [mode]);
+
 
   const handleGenerate = async (documentType: string) => {
     if (subscriptionStatus !== 'active' && !isAdmin && reportCount >= FREE_REPORT_LIMIT) {

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -6,6 +6,14 @@ import ServiceWorkerRegister from "@/components/service-worker-register";
 import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+
+// Startfarbe des oberen Rands (Statusleiste) der installierten App.
+// Wird im Browser von der Berufsgruppen-Auswahl dynamisch überschrieben (page.tsx).
+export const viewport: Viewport = {
+  themeColor: "#4f46e5",
+  width: "device-width",
+  initialScale: 1,
+};
 
 export const metadata: Metadata = {
   title: "HEP-QuickWrite | KI-gestützte Fachberichte",

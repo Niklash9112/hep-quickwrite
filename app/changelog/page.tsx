@@ -16,6 +16,15 @@ interface ChangelogEntry {
 
 const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.1',
+    date: '23.09.2026',
+    title: 'Statusleiste färbt sich nach Berufsgruppe',
+    changes: [
+      'Der obere Rand der installierten App nimmt die Farbe der gewählten Berufsgruppe an (z. B. Türkis bei Case Manager:in, Rot bei Altenpfleger:in, Gelb bei Logopäde:in)',
+      'Ohne Auswahl bleibt der Rand im App-Lila',
+    ],
+  },
+  {
     version: '1.0',
     date: '20.09.2026',
     title: 'Neue Berufsgruppe: Gesundheits- und Krankenpfleger:in',
