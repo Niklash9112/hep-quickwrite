@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth, clerkClient } from '@clerk/nextjs/server';
-import { dbAktiv, berichtSpeichern, berichteLesen, berichteZaehlen } from '@/lib/reports-db';
+import { aktiverSpeicher, berichtSpeichern, berichteLesen } from '@/lib/reports-store';
 
 const MAX_REPORTS = 50;
 
@@ -27,10 +27,14 @@ export async function POST(request: NextRequest) {
       report: generatedReport,
     };
 
-    if (dbAktiv()) {
-      const id = await berichtSpeichern(userId, newReport);
-      const count = await berichteZaehlen(userId);
-      return NextResponse.json({ success: true, count, id, storage: 'db' });
+    const gespeichert = await berichtSpeichern(userId, newReport);
+    if (gespeichert) {
+      return NextResponse.json({
+        success: true,
+        count: gespeichert.count,
+        id: gespeichert.id,
+        storage: aktiverSpeicher(),
+      });
     }
 
     // ---- Fallback: Clerk-Metadata (nur solange keine DB konfiguriert ist) ----
@@ -63,9 +67,9 @@ export async function GET() {
       return NextResponse.json({ error: 'Login erforderlich' }, { status: 401 });
     }
 
-    if (dbAktiv()) {
-      const reports = await berichteLesen(userId, MAX_REPORTS);
-      return NextResponse.json({ reports, storage: 'db' });
+    const berichte = await berichteLesen(userId, MAX_REPORTS);
+    if (berichte) {
+      return NextResponse.json({ reports: berichte, storage: aktiverSpeicher() });
     }
 
     const client = await clerkClient();

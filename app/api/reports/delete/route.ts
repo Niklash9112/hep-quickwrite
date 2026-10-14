@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth, clerkClient } from '@clerk/nextjs/server';
-import { dbAktiv, berichtLoeschen } from '@/lib/reports-db';
+import { aktiverSpeicher, berichtLoeschen } from '@/lib/reports-store';
 
 // POST /api/reports/delete — Bericht löschen (Postgres; Fallback: Clerk-Metadata)
 export async function POST(request: NextRequest) {
@@ -15,9 +15,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'id fehlt' }, { status: 400 });
     }
 
-    if (dbAktiv()) {
-      const geloescht = await berichtLoeschen(userId, id);
-      return NextResponse.json({ success: true, geloescht, storage: 'db' });
+    const geloescht = await berichtLoeschen(userId, id);
+    if (geloescht !== null) {
+      return NextResponse.json({ success: true, geloescht, storage: aktiverSpeicher() });
     }
 
     const client = await clerkClient();
