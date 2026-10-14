@@ -72,12 +72,13 @@ async function main() {
     console.log(`- ${mail}: ${arr.length} Bericht(e) -> reports/${u.id}/<id>.json`);
 
     if (CLEANUP) {
-      delete meta.reports;
+      // Clerk merged beim PATCH — ein Schluessel verschwindet nur, wenn man ihn
+      // ausdruecklich auf null setzt. Ein blosses Weglassen laesst ihn stehen.
       await clerk(`/users/${u.id}/metadata`, {
         method: 'PATCH',
-        body: JSON.stringify({ public_metadata: meta }),
+        body: JSON.stringify({ public_metadata: { reports: null } }),
       });
-      console.log('  Clerk-Metadata bereinigt');
+      console.log('  Clerk-Metadata bereinigt (reports = null)');
     }
   }
 
