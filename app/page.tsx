@@ -99,6 +99,12 @@ export default function Home() {
 
   const handleNotizFoto = async (file: File | undefined) => {
     if (!file) return;
+    const name = (file.name || '').toLowerCase();
+    if (name.endsWith('.heic') || name.endsWith('.heif') || file.type === 'image/heic' || file.type === 'image/heif') {
+      setOcrMeldung('HEIC-Bilder kann der Browser nicht umwandeln — bitte das Foto als JPEG oder PNG auswählen.');
+      if (fotoInputRef.current) fotoInputRef.current.value = '';
+      return;
+    }
     setOcrLaeuft(true);
     setOcrMeldung('Foto wird gelesen …');
     try {
@@ -118,7 +124,11 @@ export default function Home() {
       setNotes((vorher) => (vorher.trim() ? `${vorher.trimEnd()}\n${erkannt}` : erkannt));
       setOcrMeldung('Text übernommen — bitte prüfen und korrigieren.');
     } catch (e: any) {
-      setOcrMeldung(e?.message || 'Texterkennung fehlgeschlagen.');
+      setOcrMeldung(
+        e?.message
+          ? `Bild konnte nicht gelesen werden (${e.message}) — bitte ein JPEG- oder PNG-Foto wählen.`
+          : 'Texterkennung fehlgeschlagen.'
+      );
     } finally {
       setOcrLaeuft(false);
       if (fotoInputRef.current) fotoInputRef.current.value = '';
@@ -1044,7 +1054,6 @@ export default function Home() {
                 ref={fotoInputRef}
                 type="file"
                 accept="image/*"
-                capture="environment"
                 className="hidden"
                 onChange={(e) => handleNotizFoto(e.target.files?.[0])}
               />
