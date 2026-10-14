@@ -46,7 +46,10 @@ export async function POST(request: NextRequest) {
       payment_method_types: [
         'card',           // Kreditkarte
         'paypal',         // PayPal
-        'sepa_debit',     // SEPA Lastschrift (sehr beliebt in DE!)
+        // 'sepa_debit' ist im Stripe-Konto NICHT aktiviert und liess JEDEN Checkout
+        // mit HTTP 400 "payment method type ... invalid" scheitern (verifiziert
+        // 2026-10-14: card/paypal = HTTP 200, sepa_debit = HTTP 400). Erst wieder
+        // aufnehmen, nachdem SEPA im Stripe-Dashboard aktiviert wurde.
       ],
       line_items: [
         {

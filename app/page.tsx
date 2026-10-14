@@ -62,6 +62,10 @@ export default function Home() {
   const [supportSending, setSupportSending] = useState(false);
   const [supportSent, setSupportSent] = useState(false);
   const [showMore, setShowMore] = useState(false);   // Mobile-Menü im Header (Updates/Admin)
+  // Einziges Wahrheitskriterium für die Paywall: das Signal des Servers.
+  // Eine Client-Zahl (reportCount >= Limit) darf NICHT sperren — sie ist beim Laden
+  // noch unbekannt und sperrte Tester:innen zu früh.
+  const [limitErreicht, setLimitErreicht] = useState(false);
 
   // Speichert den Bericht in der Historie (Clerk-Metadaten).
   // WICHTIG: Der Freemium-Zähler wird hier NICHT mehr erhöht — das macht
@@ -101,6 +105,9 @@ export default function Home() {
           if (typeof data.reportLimit === 'number' && data.reportLimit > 0) {
             setReportLimit(data.reportLimit);
           }
+          if (typeof data.limitReached === 'boolean') {
+            setLimitErreicht(data.limitReached);
+          }
           // LocalStorage als Backup
           localStorage.setItem('reportCount', (data.reportCount || 0).toString());
         }
@@ -116,16 +123,15 @@ export default function Home() {
     fetchReportCount();
   }, []);
 
-  // Auto-Paywall: Zeige Paywall automatisch an, wenn Limit erreicht
+  // Auto-Paywall: nur wenn der SERVER das Limit als erreicht meldet
   useEffect(() => {
-    if (isLoaded && user && subscriptionStatus !== 'active' && !isAdmin && reportCount >= FREE_REPORT_LIMIT) {
-      // Warte 1 Sekunde, damit User die Seite sieht, bevor Paywall erscheint
+    if (isLoaded && user && !isAdmin && limitErreicht) {
       const timer = setTimeout(() => {
         setShowPaywall(true);
       }, 1000);
       return () => clearTimeout(timer);
     }
-  }, [isLoaded, user, subscriptionStatus, reportCount]);
+  }, [isLoaded, user, isAdmin, limitErreicht]);
 
   // Solange ein Dialog offen ist, darf der Hintergrund nicht mitscrollen —
   // sonst scrollt auf dem Handy die Seite statt des Dialogs.
@@ -175,7 +181,9 @@ export default function Home() {
 
 
   const handleGenerate = async (documentType: string) => {
-    if (subscriptionStatus !== 'active' && !isAdmin && reportCount >= FREE_REPORT_LIMIT) {
+    // Doppelklick/Mehrfachstart verhindern: jeder Lauf zählt serverseitig einen Bericht.
+    if (isGenerating) return;
+    if (subscriptionStatus !== 'active' && !isAdmin && limitErreicht) {
       setShowPaywall(true);
       return;
     }
@@ -236,10 +244,17 @@ export default function Home() {
         if (typeof data.reportLimit === 'number' && data.reportLimit > 0) {
           setReportLimit(data.reportLimit);
         }
-        // Paywall erst, wenn das Limit wirklich erreicht ist
+        if (typeof data.limitReached === 'boolean') {
+          setLimitErreicht(data.limitReached);
+        }
+        // Paywall erst, wenn der Server das Limit als erreicht meldet
         if (data.limitReached) {
           setTimeout(() => setShowPaywall(true), 2000);
         }
+      } else if (response.status === 403 && data.limitReached) {
+        // Server hat das Limit durchgesetzt — das ist die Wahrheit, nicht die Client-Zahl
+        setLimitErreicht(true);
+        setShowPaywall(true);
       } else {
         alert(`Fehler: ${data.error}`);
       }
@@ -1044,16 +1059,16 @@ export default function Home() {
             <button
               onClick={() => {
                 if (!notes.trim() || !selectedTemplate) return;
-                if (subscriptionStatus !== 'active' && !isAdmin && reportCount >= FREE_REPORT_LIMIT) {
-                  setShowPaywall(true); // Paywall automatisch öffnen!
+                if (subscriptionStatus !== 'active' && !isAdmin && limitErreicht) {
+                  setShowPaywall(true); // Paywall öffnen, wenn der Server das Limit meldet
                   return;
                 }
                 handleGenerate(selectedTemplate.documentType);
               }}
-              disabled={!notes.trim() || !selectedTemplate}
+              disabled={!notes.trim() || !selectedTemplate || isGenerating}
               className={`w-full py-4 px-6 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${
-                notes.trim() && selectedTemplate
-                  ? (subscriptionStatus === 'active' || reportCount < FREE_REPORT_LIMIT)
+                notes.trim() && selectedTemplate && !isGenerating
+                  ? (!limitErreicht && (subscriptionStatus === 'active' || !isAdmin))
                     ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-md hover:shadow-lg'
                     : 'bg-indigo-600 text-white shadow-md hover:shadow-lg cursor-pointer'
                   : theme === 'light'
@@ -1068,7 +1083,7 @@ export default function Home() {
               )}
             </button>
 
-            {subscriptionStatus !== 'active' && reportCount >= FREE_REPORT_LIMIT && (
+            {limitErreicht && (
               <div className={`mt-6 p-4 border rounded-lg ${
                 theme === 'light'
                   ? 'bg-amber-50 border-amber-200'
