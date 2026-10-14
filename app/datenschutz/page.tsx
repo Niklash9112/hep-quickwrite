@@ -175,6 +175,12 @@ export default function Datenschutz() {
                   https://ollama.com/privacy
                 </a>
               </p>
+              <p className="mt-2 leading-relaxed">
+                <strong>Notiz-Foto (Texterkennung):</strong> Wenn Sie ein Foto Ihrer Notizen übernehmen, wird das
+                Bild zur Texterkennung an Ollama übermittelt. Das Bild wird nicht gespeichert und nicht in Ihrem
+                Konto abgelegt; übernommen wird ausschließlich der erkannte Text, den Sie vor der Erstellung des
+                Berichts prüfen und bearbeiten können.
+              </p>
             </section>
 
             <section>
@@ -199,8 +205,10 @@ export default function Datenschutz() {
             <section>
               <h2 className="text-xl font-semibold text-gray-900 mb-3">7. Datenspeicherung</h2>
               <p className="leading-relaxed">
-                <strong>Klienten-Historie:</strong> Berichte werden ausschließlich lokal in Ihrem Browser gespeichert 
-                (localStorage). Wir haben keinen Zugriff auf diese Daten.
+                <strong>Klienten-Historie:</strong> Ihre Berichte werden in der Anwendung gespeichert, damit Sie
+                sie in der Historie wiederfinden. Die Speicherung erfolgt bei unserem Hoster Vercel und ist
+                ausschließlich über Ihr Konto zugänglich. Jeden Bericht können Sie in der Historie selbst löschen.
+                (Im Browser werden nur Ihre Design-Einstellung und der Zähler zwischengespeichert.)
               </p>
               <p className="mt-2 leading-relaxed">
                 <strong>Benutzer-Account-Daten:</strong> Werden bei Clerk gespeichert und können jederzeit gelöscht werden.

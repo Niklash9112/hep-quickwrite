@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { CheckCircle, Lock, Sun, Moon, Copy, Loader2, Download, FileText, ChevronDown, History, Info, Rocket, MoreHorizontal, Headphones, X } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { CheckCircle, Lock, Sun, Moon, Copy, Loader2, Download, FileText, ChevronDown, History, Info, Rocket, MoreHorizontal, Headphones, X, Camera } from 'lucide-react';
 import { UserButton, useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import jsPDF from 'jspdf';
@@ -66,6 +66,64 @@ export default function Home() {
   // Eine Client-Zahl (reportCount >= Limit) darf NICHT sperren — sie ist beim Laden
   // noch unbekannt und sperrte Tester:innen zu früh.
   const [limitErreicht, setLimitErreicht] = useState(false);
+
+  // --- Notiz-Foto (Texterkennung) ---
+  const [ocrLaeuft, setOcrLaeuft] = useState(false);
+  const [ocrMeldung, setOcrMeldung] = useState('');
+  const fotoInputRef = useRef<HTMLInputElement>(null);
+
+  // Bild im Browser verkleinern: Handyfotos sind 3-5 MB, und Ollama Cloud mag keine
+  // progressiven JPEGs (HTTP 500) — Canvas liefert immer ein Baseline-JPEG.
+  const bildVerkleinern = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error('Datei konnte nicht gelesen werden'));
+      reader.onload = () => {
+        const img = new window.Image();
+        img.onerror = () => reject(new Error('Bild konnte nicht geöffnet werden'));
+        img.onload = () => {
+          const maxKante = 1600;
+          const skala = Math.min(1, maxKante / Math.max(img.width, img.height));
+          const canvas = document.createElement('canvas');
+          canvas.width = Math.round(img.width * skala);
+          canvas.height = Math.round(img.height * skala);
+          const ctx = canvas.getContext('2d');
+          if (!ctx) return reject(new Error('Canvas nicht verfügbar'));
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL('image/jpeg', 0.85));
+        };
+        img.src = String(reader.result);
+      };
+      reader.readAsDataURL(file);
+    });
+
+  const handleNotizFoto = async (file: File | undefined) => {
+    if (!file) return;
+    setOcrLaeuft(true);
+    setOcrMeldung('Foto wird gelesen …');
+    try {
+      const bild = await bildVerkleinern(file);
+      const res = await fetch('/api/ocr', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: bild }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.text) {
+        setOcrMeldung(data.error || 'Texterkennung fehlgeschlagen.');
+        return;
+      }
+      // Anhängen statt überschreiben — vorhandene Notizen bleiben erhalten.
+      const erkannt = String(data.text).trim();
+      setNotes((vorher) => (vorher.trim() ? `${vorher.trimEnd()}\n${erkannt}` : erkannt));
+      setOcrMeldung('Text übernommen — bitte prüfen und korrigieren.');
+    } catch (e: any) {
+      setOcrMeldung(e?.message || 'Texterkennung fehlgeschlagen.');
+    } finally {
+      setOcrLaeuft(false);
+      if (fotoInputRef.current) fotoInputRef.current.value = '';
+    }
+  };
 
   // Speichert den Bericht in der Historie (Clerk-Metadaten).
   // WICHTIG: Der Freemium-Zähler wird hier NICHT mehr erhöht — das macht
@@ -894,7 +952,7 @@ export default function Home() {
           <div className={`rounded-lg shadow-md p-6 transition-colors duration-300 ${
             theme === 'light' ? 'bg-white' : 'bg-gray-800'
           }`}>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
               <label htmlFor="notes" className={`text-lg font-semibold ${
                 theme === 'light' ? 'text-gray-800' : 'text-gray-100'
               }`}>
@@ -964,7 +1022,41 @@ export default function Home() {
                   </>
                 )}
               </div>
+
+              {/* Notiz-Foto: Text von einem Foto übernehmen (Handschrift/gedruckt) */}
+              <button
+                type="button"
+                onClick={() => fotoInputRef.current?.click()}
+                disabled={ocrLaeuft}
+                title="Notiz abfotografieren und Text übernehmen"
+                className={`flex items-center gap-2 px-4 min-h-11 rounded-lg font-medium transition-all ${
+                  ocrLaeuft
+                    ? 'bg-gray-200 text-gray-500 cursor-wait'
+                    : theme === 'light'
+                    ? 'bg-teal-100 text-teal-800 hover:bg-teal-200'
+                    : 'bg-teal-900 text-teal-200 hover:bg-teal-800'
+                }`}
+              >
+                {ocrLaeuft ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
+                {ocrLaeuft ? 'Liest …' : 'Notiz-Foto'}
+              </button>
+              <input
+                ref={fotoInputRef}
+                type="file"
+                accept="image/*"
+                capture="environment"
+                className="hidden"
+                onChange={(e) => handleNotizFoto(e.target.files?.[0])}
+              />
             </div>
+
+            {ocrMeldung && (
+              <p className={`text-xs mb-3 ${
+                ocrLaeuft ? (theme === 'light' ? 'text-gray-500' : 'text-gray-400') : 'text-teal-700'
+              }`}>
+                {ocrMeldung} <span className="opacity-70">(Foto wird nur zur Erkennung gesendet und nicht gespeichert)</span>
+              </p>
+            )}
             
             <div className="mb-4">
               <input
