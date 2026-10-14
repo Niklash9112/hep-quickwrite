@@ -274,13 +274,16 @@ export async function POST(request: NextRequest) {
     const userEmail = user.primaryEmailAddress?.emailAddress || user.emailAddresses[0]?.emailAddress || '';
     const subscriptionStatus = user.publicMetadata.subscriptionStatus as string | undefined;
     const currentCount = (user.publicMetadata.reportCount as number) || 0;
-
+    // Kulanz-/Testguthaben: erhöht das Freemium-Limit (z. B. für Tester:innen,
+    // die wegen des früheren Doppelzähl-Bugs Berichte verloren haben).
+    const bonusReports = Number(user.publicMetadata.bonusReports) || 0;
+    const reportLimit = FREE_REPORT_LIMIT + bonusReports;
     // Admin bekommt unbegrenzt
     const isAdmin = userEmail === ADMIN_EMAIL;
     // Abonnent bekommt unbegrenzt
     const hasSubscription = subscriptionStatus === 'active';
 
-    if (!isAdmin && !hasSubscription && currentCount >= FREE_REPORT_LIMIT) {
+    if (!isAdmin && !hasSubscription && currentCount >= reportLimit) {
       return NextResponse.json(
         { error: 'Freemium-Limit erreicht', limitReached: true },
         { status: 403 }
@@ -389,7 +392,7 @@ FORMATIERUNG:
     let limitReached = false;
     if (!isAdmin) {
       newCount = currentCount + 1;
-      limitReached = !hasSubscription && newCount >= FREE_REPORT_LIMIT;
+      limitReached = !hasSubscription && newCount >= reportLimit;
       try {
         await client.users.updateUserMetadata(userId, {
           publicMetadata: { ...user.publicMetadata, reportCount: newCount },
@@ -402,6 +405,7 @@ FORMATIERUNG:
     return NextResponse.json({
       result,
       reportCount: isAdmin ? 0 : newCount,
+      reportLimit: isAdmin ? 0 : reportLimit,
       limitReached,
     });
 

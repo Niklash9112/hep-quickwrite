@@ -51,7 +51,9 @@ export default function Home() {
   const [lastDocumentType, setLastDocumentType] = useState<string | null>(null);
   const [reportCount, setReportCount] = useState(0);
   const [showPaywall, setShowPaywall] = useState(false);
-  const FREE_REPORT_LIMIT = 3;
+  // Limit kommt vom Server: 3 + Kulanzguthaben (bonusReports in den Clerk-Metadaten),
+  // damit Tester:innen zusätzliche Gratis-Berichte bekommen können.
+  const [FREE_REPORT_LIMIT, setReportLimit] = useState(3);
   const [showTemplates, setShowTemplates] = useState(false);
   const [showSupport, setShowSupport] = useState(false);
   const [supportName, setSupportName] = useState('');
@@ -95,6 +97,9 @@ export default function Home() {
         const data = await response.json();
         if (response.ok) {
           setReportCount(data.reportCount || 0);
+          if (typeof data.reportLimit === 'number' && data.reportLimit > 0) {
+            setReportLimit(data.reportLimit);
+          }
           // LocalStorage als Backup
           localStorage.setItem('reportCount', (data.reportCount || 0).toString());
         }
@@ -226,6 +231,9 @@ export default function Home() {
         if (typeof data.reportCount === 'number') {
           setReportCount(data.reportCount);
           localStorage.setItem('reportCount', String(data.reportCount));
+        }
+        if (typeof data.reportLimit === 'number' && data.reportLimit > 0) {
+          setReportLimit(data.reportLimit);
         }
         // Paywall erst, wenn das Limit wirklich erreicht ist
         if (data.limitReached) {
@@ -1007,7 +1015,7 @@ export default function Home() {
                 <p className={`text-sm font-medium ${
                   theme === 'light' ? 'text-amber-800' : 'text-amber-200'
                 }`}>
-                  ⚡ Du hast deine 3 kostenlosen Berichte erstellt! Klicke auf einen Button für Pro-Upgrade.
+                  ⚡ Du hast deine {FREE_REPORT_LIMIT} kostenlosen Berichte erstellt! Klicke auf einen Button für Pro-Upgrade.
                 </p>
               </div>
             )}

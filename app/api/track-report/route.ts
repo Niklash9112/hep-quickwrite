@@ -36,6 +36,8 @@ export async function POST(request: NextRequest) {
 
     // Jeder andere User zählt (Freemium UND Abonnent) — Nutzung = generierte Texte
     const currentCount = (user.publicMetadata.reportCount as number) || 0;
+    const bonusReports = Number(user.publicMetadata.bonusReports) || 0;
+    const reportLimit = FREE_REPORT_LIMIT + bonusReports;
     const newCount = currentCount + 1;
     await client.users.updateUserMetadata(clerkUserId, {
       publicMetadata: { ...user.publicMetadata, reportCount: newCount },
@@ -47,7 +49,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       reportCount: newCount,
-      limitReached: isSubscriber ? false : newCount >= FREE_REPORT_LIMIT,
+      reportLimit,
+      limitReached: isSubscriber ? false : newCount >= reportLimit,
       hasSubscription: isSubscriber,
     });
   } catch (error: any) {
@@ -84,12 +87,15 @@ export async function GET(request: NextRequest) {
     }
 
     const currentCount = (user.publicMetadata.reportCount as number) || 0;
+    const bonusReports = Number(user.publicMetadata.bonusReports) || 0;
+    const reportLimit = FREE_REPORT_LIMIT + bonusReports;
     const subscriptionStatus = user.publicMetadata.subscriptionStatus as string | undefined;
     const isSubscriber = subscriptionStatus === 'active';
 
     return NextResponse.json({
       reportCount: currentCount,
-      limitReached: isSubscriber ? false : currentCount >= FREE_REPORT_LIMIT,
+      reportLimit,
+      limitReached: isSubscriber ? false : currentCount >= reportLimit,
       hasSubscription: isSubscriber,
     });
   } catch (error: any) {
