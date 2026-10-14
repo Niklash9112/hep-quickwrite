@@ -16,6 +16,20 @@ interface ChangelogEntry {
 
 const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.2',
+    date: '14.10.2026',
+    title: 'Notizen abfotografieren & Handy-Feinschliff',
+    changes: [
+      'Notiz-Foto: Notizen abfotografieren statt abtippen — Kamera oder Galerie wählen, der Text wird erkannt und direkt ins Notizfeld übernommen (dort weiter bearbeitbar)',
+      'Historie aufgeräumt: Berichte als übersichtliche Karten mit Datum, Berufsgruppe, Dokumenttyp und Klient:in; der Berichtstext klappt auf Knopfdruck auf',
+      'Kopieren, PDF und Löschen in der Historie jetzt beschriftet und mit großer Tippfläche statt kleiner Symbole',
+      'Besser am Handy: alle Schaltflächen mit größerer Tippfläche, seltenere Menüpunkte in einem Sammelmenü oben rechts',
+      'Zuverlässigere Freiberichte: Ihre 3 kostenlosen Berichte werden korrekt gezählt, die Bezahlseite erscheint erst danach — und gespeicherte Berichte gehen nicht mehr verloren',
+      'Bezahlung per Kreditkarte oder PayPal direkt im Checkout',
+      'Datenschutzerklärung ergänzt: Hinweis zur Foto-Übermittlung bei der Texterkennung',
+    ],
+  },
+  {
     version: '1.1',
     date: '23.09.2026',
     title: 'Statusleiste färbt sich nach Berufsgruppe',
@@ -89,7 +103,7 @@ const CHANGELOG: ChangelogEntry[] = [
     changes: [
       'Erste Version der App: Berichte für Heilerziehungspflege generieren lassen',
       'Stripe-Integration (Checkout, Webhooks, Abo)',
-      'Bezahlmethoden: Kreditkarte, PayPal, SEPA-Lastschrift',
+      'Bezahlmethoden: Kreditkarte und PayPal',
       'Auto-Paywall nach Freemium-Limit, 7-Tage-Testphase',
       'Anmelde-Pflicht für die Nutzung (Clerk) + Onboarding',
     ],
