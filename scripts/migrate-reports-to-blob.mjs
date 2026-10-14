@@ -57,15 +57,19 @@ async function main() {
       console.log(`- ${mail}: keine Berichte in Clerk`);
       continue;
     }
-    const pfad = `reports/${u.id}.json`;
-    const { url } = await put(pfad, JSON.stringify(reports), {
-      access: 'private',
-      addRandomSuffix: false,
-      allowOverwrite: true,
-      contentType: 'application/json',
-    });
-    gesamt += reports.length;
-    console.log(`- ${mail}: ${reports.length} Bericht(e) -> ${pfad}`);
+    const arr = [];
+    for (const r of reports) {
+      const id = String(r.id || Date.now());
+      await put(`reports/${u.id}/${id}.json`, JSON.stringify(r), {
+        access: 'private',
+        addRandomSuffix: false,
+        allowOverwrite: true,
+        contentType: 'application/json',
+      });
+      arr.push(id);
+    }
+    gesamt += arr.length;
+    console.log(`- ${mail}: ${arr.length} Bericht(e) -> reports/${u.id}/<id>.json`);
 
     if (CLEANUP) {
       delete meta.reports;
