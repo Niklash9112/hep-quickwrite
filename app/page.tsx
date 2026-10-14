@@ -60,24 +60,17 @@ export default function Home() {
   const [supportSending, setSupportSending] = useState(false);
   const [supportSent, setSupportSent] = useState(false);
 
-  // Speichert den Bericht (ruft track-report auf, um den Freemium-Counter zu erhöhen)
+  // Speichert den Bericht in der Historie (Clerk-Metadaten).
+  // WICHTIG: Der Freemium-Zähler wird hier NICHT mehr erhöht — das macht
+  // /api/generate serverseitig genau einmal pro Bericht (vorher zählte das
+  // Frontend doppelt: saveReport() und danach nochmal direkt).
   const saveReport = async (data: any) => {
     try {
-      // Bericht in Clerk-Metadata speichern (für Historie)
       await fetch('/api/reports', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-      // Counter erhöhen
-      const res = await fetch('/api/track-report', { method: 'POST' });
-      const result = await res.json();
-      if (result.reportCount !== undefined) {
-        setReportCount(result.reportCount);
-      }
-      if (result.limitReached) {
-        setShowPaywall(true);
-      }
     } catch (e) {
       console.error('saveReport Fehler:', e);
     }
@@ -127,6 +120,15 @@ export default function Home() {
       return () => clearTimeout(timer);
     }
   }, [isLoaded, user, subscriptionStatus, reportCount]);
+
+  // Solange ein Dialog offen ist, darf der Hintergrund nicht mitscrollen —
+  // sonst scrollt auf dem Handy die Seite statt des Dialogs.
+  useEffect(() => {
+    document.body.style.overflow = showPaywall || showSupport ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showPaywall, showSupport]);
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
@@ -220,30 +222,14 @@ export default function Home() {
           });
         }
         
-        // Counter über Server erhöhen (alle User außer Admin zählen — Freemium UND Abo;
-        // Admin bleibt ausgeblendet, siehe track-report-server-seitig)
-        if (!isAdmin) {
-          try {
-            const trackResponse = await fetch('/api/track-report', {
-              method: 'POST',
-              cache: 'no-store',
-            });
-            const trackData = await trackResponse.json();
-            if (trackResponse.ok) {
-              setReportCount(trackData.reportCount || 0);
-              localStorage.setItem('reportCount', (trackData.reportCount || 0).toString());
-              
-              // Zeige Paywall sofort, wenn Limit erreicht
-              if (trackData.limitReached) {
-                setTimeout(() => setShowPaywall(true), 2000);
-              }
-            }
-          } catch (error) {
-            // Fallback: LocalStorage
-            const newCount = reportCount + 1;
-            setReportCount(newCount);
-            localStorage.setItem('reportCount', newCount.toString());
-          }
+        // Zähler kommt fertig aus der Server-Antwort (genau +1 pro Bericht)
+        if (typeof data.reportCount === 'number') {
+          setReportCount(data.reportCount);
+          localStorage.setItem('reportCount', String(data.reportCount));
+        }
+        // Paywall erst, wenn das Limit wirklich erreicht ist
+        if (data.limitReached) {
+          setTimeout(() => setShowPaywall(true), 2000);
         }
       } else {
         alert(`Fehler: ${data.error}`);
@@ -1129,10 +1115,21 @@ export default function Home() {
       </main>
 
       {showPaywall && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className={`max-w-md w-full rounded-lg shadow-2xl p-8 ${
+        <div className="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto z-50 p-4 flex items-start sm:items-center justify-center">
+          <div className={`relative my-auto w-full max-w-md rounded-lg shadow-2xl p-8 ${
             theme === 'light' ? 'bg-white' : 'bg-gray-800'
           }`}>
+            <button
+              onClick={() => setShowPaywall(false)}
+              aria-label="Dialog schließen"
+              className={`absolute top-3 right-3 p-2 rounded-lg transition-colors ${
+                theme === 'light'
+                  ? 'text-gray-500 hover:bg-gray-100'
+                  : 'text-gray-400 hover:bg-gray-700'
+              }`}
+            >
+              ✕
+            </button>
             <div className="text-center">
               {/* Logo im Paywall */}
               <div className="mb-4 flex justify-center">
@@ -1285,8 +1282,8 @@ export default function Home() {
       )}
 
       {showSupport && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className={`max-w-md w-full rounded-lg shadow-2xl p-8 ${
+        <div className="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto z-50 p-4 flex items-start sm:items-center justify-center">
+          <div className={`relative my-auto w-full max-w-md rounded-lg shadow-2xl p-8 ${
             theme === 'light' ? 'bg-white' : 'bg-gray-800'
           }`}>
             <div className="flex items-center justify-between mb-4">

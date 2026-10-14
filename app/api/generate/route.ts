@@ -381,7 +381,29 @@ FORMATIERUNG:
     // Mehrfache Leerzeilen auf eine reduzieren
     result = result.replace(/\n{3,}/g, '\n\n');
 
-    return NextResponse.json({ result });
+    // Freemium-Zähler EINMAL pro erfolgreich erzeugtem Bericht serverseitig erhöhen.
+    // Vorher zählte das Frontend — und zwar doppelt (saveReport() + eigener Aufruf),
+    // wodurch das Limit von 3 Berichten schon nach 2 Berichten griff und der
+    // Paywall-Dialog zu früh erschien ("Testphase beendet" statt 3. Bericht).
+    let newCount = currentCount;
+    let limitReached = false;
+    if (!isAdmin) {
+      newCount = currentCount + 1;
+      limitReached = !hasSubscription && newCount >= FREE_REPORT_LIMIT;
+      try {
+        await client.users.updateUserMetadata(userId, {
+          publicMetadata: { ...user.publicMetadata, reportCount: newCount },
+        });
+      } catch (e) {
+        console.error('reportCount-Update fehlgeschlagen:', e);
+      }
+    }
+
+    return NextResponse.json({
+      result,
+      reportCount: isAdmin ? 0 : newCount,
+      limitReached,
+    });
 
   } catch (error: any) {
     console.error('Generate API Error:', error);
