@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Trash2, Copy, Download, Moon, Sun } from 'lucide-react';
+import { ArrowLeft, Trash2, Copy, Download, Moon, Sun, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import jsPDF from 'jspdf';
@@ -40,6 +40,9 @@ export default function Historie() {
   const [reports, setReports] = useState<Report[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  // Auf dem Handy sind vollstaendig ausgerollte Berichte unbrauchbar lang:
+  // pro Karte nur Kopfdaten, der Berichtstext klappt auf Klick auf.
+  const [offen, setOffen] = useState<string | null>(null);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') as Theme;
@@ -131,7 +134,7 @@ export default function Historie() {
           </div>
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            className="h-11 w-11 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             aria-label="Thema umschalten"
           >
             {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5 text-gray-200" />}
@@ -142,7 +145,7 @@ export default function Historie() {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <button
           onClick={() => router.push('/')}
-          className={`flex items-center gap-2 mb-8 transition-colors ${textSoft}`}
+          className={`flex items-center gap-2 mb-6 min-h-11 -ml-2 px-2 rounded-lg transition-colors ${textSoft}`}
         >
           <ArrowLeft className="w-5 h-5" />
           Zurück zur Startseite
@@ -160,49 +163,73 @@ export default function Historie() {
           </div>
         )}
 
-        <div className="space-y-6">
-          {reports.map((report) => (
-            <div key={report.id} className={`${card} ${cardBorder} border rounded-lg shadow-md p-6`}>
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h2 className={`text-lg font-semibold ${textMain}`}>
-                    {report.clientName || 'Ohne Name'}
-                  </h2>
-                  <p className={`text-sm ${textSoft}`}>
-                    {new Date(report.date).toLocaleDateString('de-DE')} · {MODE_NAMES[report.mode] || report.mode} · {report.documentType}
-                  </p>
+        <div className="space-y-4">
+          {reports.map((report) => {
+            const istOffen = offen === report.id;
+            return (
+              <div key={report.id} className={`${card} ${cardBorder} border rounded-lg shadow-md p-4 sm:p-6`}>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <h2 className={`text-lg font-semibold truncate ${textMain}`}>
+                      {report.clientName || 'Ohne Name'}
+                    </h2>
+                    <p className={`text-sm ${textSoft}`}>
+                      {new Date(report.date).toLocaleDateString('de-DE')} · {MODE_NAMES[report.mode] || report.mode}
+                    </p>
+                    <p className={`text-sm ${textSoft}`}>{report.documentType}</p>
+                  </div>
+                  <button
+                    onClick={() => setOffen(istOffen ? null : report.id)}
+                    aria-expanded={istOffen}
+                    className={`shrink-0 min-h-11 px-4 flex items-center gap-2 rounded-lg text-sm font-medium transition-colors ${
+                      theme === 'light'
+                        ? 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100'
+                        : 'bg-indigo-900/40 text-indigo-200 hover:bg-indigo-900/60'
+                    }`}
+                  >
+                    <ChevronDown className={`w-5 h-5 transition-transform ${istOffen ? 'rotate-180' : ''}`} />
+                    {istOffen ? 'Zuklappen' : 'Anzeigen'}
+                  </button>
                 </div>
-                <div className="flex gap-2">
+
+                {/* Aktionen: immer sichtbar, beschriftet und mit 44px Tap-Hoehe */}
+                <div className="flex flex-wrap gap-2 mt-4">
                   <button
                     onClick={() => copyReport(report.report)}
-                    className={`p-2 rounded-lg ${
-                      theme === 'light' ? 'bg-gray-100 hover:bg-gray-200 text-gray-700' : 'bg-gray-700 hover:bg-gray-600 text-gray-200'
+                    className={`min-h-11 px-4 flex items-center gap-2 rounded-lg text-sm font-medium transition-colors ${
+                      theme === 'light'
+                        ? 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                        : 'bg-gray-700 hover:bg-gray-600 text-gray-200'
                     }`}
-                    title="Kopieren"
                   >
-                    <Copy className="w-4 h-4" />
+                    <Copy className="w-5 h-5" /> Kopieren
                   </button>
                   <button
                     onClick={() => downloadPdf(report)}
-                    className="p-2 rounded-lg bg-indigo-100 hover:bg-indigo-200 text-indigo-700"
-                    title="PDF"
+                    className="min-h-11 px-4 flex items-center gap-2 rounded-lg text-sm font-medium bg-indigo-600 hover:bg-indigo-700 text-white transition-colors"
                   >
-                    <Download className="w-4 h-4" />
+                    <Download className="w-5 h-5" /> PDF
                   </button>
                   <button
                     onClick={() => deleteReport(report.id)}
-                    className="p-2 rounded-lg bg-red-100 hover:bg-red-200 text-red-700"
-                    title="Löschen"
+                    className={`min-h-11 px-4 flex items-center gap-2 rounded-lg text-sm font-medium transition-colors ${
+                      theme === 'light'
+                        ? 'bg-red-50 hover:bg-red-100 text-red-700'
+                        : 'bg-red-900/40 hover:bg-red-900/60 text-red-200'
+                    }`}
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="w-5 h-5" /> Löschen
                   </button>
                 </div>
+
+                {istOffen && (
+                  <div className={`mt-4 pt-4 border-t ${cardBorder} prose prose-sm max-w-none ${textReport}`}>
+                    <ReactMarkdown>{report.report}</ReactMarkdown>
+                  </div>
+                )}
               </div>
-              <div className={`prose prose-sm max-w-none ${textReport}`}>
-                <ReactMarkdown>{report.report}</ReactMarkdown>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </main>
     </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { CheckCircle, Lock, Sun, Moon, Copy, Loader2, Download, FileText, ChevronDown, History, Info, Rocket } from 'lucide-react';
+import { CheckCircle, Lock, Sun, Moon, Copy, Loader2, Download, FileText, ChevronDown, History, Info, Rocket, MoreHorizontal, Headphones, X } from 'lucide-react';
 import { UserButton, useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import jsPDF from 'jspdf';
@@ -61,6 +61,7 @@ export default function Home() {
   const [supportMessage, setSupportMessage] = useState('');
   const [supportSending, setSupportSending] = useState(false);
   const [supportSent, setSupportSent] = useState(false);
+  const [showMore, setShowMore] = useState(false);   // Mobile-Menü im Header (Updates/Admin)
 
   // Speichert den Bericht in der Historie (Clerk-Metadaten).
   // WICHTIG: Der Freemium-Zähler wird hier NICHT mehr erhöht — das macht
@@ -521,7 +522,7 @@ export default function Home() {
               }`}>HEP-QuickWrite</h1>
             </div>
             
-            <div className="flex items-center gap-2 sm:gap-4 flex-wrap justify-end">
+            <div className="flex items-center gap-1 sm:gap-4 flex-wrap justify-end">
               {user && (
                 <span className={`hidden sm:block text-sm ${
                   theme === 'light' ? 'text-gray-600' : 'text-gray-300'
@@ -532,18 +533,19 @@ export default function Home() {
 
               <button
                 onClick={toggleTheme}
-                className={`p-2 rounded-lg transition-all ${
+                aria-label="Thema umschalten"
+                className={`h-11 w-11 flex items-center justify-center rounded-lg transition-all ${
                   theme === 'light'
                     ? 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                     : 'bg-gray-700 hover:bg-gray-600 text-yellow-300'
                 }`}
               >
-                {theme === 'light' ? <Moon className="w-4 h-4 sm:w-5 sm:h-5" /> : <Sun className="w-4 h-4 sm:w-5 sm:h-5" />}
+                {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
               </button>
               
               {subscriptionStatus !== 'active' && (
                 <>
-                  <span className={`text-xs sm:text-sm font-medium ${
+                  <span className={`text-xs sm:text-sm font-medium whitespace-nowrap ${
                     reportCount >= FREE_REPORT_LIMIT 
                       ? 'text-red-600' 
                       : reportCount >= 2 
@@ -577,7 +579,7 @@ export default function Home() {
                         alert('Fehler beim Öffnen des Checkout.');
                       }
                     }}
-                    className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 rounded-lg transition-all transform hover:scale-105 shadow-md whitespace-nowrap"
+                    className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white text-xs sm:text-sm font-bold px-3 sm:px-4 h-11 flex items-center rounded-lg transition-all transform hover:scale-105 shadow-md whitespace-nowrap"
                   >
                     <span className="hidden sm:inline">⚡ Upgrade auf Pro</span>
                     <span className="sm:hidden">⚡ Pro</span>
@@ -586,70 +588,130 @@ export default function Home() {
               )}
 
               {subscriptionStatus === 'active' ? (
-                <span className="flex items-center gap-1 sm:gap-2 text-green-600 text-xs sm:text-sm font-medium whitespace-nowrap">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span className="hidden sm:inline">Abo aktiv</span>
-                  <span className="sm:hidden">Abo</span>
+                <span className="hidden sm:flex items-center gap-2 text-green-600 text-sm font-medium whitespace-nowrap">
+                  <CheckCircle className="w-5 h-5" />
+                  <span>Abo aktiv</span>
                 </span>
               ) : (
-                <span className="flex items-center gap-1 sm:gap-2 text-orange-600 text-xs sm:text-sm font-medium whitespace-nowrap">
-                  <Lock className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span className="hidden sm:inline">Gratis-Version</span>
-                  <span className="sm:hidden">Free</span>
+                <span className="hidden sm:flex items-center gap-2 text-orange-600 text-sm font-medium whitespace-nowrap">
+                  <Lock className="w-5 h-5" />
+                  <span>Gratis-Version</span>
                 </span>
               )}
 
+              {/* Updates + Admin: ab sm als Button, mobil im "…"-Menü (spart Platz für 44px-Tap-Ziele) */}
               <button
                 onClick={() => router.push('/changelog')}
-                className={`px-3 sm:px-4 py-2 rounded-lg transition-colors text-xs sm:text-sm font-medium flex items-center gap-1 sm:gap-2 ${
+                className={`hidden sm:flex px-4 py-2 rounded-lg transition-colors text-sm font-medium items-center gap-2 ${
                   theme === 'light'
                     ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
                 }`}
               >
                 <Rocket className="w-4 h-4" />
-                <span className="hidden sm:inline">Updates</span>
+                <span>Updates</span>
               </button>
 
               <button
                 onClick={() => router.push('/historie')}
-                className={`px-3 sm:px-4 py-2 rounded-lg transition-colors text-xs sm:text-sm font-medium flex items-center gap-1 sm:gap-2 ${
+                aria-label="Historie"
+                className={`h-11 w-11 sm:w-auto sm:px-4 flex items-center justify-center sm:justify-start gap-2 rounded-lg transition-colors text-sm font-medium ${
                   theme === 'light'
                     ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
                 }`}
               >
-                <History className="w-4 h-4" />
+                <History className="w-5 h-5 sm:w-4 sm:h-4" />
                 <span className="hidden sm:inline">Historie</span>
               </button>
 
               <button
                 onClick={() => setShowSupport(true)}
-                className={`px-3 sm:px-4 py-2 rounded-lg transition-colors text-xs sm:text-sm font-medium flex items-center gap-1 sm:gap-2 ${
+                aria-label="Support"
+                className={`h-11 w-11 sm:w-auto sm:px-4 flex items-center justify-center sm:justify-start gap-2 rounded-lg transition-colors text-sm font-medium ${
                   theme === 'light'
                     ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
                 }`}
               >
-                <span>💬</span>
+                <Headphones className="w-5 h-5 sm:w-4 sm:h-4" />
                 <span className="hidden sm:inline">Support</span>
               </button>
 
               {isAdmin && (
                 <a
                   href="/admin"
-                  className="px-3 sm:px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-xs sm:text-sm font-medium flex items-center gap-1 sm:gap-2"
+                  className="hidden sm:flex px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium items-center gap-2"
                 >
                   <span>📊</span>
-                  <span className="hidden sm:inline">Admin</span>
+                  <span>Admin</span>
                 </a>
               )}
+
+              {/* Mobile-Menü für die selteneren Ziele */}
+              <div className="relative sm:hidden">
+                <button
+                  onClick={() => setShowMore(v => !v)}
+                  aria-label="Mehr Optionen"
+                  aria-expanded={showMore}
+                  className={`h-11 w-11 flex items-center justify-center rounded-lg transition-colors ${
+                    theme === 'light'
+                      ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
+                  }`}
+                >
+                  <MoreHorizontal className="w-5 h-5" />
+                </button>
+                {showMore && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setShowMore(false)} />
+                    <div className={`absolute right-0 mt-2 w-56 rounded-lg shadow-xl border z-50 overflow-hidden ${
+                      theme === 'light' ? 'bg-white border-gray-200' : 'bg-gray-800 border-gray-700'
+                    }`}>
+                      <button
+                        onClick={() => { setShowMore(false); router.push('/changelog'); }}
+                        className={`w-full min-h-11 px-4 flex items-center gap-3 text-sm ${
+                          theme === 'light' ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-200 hover:bg-gray-700'
+                        }`}
+                      >
+                        <Rocket className="w-5 h-5" /> Updates &amp; Neuigkeiten
+                      </button>
+                      <button
+                        onClick={() => { setShowMore(false); router.push('/historie'); }}
+                        className={`w-full min-h-11 px-4 flex items-center gap-3 text-sm ${
+                          theme === 'light' ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-200 hover:bg-gray-700'
+                        }`}
+                      >
+                        <History className="w-5 h-5" /> Klienten-Historie
+                      </button>
+                      {isAdmin && (
+                        <a
+                          href="/admin"
+                          className={`w-full min-h-11 px-4 flex items-center gap-3 text-sm ${
+                            theme === 'light' ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-200 hover:bg-gray-700'
+                          }`}
+                        >
+                          <span className="text-lg">📊</span> Admin-Bereich
+                        </a>
+                      )}
+                      <button
+                        onClick={() => { setShowMore(false); setShowSupport(true); }}
+                        className={`w-full min-h-11 px-4 flex items-center gap-3 text-sm ${
+                          theme === 'light' ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-200 hover:bg-gray-700'
+                        }`}
+                      >
+                        <Headphones className="w-5 h-5" /> Support &amp; Kontakt
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
 
               <UserButton 
                 afterSignOutUrl="/"
                 appearance={{
                   elements: {
-                    avatarBox: "w-8 h-8 sm:w-10 sm:h-10"
+                    avatarBox: "w-11 h-11 sm:w-10 sm:h-10"
                   }
                 }}
               />
@@ -827,7 +889,7 @@ export default function Home() {
               <div className="relative">
                 <button
                   onClick={() => setShowTemplates(!showTemplates)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                  className={`flex items-center gap-2 px-4 min-h-11 rounded-lg font-medium transition-all ${
                     theme === 'light'
                       ? 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200'
                       : 'bg-indigo-900 text-indigo-200 hover:bg-indigo-800'
