@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { CheckCircle, Lock, Sun, Moon, Copy, Loader2, Download, FileText, ChevronDown, History, Info, Rocket, MoreHorizontal, Headphones, X, Camera } from 'lucide-react';
+import { CheckCircle, Lock, Sun, Moon, Copy, Loader2, Download, FileText, ChevronDown, History, Info, Rocket, MoreHorizontal, Headphones, X, Camera, Image as ImageIcon } from 'lucide-react';
 import { UserButton, useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import jsPDF from 'jspdf';
@@ -70,7 +70,10 @@ export default function Home() {
   // --- Notiz-Foto (Texterkennung) ---
   const [ocrLaeuft, setOcrLaeuft] = useState(false);
   const [ocrMeldung, setOcrMeldung] = useState('');
-  const fotoInputRef = useRef<HTMLInputElement>(null);
+  // Zwei getrennte Felder: nur so oeffnet 'capture' zuverlaessig die Kamera und das
+  // Feld ohne capture die Galerie (manche Android-Browser zeigen sonst nur den Dateipicker).
+  const fotoKameraRef = useRef<HTMLInputElement>(null);
+  const fotoGalerieRef = useRef<HTMLInputElement>(null);
 
   // Bild im Browser verkleinern: Handyfotos sind 3-5 MB, und Ollama Cloud mag keine
   // progressiven JPEGs (HTTP 500) — Canvas liefert immer ein Baseline-JPEG.
@@ -97,12 +100,17 @@ export default function Home() {
       reader.readAsDataURL(file);
     });
 
+  const zuruecksetzen = () => {
+    if (fotoKameraRef.current) fotoKameraRef.current.value = '';
+    if (fotoGalerieRef.current) fotoGalerieRef.current.value = '';
+  };
+
   const handleNotizFoto = async (file: File | undefined) => {
     if (!file) return;
     const name = (file.name || '').toLowerCase();
     if (name.endsWith('.heic') || name.endsWith('.heif') || file.type === 'image/heic' || file.type === 'image/heif') {
       setOcrMeldung('HEIC-Bilder kann der Browser nicht umwandeln — bitte das Foto als JPEG oder PNG auswählen.');
-      if (fotoInputRef.current) fotoInputRef.current.value = '';
+      zuruecksetzen();
       return;
     }
     setOcrLaeuft(true);
@@ -131,7 +139,7 @@ export default function Home() {
       );
     } finally {
       setOcrLaeuft(false);
-      if (fotoInputRef.current) fotoInputRef.current.value = '';
+      zuruecksetzen();
     }
   };
 
@@ -1033,12 +1041,13 @@ export default function Home() {
                 )}
               </div>
 
-              {/* Notiz-Foto: Text von einem Foto übernehmen (Handschrift/gedruckt) */}
+              {/* Kamera und Galerie getrennt: ohne capture-Attribut oeffnen manche
+                  Android-Geraete direkt nur die Galerie, mit capture nur die Kamera. */}
               <button
                 type="button"
-                onClick={() => fotoInputRef.current?.click()}
+                onClick={() => fotoKameraRef.current?.click()}
                 disabled={ocrLaeuft}
-                title="Notiz abfotografieren und Text übernehmen"
+                title="Notiz mit der Kamera aufnehmen"
                 className={`flex items-center gap-2 px-4 min-h-11 rounded-lg font-medium transition-all ${
                   ocrLaeuft
                     ? 'bg-gray-200 text-gray-500 cursor-wait'
@@ -1050,8 +1059,32 @@ export default function Home() {
                 {ocrLaeuft ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
                 {ocrLaeuft ? 'Liest …' : 'Notiz-Foto'}
               </button>
+              <button
+                type="button"
+                onClick={() => fotoGalerieRef.current?.click()}
+                disabled={ocrLaeuft}
+                title="Bild aus der Galerie wählen"
+                className={`flex items-center gap-2 px-4 min-h-11 rounded-lg font-medium transition-all ${
+                  ocrLaeuft
+                    ? 'bg-gray-200 text-gray-500 cursor-wait'
+                    : theme === 'light'
+                    ? 'bg-teal-50 text-teal-800 hover:bg-teal-100'
+                    : 'bg-teal-950 text-teal-200 hover:bg-teal-900'
+                }`}
+              >
+                <ImageIcon className="w-4 h-4" />
+                Galerie
+              </button>
               <input
-                ref={fotoInputRef}
+                ref={fotoKameraRef}
+                type="file"
+                accept="image/*"
+                capture="environment"
+                className="hidden"
+                onChange={(e) => handleNotizFoto(e.target.files?.[0])}
+              />
+              <input
+                ref={fotoGalerieRef}
                 type="file"
                 accept="image/*"
                 className="hidden"
