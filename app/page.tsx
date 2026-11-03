@@ -51,6 +51,10 @@ export default function Home() {
   const [lastDocumentType, setLastDocumentType] = useState<string | null>(null);
   const [reportCount, setReportCount] = useState(0);
   const [showPaywall, setShowPaywall] = useState(false);
+  // In der Play-App (TWA) läuft die Seite mit dem Referrer android-app://<paket>.
+  // Dort dürfen keine digitalen Abos verkauft werden (Play-Billing-Regel),
+  // deshalb wird der Kauf-Pfad in der App gar nicht erst angeboten.
+  const [istApp, setIstApp] = useState(false);
   // Limit kommt vom Server: 3 + Kulanzguthaben (bonusReports in den Clerk-Metadaten),
   // damit Tester:innen zusätzliche Gratis-Berichte bekommen können.
   const [FREE_REPORT_LIMIT, setReportLimit] = useState(3);
@@ -217,6 +221,10 @@ export default function Home() {
       document.body.style.overflow = '';
     };
   }, [showPaywall, showSupport]);
+
+  useEffect(() => {
+    setIstApp(document.referrer.startsWith('android-app://'));
+  }, []);
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
@@ -649,6 +657,7 @@ export default function Home() {
                   <button
                     onClick={async () => {
                       if (!user) return;
+                      if (istApp) { setShowPaywall(true); return; }
                       try {
                         const response = await fetch('/api/create-checkout', {
                           method: 'POST',
@@ -1419,6 +1428,27 @@ export default function Home() {
                 </div>
               </div>
 
+              {istApp && (
+                <div className={`mb-6 p-4 rounded-lg border-2 ${
+                  theme === 'light'
+                    ? 'bg-amber-50 border-amber-200'
+                    : 'bg-amber-900/20 border-amber-700'
+                }`}>
+                  <p className={`text-sm font-semibold mb-1 ${
+                    theme === 'light' ? 'text-amber-800' : 'text-amber-300'
+                  }`}>
+                    Pro-Abo in der Android-App nicht verfügbar
+                  </p>
+                  <p className={`text-xs ${
+                    theme === 'light' ? 'text-amber-700' : 'text-amber-400'
+                  }`}>
+                    Deine Gratis-Berichte funktionieren wie gewohnt weiter. Das Pro-Abo kann
+                    derzeit nur außerhalb der App abgeschlossen werden.
+                  </p>
+                </div>
+              )}
+
+              {!istApp && (<>
               {/* Trial-Hinweis */}
               <div className={`mb-4 p-4 rounded-lg border-2 ${
                 theme === 'light' 
@@ -1484,6 +1514,7 @@ export default function Home() {
               }`}>
                 Kündigung jederzeit möglich über dein Kundenkonto
               </p>
+              </>)}
 
               <button
                 onClick={() => setShowPaywall(false)}
