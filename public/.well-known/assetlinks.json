@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.niklash9112.hepquickwrite",
+      "sha256_cert_fingerprints": [
+        "76:F8:CE:3B:98:91:BB:02:81:1F:3B:6D:AC:29:C4:A8:1D:45:A1:71:F3:1C:21:B6:F3:9C:B1:B4:04:02:CB:05"
+      ]
+    }
+  }
+]
