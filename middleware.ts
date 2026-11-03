@@ -13,6 +13,7 @@ const isPublicRoute = createRouteMatcher([
   '/sitemap.xml',
   '/robots.txt',
   '/.well-known(.*)',
+  '/konto-loeschen(.*)',
 ])
 
 export default clerkMiddleware(async (auth, request) => {

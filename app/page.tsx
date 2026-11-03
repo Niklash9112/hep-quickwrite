@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { CheckCircle, Lock, Sun, Moon, Copy, Loader2, Download, FileText, ChevronDown, History, Info, Rocket, MoreHorizontal, Headphones, X, Camera, Image as ImageIcon } from 'lucide-react';
+import { CheckCircle, Lock, Sun, Moon, Copy, Loader2, Download, FileText, ChevronDown, History, Info, Rocket, MoreHorizontal, Headphones, X, Camera, Image as ImageIcon, Trash2 } from 'lucide-react';
 import { UserButton, useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import jsPDF from 'jspdf';
@@ -802,6 +802,14 @@ export default function Home() {
                       >
                         <Headphones className="w-5 h-5" /> Support &amp; Kontakt
                       </button>
+                      <button
+                        onClick={() => { setShowMore(false); router.push('/konto-loeschen'); }}
+                        className={`w-full min-h-11 px-4 flex items-center gap-3 text-sm ${
+                          theme === 'light' ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-200 hover:bg-gray-700'
+                        }`}
+                      >
+                        <Trash2 className="w-5 h-5" /> Konto löschen
+                      </button>
                     </div>
                   </>
                 )}
@@ -1246,14 +1254,14 @@ export default function Home() {
           <div className={`mt-6 rounded-lg shadow-md p-6 transition-colors duration-300 ${
             theme === 'light' ? 'bg-white' : 'bg-gray-800'
           }`}>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
               <h3 className={`text-lg font-semibold ${
                 theme === 'light' ? 'text-gray-800' : 'text-gray-100'
               }`}>
                 Generierter Bericht
               </h3>
               {generatedText && !isGenerating && (
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-3">
                   <button
                     onClick={handleCopyText}
                     className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
@@ -1665,6 +1673,14 @@ export default function Home() {
                 © 2026 HEP-QuickWrite. Alle Rechte vorbehalten.
               </p>
             </div>
+            <button
+              onClick={() => router.push('/konto-loeschen')}
+              className={`text-sm hover:underline ${
+                theme === 'light' ? 'text-gray-500' : 'text-gray-400'
+              }`}
+            >
+              Konto löschen
+            </button>
           </div>
         </div>
       </footer>
