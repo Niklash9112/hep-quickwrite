@@ -337,40 +337,54 @@ FORMATIERUNG:
 - Trennlinien (---) IMMER auf einer eigenen Zeile, nie am Ende eines Listenpunkts
 - Verwende Markdown-Überschriften (##) für Abschnitte und Aufzählungszeichen (-) für Listen`;
 
-    const response = await fetch(OLLAMA_BASE_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OLLAMA_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: 'mistral-large-3:675b',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt }
-        ],
-        options: {
-          temperature: 0.7,
-          num_predict: 1500,
-        },
-        stream: false,
-      }),
-    });
+    // Bericht-Modell: `mistral-large-3:675b` wird am 09.11.2026 abgeschaltet (Ollama-Hinweis).
+    // Nachfolger `mistral-large-4` ist ein Reasoning-Modell: ohne `think: false` bleibt `message.content`
+    // leer (gemessen 07.11.2026) — deshalb steht der Schalter im Request und der Fallback darunter.
+    const BERICHT_MODELLE = ['mistral-large-4', 'deepseek-v4-pro:0813'];
 
-    if (!response.ok) {
-      const errorData = await response.text();
-      console.error('Ollama API Error:', errorData);
-      return NextResponse.json(
-        { error: `Ollama API Fehler: ${response.status}` },
-        { status: 500 }
-      );
+    let data: any = null;
+    let letzterFehler = '';
+    for (const modell of BERICHT_MODELLE) {
+      const response = await fetch(OLLAMA_BASE_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.OLLAMA_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: modell,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userPrompt }
+          ],
+          think: false,
+          options: {
+            temperature: 0.7,
+            num_predict: 1500,
+          },
+          stream: false,
+        }),
+      });
+
+      if (!response.ok) {
+        letzterFehler = `Ollama API Fehler (${modell}): ${response.status}`;
+        console.error(letzterFehler, (await response.text()).slice(0, 500));
+        continue;
+      }
+
+      const kandidat = await response.json();
+      if (!kandidat?.message?.content) {
+        letzterFehler = `Keine Antwort vom Modell (${modell})`;
+        console.error(letzterFehler, JSON.stringify(kandidat).slice(0, 300));
+        continue;
+      }
+      data = kandidat;
+      break;
     }
 
-    const data = await response.json();
-    
-    if (!data.message?.content) {
+    if (!data) {
       return NextResponse.json(
-        { error: 'Keine Antwort vom Modell erhalten' },
+        { error: letzterFehler || 'Keine Antwort vom Modell erhalten' },
         { status: 500 }
       );
     }
