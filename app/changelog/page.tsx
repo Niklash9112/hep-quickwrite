@@ -16,6 +16,18 @@ interface ChangelogEntry {
 
 const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.3',
+    date: '07.11.2026',
+    title: 'Berichte erfinden nichts mehr',
+    changes: [
+      'Berichte halten sich strikt an Ihre Notizen: Interessen, Vorlieben, Aktivitäten oder Motive, die Sie nicht notiert haben, werden nicht mehr dazugedichtet',
+      'Fehlt eine Angabe, steht im Bericht ausdrücklich „[in den Notizen nicht angegeben]" statt einer plausiblen Erfindung',
+      'Automatische Nachprüfung: Nach jeder Erstellung wird der Bericht gegen Ihre Notizen geprüft — nicht gedeckte Sätze erscheinen als Warnhinweis mit Zitat über dem Bericht',
+      'Ziele und Empfehlungen sind weiterhin erlaubt, aber als Maßnahme formuliert („Empfohlen wird …", „Ziel ist …") und nicht als bereits beobachtete Tatsache',
+      'Neu: Berichte auch einzeln kaufen — 2 € pro Bericht, kein Abo nötig, Guthaben verfällt nicht. Das Abo mit unbegrenzten Berichten bleibt daneben bestehen',
+    ],
+  },
+  {
     version: '1.2',
     date: '14.10.2026',
     title: 'Notizen abfotografieren & Handy-Feinschliff',

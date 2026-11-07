@@ -356,16 +356,25 @@ export async function POST(request: NextRequest) {
     // die wegen des früheren Doppelzähl-Bugs Berichte verloren haben).
     const bonusReports = Number(user.publicMetadata.bonusReports) || 0;
     const reportLimit = FREE_REPORT_LIMIT + bonusReports;
+    // Einzelkauf-Guthaben (2 € pro Bericht): wird verbraucht, sobald das Freikontingent ausgeschöpft ist
+    // und kein aktives Abo besteht. Abgebucht wird erst NACH erfolgreicher Generierung.
+    const credits = Number(user.publicMetadata.creditReports) || 0;
     // Admin bekommt unbegrenzt
     const isAdmin = userEmail === ADMIN_EMAIL;
     // Abonnent bekommt unbegrenzt
     const hasSubscription = subscriptionStatus === 'active';
 
+    // Freikontingent ausgeschöpft: entweder Guthaben aus einem Einzelkauf (2 €) verbrauchen oder sperren
+    let guthabenVerbrauchen = false;
     if (!isAdmin && !hasSubscription && currentCount >= reportLimit) {
-      return NextResponse.json(
-        { error: 'Freemium-Limit erreicht', limitReached: true },
-        { status: 403 }
-      );
+      if (credits > 0) {
+        guthabenVerbrauchen = true;
+      } else {
+        return NextResponse.json(
+          { error: 'Freemium-Limit erreicht', limitReached: true, credits: 0 },
+          { status: 403 }
+        );
+      }
     }
 
     // Verfasser aus dem angemeldeten Clerk-Profil holen
@@ -488,12 +497,18 @@ FORMATIERUNG:
     // Paywall-Dialog zu früh erschien ("Testphase beendet" statt 3. Bericht).
     let newCount = currentCount;
     let limitReached = false;
+    let restGuthaben = credits;
     if (!isAdmin) {
       newCount = currentCount + 1;
-      limitReached = !hasSubscription && newCount >= reportLimit;
+      limitReached = !hasSubscription && newCount >= reportLimit && !guthabenVerbrauchen;
       try {
+        const neueMetadaten: Record<string, unknown> = { ...user.publicMetadata, reportCount: newCount };
+        if (guthabenVerbrauchen) {
+          restGuthaben = Math.max(0, credits - 1);
+          neueMetadaten.creditReports = restGuthaben;
+        }
         await client.users.updateUserMetadata(userId, {
-          publicMetadata: { ...user.publicMetadata, reportCount: newCount },
+          publicMetadata: neueMetadaten,
         });
       } catch (e) {
         console.error('reportCount-Update fehlgeschlagen:', e);
@@ -504,6 +519,7 @@ FORMATIERUNG:
       result,
       unbelegt: belegPruefung.unbelegt,
       pruefung: belegPruefung.ok ? 'ok' : 'fehlgeschlagen',
+      credits: restGuthaben,
       reportCount: isAdmin ? 0 : newCount,
       reportLimit: isAdmin ? 0 : reportLimit,
       limitReached,

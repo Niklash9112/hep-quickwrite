@@ -39,6 +39,23 @@ export async function POST(request: NextRequest) {
         const session = event.data.object as Stripe.Checkout.Session;
         const clerkUserId = session.metadata?.clerkUserId;
 
+        // Einzelkauf eines Berichts (2 €): Guthaben hochzählen, KEINE Abo-Metadaten anfassen.
+        // Clerk merged beim PATCH — es genügt, den Zähler mitzuschicken.
+        if (clerkUserId && session.metadata?.kauf === 'report') {
+          const client = await clerkClient();
+          const nutzer = await client.users.getUser(clerkUserId);
+          const bisher = Number(nutzer.publicMetadata.creditReports) || 0;
+          const menge = Math.max(1, Number(session.metadata?.berichte) || 1);
+          await client.users.updateUserMetadata(clerkUserId, {
+            publicMetadata: {
+              creditReports: bisher + menge,
+              stripeCustomerId: session.customer,
+            },
+          });
+          console.log(`✅ Einzelbericht gekauft: ${clerkUserId} -> ${bisher + menge} Guthaben`);
+          break;
+        }
+
         if (clerkUserId) {
           const client = await clerkClient();
           await client.users.updateUserMetadata(clerkUserId, {

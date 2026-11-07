@@ -1495,6 +1495,61 @@ export default function Home() {
               )}
 
               {!istApp && (<>
+              {/* Einzelkauf: ein Bericht für 2 € — billiger Einstieg ohne Abo */}
+              <div className={`mb-4 p-4 rounded-lg border-2 ${
+                theme === 'light'
+                  ? 'bg-indigo-50 border-indigo-200'
+                  : 'bg-indigo-900/20 border-indigo-700'
+              }`}>
+                <p className={`text-sm font-semibold mb-1 ${
+                  theme === 'light' ? 'text-indigo-900' : 'text-indigo-200'
+                }`}>
+                  Lieber einzeln? Ein Bericht für 2 €
+                </p>
+                <p className={`text-xs mb-3 ${
+                  theme === 'light' ? 'text-indigo-800' : 'text-indigo-300'
+                }`}>
+                  Kein Abo, kein Ablaufdatum — das Guthaben gilt, bis du den Bericht erstellst.
+                </p>
+                <button
+                  onClick={async () => {
+                    if (!user) return;
+                    try {
+                      const response = await fetch('/api/create-checkout-report', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+                          userId: user.id,
+                          userEmail: user.primaryEmailAddress?.emailAddress || user.emailAddresses[0].emailAddress,
+                        }),
+                      });
+                      const data = await response.json();
+                      if (data.url) {
+                        window.location.href = data.url;
+                      } else {
+                        alert('Fehler: ' + (data.error || 'Unbekannter Fehler'));
+                      }
+                    } catch (error) {
+                      alert('Fehler beim Öffnen des Checkout.');
+                    }
+                  }}
+                  className={`w-full py-3 px-4 rounded-lg font-bold border-2 transition-all ${
+                    theme === 'light'
+                      ? 'border-indigo-600 text-indigo-700 hover:bg-indigo-100'
+                      : 'border-indigo-400 text-indigo-200 hover:bg-indigo-900/40'
+                  }`}
+                >
+                  Einzelbericht für 2 € kaufen
+                </button>
+              </div>
+
+              <p className={`text-center text-xs mb-4 ${
+                theme === 'light' ? 'text-gray-500' : 'text-gray-400'
+              }`}>
+                — oder unbegrenzt mit dem Abo —
+              </p>
+
               {/* Trial-Hinweis */}
               <div className={`mb-4 p-4 rounded-lg border-2 ${
                 theme === 'light' 
