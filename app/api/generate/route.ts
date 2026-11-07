@@ -5,6 +5,84 @@ const OLLAMA_BASE_URL = 'https://ollama.com/api/chat';
 const FREE_REPORT_LIMIT = 3;
 const ADMIN_EMAIL = 'niklas.h112@gmail.com';
 
+// Harte Regel gegen erfundene Tatsachen (Befund einer Praktikantin, 07.11.2026): Das Modell füllte
+// Abschnitte wie "Ressourcen" mit plausiblen, aber NICHT belegten Angaben (Interessen, Motive,
+// Aktivitäten wie "zeigt Interesse an kurzen Spaziergängen"). In einer Fachdokumentation ist das
+// eine Falschaussage über die betreute Person — deshalb diese Regel vor allen Formatvorgaben und
+// zusätzlich die Nachprüfung `pruefeBelege()` nach der Generierung.
+const BELEG_REGEL = `
+BEWEISREGEL (höchste Priorität, gilt vor allen Format- und Strukturvorgaben):
+- Verwende AUSSCHLIESSLICH Informationen, die in den Notizen ausdrücklich stehen.
+- ERFINDE NICHTS: keine Interessen, Vorlieben, Abneigungen, Motive, Wünsche, Gewohnheiten, Aktivitäten,
+  Erlebnisse, Fähigkeiten, Biografie, Gefühle, Beziehungen oder Wohnverhältnisse, die in den Notizen nicht
+  genannt sind. Auch keine Beispiele ("z. B. kurze Spaziergänge"), keine Ursachen und keine Absichten.
+- Keine Schlussfolgerungen von einem Zustand auf Interesse oder Motivation: steht in den Notizen nur
+  "sitzt im Rollstuhl" oder "Sprachverständnis eingeschränkt", dann ist "zeigt Interesse an Aktivitäten,
+  die seine Mobilität fördern" eine Erfindung und unzulässig.
+- Fehlt eine Angabe, lasse den Punkt ganz weg oder schreibe wörtlich "[in den Notizen nicht angegeben]".
+- Ziele, Empfehlungen und Unterstützungsbedarfe dürfen fachlich neu sein, müssen aber als Maßnahme
+  formuliert sein ("Empfohlen wird ...", "Ziel ist ...") und NICHT als bereits beobachtete Tatsache
+  über die Person.
+- Jeder Satz muss sich mit einer Angabe aus den Notizen begründen lassen.
+`;
+
+const PRUEF_MODELL = 'deepseek-v4-pro:0813';
+
+/** Prüft den erzeugten Bericht gegen die Notizen und liefert nicht belegte Tatsachenbehauptungen. */
+async function pruefeBelege(notizen: string, bericht: string): Promise<{ unbelegt: string[]; ok: boolean }> {
+  const prompt = `Du prüfst, ob ein Pflegebericht Aussagen über die Person enthält, die durch die Notizen NICHT gedeckt sind.
+
+Melde NUR Sätze, die Tatsachen über die Person behaupten, für die es in den Notizen keinen Anhaltspunkt gibt:
+erfundene Interessen, Motive, Vorlieben, Gewohnheiten, Aktivitäten, Erlebnisse, Fähigkeiten, Biografie, Gefühle.
+NICHT melden: geplante Maßnahmen, Ziele, Empfehlungen, Unterstützungsbedarfe (die sind Vorschläge und dürfen neu sein), und Sätze, die nur die Notizen zusammenfassen.
+
+Antworte ausschließlich mit einem JSON-Array der betroffenen Sätze im Originalwortlaut. Ist nichts zu beanstanden: []
+
+NOTIZEN:
+${notizen}
+
+BERICHT:
+${bericht}`;
+
+  try {
+    const response = await fetch(OLLAMA_BASE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.OLLAMA_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: PRUEF_MODELL,
+        messages: [{ role: 'user', content: prompt }],
+        think: false,
+        stream: false,
+        options: { temperature: 0, num_predict: 800 },
+      }),
+    });
+    if (!response.ok) {
+      console.error('Belegprüfung: HTTP', response.status);
+      return { unbelegt: [], ok: false };
+    }
+    const data = await response.json();
+    const text: string = data?.message?.content || '';
+    const match = text.match(/\[[\s\S]*\]/);
+    if (!match) {
+      console.error('Belegprüfung: keine JSON-Liste', text.slice(0, 200));
+      return { unbelegt: [], ok: false };
+    }
+    const arr = JSON.parse(match[0]);
+    if (!Array.isArray(arr)) return { unbelegt: [], ok: false };
+    const unbelegt = arr
+      .filter((satz: unknown): satz is string => typeof satz === 'string' && satz.trim().length > 10)
+      .slice(0, 15);
+    return { unbelegt, ok: true };
+  } catch (e) {
+    console.error('Belegprüfung fehlgeschlagen:', e);
+    return { unbelegt: [], ok: false };
+  }
+}
+
+
 const SYSTEM_PROMPTS = {
   hep: `Du bist ein erfahrener Heilerziehungspfleger:in und hilfst bei der Erstellung professioneller Fachberichte.
 
@@ -309,7 +387,8 @@ export async function POST(request: NextRequest) {
       timeZone: 'Europe/Berlin',
     });
 
-    const systemPrompt = SYSTEM_PROMPTS[mode as keyof typeof SYSTEM_PROMPTS] || SYSTEM_PROMPTS.hep;
+    const systemPrompt = (SYSTEM_PROMPTS[mode as keyof typeof SYSTEM_PROMPTS] || SYSTEM_PROMPTS.hep)
+      + '\n\n' + BELEG_REGEL;
     const typePrompt = DOCUMENT_TYPE_PROMPTS[documentType] || DOCUMENT_TYPE_PROMPTS['Fachbericht (ICF)'];
     
     const userPrompt = `${typePrompt}
@@ -398,6 +477,11 @@ FORMATIERUNG:
     // Mehrfache Leerzeilen auf eine reduzieren
     result = result.replace(/\n{3,}/g, '\n\n');
 
+    // Nachprüfung: welche Sätze sind durch die Notizen NICHT gedeckt? (kostet einen zweiten,
+    // günstigen Modellaufruf; scheitert er, wird der Bericht trotzdem ausgeliefert und die
+    // Oberfläche weist auf die fehlende Prüfung hin)
+    const belegPruefung = await pruefeBelege(notes, result);
+
     // Freemium-Zähler EINMAL pro erfolgreich erzeugtem Bericht serverseitig erhöhen.
     // Vorher zählte das Frontend — und zwar doppelt (saveReport() + eigener Aufruf),
     // wodurch das Limit von 3 Berichten schon nach 2 Berichten griff und der
@@ -418,6 +502,8 @@ FORMATIERUNG:
 
     return NextResponse.json({
       result,
+      unbelegt: belegPruefung.unbelegt,
+      pruefung: belegPruefung.ok ? 'ok' : 'fehlgeschlagen',
       reportCount: isAdmin ? 0 : newCount,
       reportLimit: isAdmin ? 0 : reportLimit,
       limitReached,

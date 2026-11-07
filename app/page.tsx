@@ -46,6 +46,10 @@ export default function Home() {
     isAdmin || clerkSubscriptionStatus === 'active' ? 'active' : 'inactive';
   const [theme, setTheme] = useState<Theme>('light');
   const [generatedText, setGeneratedText] = useState('');
+  // Sätze, die durch die Notizen nicht gedeckt sind (Nachprüfung im Server), plus Flag, ob die
+  // Prüfung überhaupt laufen konnte. In einer Fachdokumentation darf nichts Erfundenes landen.
+  const [unbelegteSaetze, setUnbelegteSaetze] = useState<string[]>([]);
+  const [pruefungFehlgeschlagen, setPruefungFehlgeschlagen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
   const [lastDocumentType, setLastDocumentType] = useState<string | null>(null);
@@ -274,6 +278,8 @@ export default function Home() {
 
     setIsGenerating(true);
     setGeneratedText('');
+    setUnbelegteSaetze([]);
+    setPruefungFehlgeschlagen(false);
 
     try {
       const controller = new AbortController();
@@ -307,6 +313,8 @@ export default function Home() {
 
       if (response.ok) {
         setGeneratedText(data.result);
+        setUnbelegteSaetze(Array.isArray(data.unbelegt) ? data.unbelegt : []);
+        setPruefungFehlgeschlagen(data.pruefung === 'fehlgeschlagen');
         setLastDocumentType(documentType);
         
         if (clientName.trim()) {
@@ -1290,6 +1298,36 @@ export default function Home() {
                 </div>
               )}
             </div>
+
+            {!isGenerating && generatedText && (unbelegteSaetze.length > 0 || pruefungFehlgeschlagen) && (
+              <div className={`mb-4 rounded-lg border-l-4 p-4 text-sm ${
+                theme === 'light'
+                  ? 'border-amber-500 bg-amber-50 text-amber-900'
+                  : 'border-amber-400 bg-amber-900/40 text-amber-100'
+              }`}>
+                {unbelegteSaetze.length > 0 ? (
+                  <>
+                    <p className="font-semibold mb-2">
+                      ⚠️ Bitte prüfen: {unbelegteSaetze.length === 1
+                        ? 'dieser Satz ist'
+                        : `diese ${unbelegteSaetze.length} Sätze sind`} nicht durch deine Notizen gedeckt
+                    </p>
+                    <ul className="list-disc pl-5 space-y-1">
+                      {unbelegteSaetze.map((satz, i) => (
+                        <li key={i}>{satz}</li>
+                      ))}
+                    </ul>
+                    <p className="mt-2">
+                      Bitte streichen oder durch die tatsächliche Beobachtung ersetzen, bevor der Bericht in die Dokumentation geht.
+                    </p>
+                  </>
+                ) : (
+                  <p>
+                    ⚠️ Die automatische Prüfung auf erfundene Angaben konnte nicht laufen. Bitte den Bericht selbst gegen die Notizen gegenlesen.
+                  </p>
+                )}
+              </div>
+            )}
 
             {isGenerating ? (
               <div className="flex items-center justify-center py-12">
