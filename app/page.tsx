@@ -1449,17 +1449,16 @@ export default function Home() {
                 theme === 'light' ? 'text-gray-600' : 'text-gray-300'
               }`}>
                 <p>
-                  HEP-QuickWrite ist ein <span className="font-semibold">Ein-Mann-Projekt</span>: Ich baue die App
-                  neben meinem Hauptberuf in der Heilerziehungspflege — Stück für Stück in meiner Freizeit.
+                  HEP-QuickWrite ist ein <span className="font-semibold">Ein-Mann-Projekt</span>: von mir gebaut,
+                  neben dem Hauptberuf in der Heilerziehungspflege — in Feierabenden und Wochenenden. Kein Konzern,
+                  keine Agentur. Nur ich.
                 </p>
                 <p>
-                  Deshalb ist mir jede Rückmeldung wichtig. Wenn etwas hakt, ein Bericht komisch klingt oder dir
-                  eine Funktion fehlt: <span className="font-semibold">melde es bitte, statt dich zu ärgern.</span>{' '}
-                  Über den Support-Knopf im Menü landet deine Nachricht direkt bei mir.
+                  Und genau deshalb <span className="font-semibold">wächst die App nur mit dir</span>: Was hakt?
+                  Was fehlt? Was nervt? Schreib es mir — der Support-Knopf im Menü landet direkt bei mir, eine
+                  Zeile reicht.
                 </p>
-                <p>
-                  Jedes Feedback macht die App besser — und dafür bin ich dir jetzt schon dankbar. 🙏
-                </p>
+                <p>Danke, dass du dabei bist. 🙏</p>
               </div>
 
               <button
