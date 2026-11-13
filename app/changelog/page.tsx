@@ -16,6 +16,16 @@ interface ChangelogEntry {
 
 const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.4',
+    date: '13.11.2026',
+    title: 'Ein herzliches Willkommen beim ersten Start',
+    changes: [
+      'Beim ersten Anmelden erscheint eine kurze Begrüßung: HEP-QuickWrite ist ein Ein-Mann-Projekt, das neben dem Hauptberuf entsteht — jede Rückmeldung hilft',
+      'Direkt darin der Hinweis, Probleme und Wünsche zu melden, statt sich zu ärgern: der Support-Knopf im Menü schickt die Nachricht direkt an den Entwickler',
+      'Die Begrüßung erscheint genau einmal pro Konto — auf jedem Gerät, aber nie wieder bei späteren Besuchen',
+    ],
+  },
+  {
     version: '1.3',
     date: '07.11.2026',
     title: 'Berichte erfinden nichts mehr',

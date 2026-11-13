@@ -70,6 +70,9 @@ export default function Home() {
   const [supportSending, setSupportSending] = useState(false);
   const [supportSent, setSupportSent] = useState(false);
   const [showMore, setShowMore] = useState(false);   // Mobile-Menü im Header (Updates/Admin)
+  // Begrüßung für neue Nutzer:innen — einmalig. Ob sie schon gesehen wurde, merkt sich
+  // der Server (Clerk-Metadaten welcomeSeen), damit sie nicht pro Gerät neu aufpoppt.
+  const [showWillkommen, setShowWillkommen] = useState(false);
   // Einziges Wahrheitskriterium für die Paywall: das Signal des Servers.
   // Eine Client-Zahl (reportCount >= Limit) darf NICHT sperren — sie ist beim Laden
   // noch unbekannt und sperrte Tester:innen zu früh.
@@ -220,11 +223,37 @@ export default function Home() {
   // Solange ein Dialog offen ist, darf der Hintergrund nicht mitscrollen —
   // sonst scrollt auf dem Handy die Seite statt des Dialogs.
   useEffect(() => {
-    document.body.style.overflow = showPaywall || showSupport ? 'hidden' : '';
+    document.body.style.overflow = showPaywall || showSupport || showWillkommen ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
     };
-  }, [showPaywall, showSupport]);
+  }, [showPaywall, showSupport, showWillkommen]);
+
+  // Begrüßung nur einmal zeigen — der Server entscheidet anhand der Clerk-Metadaten.
+  useEffect(() => {
+    if (!isLoaded || !user) return;
+    let abgebrochen = false;
+    (async () => {
+      try {
+        const res = await fetch('/api/welcome', { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!abgebrochen && data.zeigen === true) setShowWillkommen(true);
+      } catch {
+        // Die Begrüßung ist Beiwerk — ein Fehler hier darf die App nicht stören.
+      }
+    })();
+    return () => {
+      abgebrochen = true;
+    };
+  }, [isLoaded, user]);
+
+  // Schließen (Knopf ODER ✕) vermerkt den Text als gesehen, sonst kommt er beim
+  // nächsten Besuch wieder.
+  const willkommenSchliessen = () => {
+    setShowWillkommen(false);
+    fetch('/api/welcome', { method: 'POST' }).catch(() => {});
+  };
 
   useEffect(() => {
     setIstApp(document.referrer.startsWith('android-app://'));
@@ -1387,6 +1416,65 @@ export default function Home() {
           </p>
         </div>
       </main>
+
+      {/* Begrüßung beim ersten Mal — Text von Niklas, einmalig pro Konto */}
+      {showWillkommen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto z-50 p-4 flex items-start sm:items-center justify-center">
+          <div className={`relative my-auto w-full max-w-md rounded-lg shadow-2xl p-6 sm:p-8 ${
+            theme === 'light' ? 'bg-white' : 'bg-gray-800'
+          }`}>
+            <button
+              onClick={willkommenSchliessen}
+              aria-label="Dialog schließen"
+              className={`absolute top-3 right-3 p-2 rounded-lg transition-colors ${
+                theme === 'light'
+                  ? 'text-gray-500 hover:bg-gray-100'
+                  : 'text-gray-400 hover:bg-gray-700'
+              }`}
+            >
+              ✕
+            </button>
+
+            <div className="text-center">
+              <div className="mb-3 flex justify-center">
+                <img src="/logo.jpg" alt="HEP-QuickWrite Logo" className="rounded-lg h-16 w-16 object-contain" />
+              </div>
+              <h2 className={`text-xl sm:text-2xl font-bold mb-4 ${
+                theme === 'light' ? 'text-gray-900' : 'text-gray-100'
+              }`}>
+                Schön, dass du da bist 👋
+              </h2>
+
+              <div className={`text-left space-y-3 text-sm sm:text-base ${
+                theme === 'light' ? 'text-gray-600' : 'text-gray-300'
+              }`}>
+                <p>
+                  HEP-QuickWrite ist ein <span className="font-semibold">Ein-Mann-Projekt</span>: Ich baue die App
+                  neben meinem Hauptberuf in der Heilerziehungspflege — Stück für Stück in meiner Freizeit.
+                </p>
+                <p>
+                  Deshalb ist mir jede Rückmeldung wichtig. Wenn etwas hakt, ein Bericht komisch klingt oder dir
+                  eine Funktion fehlt: <span className="font-semibold">melde es bitte, statt dich zu ärgern.</span>{' '}
+                  Über den Support-Knopf im Menü landet deine Nachricht direkt bei mir.
+                </p>
+                <p>
+                  Jedes Feedback macht die App besser — und dafür bin ich dir jetzt schon dankbar. 🙏
+                </p>
+              </div>
+
+              <button
+                onClick={willkommenSchliessen}
+                className="mt-6 w-full min-h-11 py-3 px-6 rounded-lg font-medium bg-indigo-600 hover:bg-indigo-700 text-white shadow-md transition-all"
+              >
+                Alles klar, los geht&apos;s
+              </button>
+              <p className={`mt-3 text-xs ${theme === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>
+                Viel Erfolg beim nächsten Bericht — Niklas
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showPaywall && (
         <div className="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto z-50 p-4 flex items-start sm:items-center justify-center">
